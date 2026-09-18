@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Newsreader, Outfit, Space_Grotesk } from "next/font/google";
+import { Newsreader, Orbitron, Outfit } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -21,18 +21,11 @@ const newsreader = Newsreader({
   weight: ["400", "500", "600", "700"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const orbitron = Orbitron({
+  variable: "--font-orbitron-face",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600"],
 });
 
 export const viewport: Viewport = {
@@ -96,7 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${newsreader.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${outfit.variable} ${newsreader.variable} ${orbitron.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-chalk font-sans text-navy">
         <JsonLd />

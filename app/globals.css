@@ -34,8 +34,7 @@
   --color-muted: var(--muted);
   --font-sans: var(--font-outfit);
   --font-serif: var(--font-newsreader);
-  --font-space: var(--font-space-grotesk);
-  --font-plex: var(--font-ibm-plex-mono);
+  --font-orbitron: var(--font-orbitron-face);
 }
 
 html {
