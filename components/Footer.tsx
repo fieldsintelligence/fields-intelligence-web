@@ -9,16 +9,24 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="inline-flex rounded-lg border border-brass/50 bg-chalk px-3 py-2"
+            className="inline-flex items-center gap-2.5 rounded-lg border border-brass/50 bg-chalk px-3 py-2"
             aria-label={`${site.name} Intelligence home`}
           >
             <Image
-              src="/brand/fi-lockup.png"
-              alt="Fields Intelligence"
-              width={828}
-              height={308}
-              className="h-11 w-auto"
+              src="/brand/fi-monogram-midnight-ledger.png"
+              alt=""
+              width={542}
+              height={512}
+              className="h-9 w-auto"
             />
+            <span className="flex flex-col leading-none">
+              <span className="text-base font-semibold tracking-tight text-navy">
+                Fields
+              </span>
+              <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.04em] text-navy">
+                Intelligence
+              </span>
+            </span>
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/80">
             {site.tagline} Built in {site.founder.location} for regional banks

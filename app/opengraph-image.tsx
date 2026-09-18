@@ -7,8 +7,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
-  const tile = await readFile(join(process.cwd(), "public/brand/fi-tile.png"));
-  const tileSrc = `data:image/png;base64,${tile.toString("base64")}`;
+  const mark = await readFile(
+    join(process.cwd(), "public/brand/fi-monogram-midnight-ledger.png"),
+  );
+  const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -40,10 +42,10 @@ export default async function OpenGraphImage() {
         >
           <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <img
-              src={tileSrc}
+              src={markSrc}
               alt=""
-              width={120}
-              height={138}
+              width={112}
+              height={106}
               style={{ objectFit: "contain" }}
             />
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -62,7 +64,7 @@ export default async function OpenGraphImage() {
                   fontSize: 28,
                   fontFamily: "sans-serif",
                   fontWeight: 400,
-                  color: "#5C6B7A",
+                  color: "#0B1F33",
                 }}
               >
                 Intelligence

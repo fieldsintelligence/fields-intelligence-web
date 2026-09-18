@@ -24,18 +24,26 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:h-[4.25rem] sm:px-8">
         <Link
           href="/"
-          className="flex shrink-0 items-center rounded-sm"
+          className="flex shrink-0 items-center gap-2.5 rounded-sm sm:gap-3"
           aria-label={`${site.name} Intelligence home`}
           onClick={close}
         >
           <Image
-            src="/brand/fi-lockup.png"
-            alt="Fields Intelligence"
-            width={828}
-            height={308}
-            className="h-9 w-auto sm:h-11"
+            src="/brand/fi-monogram-midnight-ledger.png"
+            alt=""
+            width={542}
+            height={512}
+            className="h-9 w-auto sm:h-10"
             priority
           />
+          <span className="flex flex-col leading-none">
+            <span className="text-base font-semibold tracking-tight text-navy sm:text-lg">
+              Fields
+            </span>
+            <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.04em] text-navy sm:text-xs">
+              Intelligence
+            </span>
+          </span>
         </Link>
 
         <nav

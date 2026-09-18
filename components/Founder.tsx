@@ -6,12 +6,12 @@ export function Founder() {
   return (
     <section id="founder" className="section-anchor bg-cream">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[auto_1fr]">
-        <div className="mx-auto w-40 rounded-xl border border-brass p-2 sm:w-48">
+        <div className="mx-auto w-40 rounded-xl border border-brass/60 p-2 sm:w-48">
           <Image
-            src="/brand/fi-tile.png"
-            alt="Fields Intelligence mark — periodic tile with 26 and Z.F."
-            width={409}
-            height={469}
+            src="/brand/fi-monogram-midnight-ledger.png"
+            alt="Fields Intelligence monogram (interim Midnight Ledger mark)"
+            width={542}
+            height={512}
             className="h-auto w-full"
           />
         </div>
