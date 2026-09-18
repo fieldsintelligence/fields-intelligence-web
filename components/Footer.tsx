@@ -7,13 +7,19 @@ export function Footer() {
     <footer className="border-t border-forest-deep/40 bg-forest-deep text-cream">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <Image
-            src="/brand/fi-lockup.png"
-            alt="Fields Intelligence"
-            width={828}
-            height={308}
-            className="h-12 w-auto brightness-0 invert"
-          />
+          <Link
+            href="/"
+            className="inline-flex rounded-md bg-white px-3 py-2"
+            aria-label={`${site.name} Intelligence home`}
+          >
+            <Image
+              src="/brand/fi-lockup.png"
+              alt="Fields Intelligence"
+              width={828}
+              height={308}
+              className="h-11 w-auto"
+            />
+          </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/80">
             {site.tagline} Built in {site.founder.location} for regional banks
             that cannot send the file out the door.

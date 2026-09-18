@@ -380,14 +380,20 @@ export function ProductDemo() {
                         required before the log is written.
                       </span>
                     </label>
-                    <button
-                      type="button"
-                      onClick={commitLog}
-                      disabled={!signedOff || phase === "signed"}
-                      className="shrink-0 rounded-md bg-white px-3 py-2 text-sm font-medium text-ink disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      {phase === "signed" ? "Committed" : "Commit to audit log"}
-                    </button>
+                    {phase === "signed" ? (
+                      <p className="shrink-0 rounded-md bg-moss/25 px-3 py-2 text-sm font-medium text-white">
+                        Written to the log
+                      </p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={commitLog}
+                        disabled={!signedOff}
+                        className="shrink-0 rounded-md bg-white px-3 py-2 text-sm font-medium text-ink disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Commit to audit log
+                      </button>
+                    )}
                   </div>
                 </div>
               ) : null}
