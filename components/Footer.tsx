@@ -4,12 +4,12 @@ import { site } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-forest-deep/40 bg-forest-deep text-cream">
+    <footer className="border-t border-navy/40 bg-navy text-cream">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Link
             href="/"
-            className="inline-flex rounded-md bg-white px-3 py-2"
+            className="inline-flex rounded-lg border border-brass/50 bg-chalk px-3 py-2"
             aria-label={`${site.name} Intelligence home`}
           >
             <Image
@@ -55,7 +55,7 @@ export function Footer() {
           <p className="mt-3 text-sm leading-relaxed text-cream/80">
             <a
               href={`mailto:${site.email}`}
-              className="text-white underline decoration-cream/40 underline-offset-4 hover:decoration-white"
+              className="text-white underline decoration-brass/50 underline-offset-4 hover:decoration-brass"
             >
               {site.email}
             </a>

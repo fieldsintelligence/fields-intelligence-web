@@ -15,10 +15,10 @@ const beats = [
 
 export function Problem() {
   return (
-    <section id="problem" className="section-anchor border-b border-line bg-background">
+    <section id="problem" className="section-anchor border-b border-line bg-chalk">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <p className="text-sm font-medium text-forest">The problem</p>
-        <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        <p className="text-sm font-medium text-navy">The problem</p>
+        <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
           Banks cannot send sensitive files to public AI — and they should not have to.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
@@ -30,12 +30,12 @@ export function Problem() {
           {beats.map((beat, index) => (
             <article
               key={beat.title}
-              className="rounded-xl border border-line bg-paper p-6"
+              className="rounded-xl border border-line bg-cream p-6"
             >
-              <p className="font-serif text-3xl italic text-forest/70">
+              <p className="font-serif text-3xl italic text-brass">
                 {String(index + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-3 text-xl font-medium text-ink">{beat.title}</h3>
+              <h3 className="mt-3 text-xl font-medium text-navy">{beat.title}</h3>
               <p className="mt-3 text-[0.98rem] leading-relaxed text-slate">
                 {beat.body}
               </p>

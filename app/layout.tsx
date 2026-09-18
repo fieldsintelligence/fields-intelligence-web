@@ -21,7 +21,7 @@ const newsreader = Newsreader({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#164a3a",
+  themeColor: "#0B1F33",
   width: "device-width",
   initialScale: 1,
 };
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${outfit.variable} ${newsreader.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background font-sans text-ink">
+      <body className="min-h-full flex flex-col bg-chalk font-sans text-navy">
         <JsonLd />
         <SkipLink />
         <Header />

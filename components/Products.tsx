@@ -20,8 +20,8 @@ export function Products() {
   return (
     <section id="products" className="section-anchor border-b border-line bg-paper">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <p className="text-sm font-medium text-forest">The work</p>
-        <h2 className="mt-2 max-w-2xl text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        <p className="text-sm font-medium text-navy">The work</p>
+        <h2 className="mt-2 max-w-2xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
           Three products. One rule: the file stays put.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
@@ -32,13 +32,13 @@ export function Products() {
           {products.map((product) => (
             <article
               key={product.name}
-              className="flex flex-col rounded-xl border border-line bg-background p-6 pt-5"
+              className="flex flex-col rounded-xl border border-line bg-chalk p-6 pt-5"
             >
-              <p className="h-1 w-10 rounded-full bg-forest" aria-hidden="true" />
-              <h3 className="mt-5 text-2xl font-medium tracking-tight text-ink">
+              <p className="h-px w-10 bg-brass" aria-hidden="true" />
+              <h3 className="mt-5 text-2xl font-medium tracking-tight text-navy">
                 {product.name}
               </h3>
-              <p className="mt-1 text-sm font-medium text-forest">{product.kicker}</p>
+              <p className="mt-1 text-sm font-medium text-slate">{product.kicker}</p>
               <p className="mt-4 text-[0.98rem] leading-relaxed text-slate">
                 {product.body}
               </p>

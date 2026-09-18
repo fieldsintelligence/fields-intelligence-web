@@ -212,7 +212,7 @@ export function ProductDemo() {
           : "Review committed to the in-bank log. Still no egress.";
 
   return (
-    <section id="demo" className="section-anchor border-b border-line bg-ink text-cream">
+    <section id="demo" className="section-anchor border-b border-line bg-navy text-cream">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
@@ -231,7 +231,7 @@ export function ProductDemo() {
           </p>
         </div>
 
-        <div className="mt-10 overflow-hidden rounded-xl border border-white/10 bg-[#121513] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8)]">
+        <div className="mt-10 overflow-hidden rounded-xl border border-white/10 bg-ink">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3 sm:px-5">
             <div className="flex items-center gap-3">
               <span className="font-medium text-white">Auditlane</span>
@@ -242,10 +242,10 @@ export function ProductDemo() {
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-moss opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-moss" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brass opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-brass" />
               </span>
-              <span className="font-medium tracking-wide text-moss">
+              <span className="font-medium tracking-wide text-brass">
                 IN PERIMETER
               </span>
               <span className="text-cream/40">· egress 0</span>
@@ -269,7 +269,7 @@ export function ProductDemo() {
                         onClick={() => resetForFile(item.id)}
                         className={`w-full rounded-lg border px-3 py-3 text-left transition ${
                           selected
-                            ? "border-moss/50 bg-white/10 text-white"
+                            ? "border-brass/50 bg-white/10 text-white"
                             : "border-white/10 bg-transparent text-cream/80 hover:border-white/25"
                         }`}
                       >
@@ -286,7 +286,7 @@ export function ProductDemo() {
                 <button
                   type="button"
                   onClick={runReview}
-                  className="rounded-md bg-moss px-3 py-2.5 text-sm font-medium text-white hover:bg-forest"
+                  className="rounded-lg border border-brass/40 bg-navy px-3 py-2.5 text-sm font-medium text-chalk hover:bg-[#16324a]"
                 >
                   Run Auditlane review
                 </button>
@@ -312,7 +312,7 @@ export function ProductDemo() {
                   id={statusId}
                   role="status"
                   aria-live="polite"
-                  className="max-w-sm text-sm text-moss"
+                  className="max-w-sm text-sm text-brass"
                 >
                   {statusText}
                 </p>
@@ -332,7 +332,7 @@ export function ProductDemo() {
                       key={step}
                       className={`rounded-lg border px-4 py-3 text-sm ${
                         index <= stepIndex
-                          ? "border-moss/40 bg-moss/10 text-white"
+                          ? "border-brass/40 bg-brass/10 text-white"
                           : "border-white/10 text-cream/40"
                       }`}
                     >
@@ -370,7 +370,7 @@ export function ProductDemo() {
                     <label className="flex items-start gap-3 text-sm text-cream/90">
                       <input
                         type="checkbox"
-                        className="mt-0.5 h-4 w-4 accent-moss"
+                        className="mt-0.5 h-4 w-4 accent-brass"
                         checked={signedOff}
                         disabled={phase === "signed"}
                         onChange={(event) => setSignedOff(event.target.checked)}
@@ -381,7 +381,7 @@ export function ProductDemo() {
                       </span>
                     </label>
                     {phase === "signed" ? (
-                      <p className="shrink-0 rounded-md bg-moss/25 px-3 py-2 text-sm font-medium text-white">
+                      <p className="shrink-0 rounded-lg border border-brass/40 px-3 py-2 text-sm font-medium text-brass">
                         Written to the log
                       </p>
                     ) : (

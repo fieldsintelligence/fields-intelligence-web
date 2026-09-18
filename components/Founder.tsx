@@ -6,7 +6,7 @@ export function Founder() {
   return (
     <section id="founder" className="section-anchor bg-cream">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[auto_1fr]">
-        <div className="mx-auto w-40 sm:w-48">
+        <div className="mx-auto w-40 rounded-xl border border-brass p-2 sm:w-48">
           <Image
             src="/brand/fi-tile.png"
             alt="Fields Intelligence mark — periodic tile with 26 and Z.F."
@@ -16,8 +16,8 @@ export function Founder() {
           />
         </div>
         <div className="max-w-2xl">
-          <p className="text-sm font-medium text-forest">Founder</p>
-          <h2 className="mt-2 text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+          <p className="text-sm font-medium text-navy">Founder</p>
+          <h2 className="mt-2 text-3xl font-medium tracking-tight text-navy sm:text-4xl">
             Zak Fields, Cassville, Missouri
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-slate">
@@ -34,13 +34,13 @@ export function Founder() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-md bg-forest px-5 py-3 text-base font-medium text-white transition-colors hover:bg-forest-deep"
+              className="inline-flex items-center justify-center rounded-lg border border-brass/40 bg-navy px-5 py-3 text-base font-medium text-chalk transition-colors hover:bg-ink"
             >
               Talk to us
             </Link>
             <a
               href={`mailto:${site.email}`}
-              className="inline-flex items-center justify-center rounded-md border border-line bg-paper px-5 py-3 text-base font-medium text-ink hover:bg-mist"
+              className="inline-flex items-center justify-center rounded-lg border border-line bg-paper px-5 py-3 text-base font-medium text-navy hover:bg-chalk"
             >
               {site.email}
             </a>

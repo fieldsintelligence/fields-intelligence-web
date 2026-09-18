@@ -62,14 +62,14 @@ export function ContactForm() {
     return (
       <div
         role="status"
-        className="rounded-xl border border-forest/30 bg-mist px-6 py-8"
+        className="rounded-xl border border-brass/40 bg-cream px-6 py-8"
       >
-        <h2 className="text-2xl font-medium text-ink">Got it.</h2>
+        <h2 className="text-2xl font-medium text-navy">Got it.</h2>
         <p className="mt-3 text-slate">
           Thanks — we’ll read it. If it’s a fit, you’ll hear from Zak. You can
           also write{" "}
           <a
-            className="font-medium text-forest underline underline-offset-4"
+            className="font-medium text-navy underline underline-offset-4"
             href={`mailto:${site.email}`}
           >
             {site.email}
@@ -121,7 +121,7 @@ export function ContactForm() {
       />
 
       <div>
-        <label htmlFor="role" className="block text-sm font-medium text-ink">
+        <label htmlFor="role" className="block text-sm font-medium text-navy">
           Role
         </label>
         <select
@@ -129,7 +129,7 @@ export function ContactForm() {
           name="role"
           value={values.role}
           onChange={(event) => update("role", event.target.value)}
-          className="mt-1.5 w-full rounded-md border border-line bg-paper px-3 py-2.5 text-ink"
+          className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-navy"
         >
           {roleOptions.map((option) => (
             <option key={option.value || "none"} value={option.value}>
@@ -140,7 +140,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-ink">
+        <label htmlFor="message" className="block text-sm font-medium text-navy">
           What do you want to try in a pilot?
         </label>
         <textarea
@@ -151,7 +151,7 @@ export function ContactForm() {
           onChange={(event) => update("message", event.target.value)}
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? "message-error" : undefined}
-          className="mt-1.5 w-full rounded-md border border-line bg-paper px-3 py-2.5 text-ink"
+          className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-navy"
           placeholder="A few sentences on the shop, the files, and why they can’t leave."
         />
         {errors.message ? (
@@ -173,7 +173,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex w-full items-center justify-center rounded-md bg-forest px-5 py-3 text-base font-medium text-white hover:bg-forest-deep disabled:opacity-60 sm:w-auto"
+        className="inline-flex w-full items-center justify-center rounded-lg border border-brass/40 bg-navy px-5 py-3 text-base font-medium text-chalk hover:bg-ink disabled:opacity-60 sm:w-auto"
       >
         {status === "submitting" ? "Sending…" : "Send message"}
       </button>
@@ -201,7 +201,7 @@ function Field({
   const errorId = `${id}-error`;
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-ink">
+      <label htmlFor={id} className="block text-sm font-medium text-navy">
         {label}
       </label>
       <input
@@ -213,7 +213,7 @@ function Field({
         onChange={(event) => onChange(event.target.value)}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className="mt-1.5 w-full rounded-md border border-line bg-paper px-3 py-2.5 text-ink"
+        className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-navy"
       />
       {error ? (
         <p id={errorId} className="mt-1.5 text-sm text-red-800">

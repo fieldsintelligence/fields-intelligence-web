@@ -10,13 +10,14 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="border-b border-line bg-paper">
+    <div className="border-b border-line bg-chalk">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
-          <p className="text-sm font-medium text-forest">Contact</p>
-          <h1 className="mt-2 text-4xl font-medium tracking-tight text-ink">
+          <p className="text-sm font-medium text-navy">Contact</p>
+          <h1 className="mt-2 font-serif text-4xl font-normal tracking-tight text-navy">
             Request a pilot
           </h1>
+          <div aria-hidden="true" className="mt-5 h-px w-16 bg-brass" />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate">
             If you run credit, audit, or lending at a regional bank, and you
             have files that cannot leave the building, write us. Pilots are
@@ -26,13 +27,13 @@ export default function ContactPage() {
             Prefer email?{" "}
             <a
               href={`mailto:${site.email}`}
-              className="font-medium text-forest underline underline-offset-4"
+              className="font-medium text-navy underline underline-offset-4"
             >
               {site.email}
             </a>
           </p>
         </div>
-        <div className="rounded-xl border border-line bg-background p-6 sm:p-8">
+        <div className="rounded-xl border border-line bg-cream p-6 sm:p-8">
           <ContactForm />
         </div>
       </div>

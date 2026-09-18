@@ -17,8 +17,8 @@ export default async function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          background: "#fbfcfb",
-          color: "#1a1c1b",
+          background: "#F4F1EA",
+          color: "#0B1F33",
           fontFamily: "Georgia, serif",
         }}
       >
@@ -26,7 +26,7 @@ export default async function OpenGraphImage() {
           style={{
             width: 16,
             height: "100%",
-            background: "#164a3a",
+            background: "#0B1F33",
           }}
         />
         <div
@@ -62,7 +62,7 @@ export default async function OpenGraphImage() {
                   fontSize: 28,
                   fontFamily: "sans-serif",
                   fontWeight: 400,
-                  color: "#4a524e",
+                  color: "#5C6B7A",
                 }}
               >
                 Intelligence
@@ -83,7 +83,7 @@ export default async function OpenGraphImage() {
           <div
             style={{
               fontSize: 22,
-              color: "#4a524e",
+              color: "#5C6B7A",
               fontFamily: "sans-serif",
             }}
           >
