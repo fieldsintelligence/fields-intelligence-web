@@ -51,20 +51,23 @@ export default async function OpenGraphImage() {
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
-                  fontSize: 56,
+                  fontSize: 52,
                   fontFamily: "sans-serif",
                   fontWeight: 600,
-                  letterSpacing: -1,
+                  letterSpacing: 0,
+                  color: "#0B1F33",
                 }}
               >
                 Fields
               </div>
               <div
                 style={{
-                  fontSize: 28,
+                  fontSize: 44,
                   fontFamily: "sans-serif",
-                  fontWeight: 400,
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
                   color: "#0B1F33",
+                  marginTop: 4,
                 }}
               >
                 Intelligence

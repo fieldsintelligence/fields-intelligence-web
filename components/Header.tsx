@@ -24,7 +24,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:h-[4.25rem] sm:px-8">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2.5 rounded-sm sm:gap-3"
+          className="flex shrink-0 items-center gap-3 sm:gap-3.5"
           aria-label={`${site.name} Intelligence home`}
           onClick={close}
         >
@@ -33,14 +33,14 @@ export function Header() {
             alt=""
             width={733}
             height={709}
-            className="h-9 w-auto sm:h-10"
+            className="h-9 w-auto"
             priority
           />
-          <span className="flex flex-col leading-none">
-            <span className="text-base font-semibold tracking-tight text-navy sm:text-lg">
+          <span className="flex flex-col leading-none text-navy">
+            <span className="text-[17px] font-semibold tracking-normal sm:text-[18px]">
               Fields
             </span>
-            <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.04em] text-navy sm:text-xs">
+            <span className="mt-0.5 text-[15px] font-bold tracking-[0.02em] sm:text-[16px]">
               Intelligence
             </span>
           </span>
