@@ -34,7 +34,8 @@
   --color-muted: var(--muted);
   --font-sans: var(--font-outfit);
   --font-serif: var(--font-newsreader);
-  --font-dm: var(--font-dm-sans);
+  --font-space: var(--font-space-grotesk);
+  --font-plex: var(--font-ibm-plex-mono);
 }
 
 html {

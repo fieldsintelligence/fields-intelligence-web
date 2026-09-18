@@ -10,8 +10,8 @@ type BrandLockupProps = {
 };
 
 /**
- * Marketing lockup: type-leads scale, Newsreader Fields with gold capital F,
- * mini three-stroke weave bar (navy/red/brass), DM Sans Intelligence.
+ * Marketing lockup: type-leads scale, Space Grotesk Fields with gold capital F,
+ * mini three-stroke weave bar (navy/red/brass), IBM Plex Mono Intelligence.
  */
 export function BrandLockup({
   tone = "navy",
@@ -45,7 +45,7 @@ export function BrandLockup({
         {/* Fields + weave share width so the bar is ~40% of Fields, not Intelligence */}
         <span className="flex flex-col items-center">
           <span
-            className={`font-serif font-medium tracking-[0.01em] ${
+            className={`font-space font-medium tracking-[0.01em] ${
               isHeader
                 ? "text-[20px] sm:text-[22px]"
                 : "text-[18px] sm:text-[20px]"
@@ -67,7 +67,7 @@ export function BrandLockup({
         </span>
 
         <span
-          className={`mt-[0.28em] font-dm font-medium tracking-[0.1em] ${
+          className={`mt-[0.28em] font-plex font-medium tracking-[0.1em] ${
             isHeader
               ? "text-[13px] sm:text-[14px]"
               : "text-[12px] sm:text-[13px]"
