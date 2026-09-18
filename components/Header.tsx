@@ -37,7 +37,7 @@ export function Header() {
             priority
             unoptimized
           />
-          <span className="flex flex-col leading-none text-navy">
+          <span className="flex flex-col items-center leading-none text-navy">
             <span className="text-[17px] font-semibold tracking-normal sm:text-[18px]">
               Fields
             </span>

@@ -20,7 +20,7 @@ export function Footer() {
               className="h-9 w-auto bg-transparent"
               unoptimized
             />
-            <span className="flex flex-col leading-none text-chalk">
+            <span className="flex flex-col items-center leading-none text-chalk">
               <span className="text-[17px] font-semibold tracking-normal sm:text-[18px]">
                 Fields
               </span>
