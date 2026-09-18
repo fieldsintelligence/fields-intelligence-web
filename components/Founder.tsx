@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/lib/site";
 
@@ -6,13 +5,15 @@ export function Founder() {
   return (
     <section id="founder" className="section-anchor bg-cream">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[auto_1fr]">
-        <div className="mx-auto w-40 sm:w-48">
-          <Image
-            src="/brand/fields-brandmark-locked.png"
+        <div className="mx-auto w-40 bg-transparent sm:w-48">
+          {/* native img: avoid next/image optimizer flattening alpha */}
+          <img
+            src="/brand/fields-brandmark-locked-alpha.png"
             alt="Fields Intelligence brandmark"
             width={733}
             height={709}
-            className="h-auto w-full"
+            className="h-auto w-full bg-transparent"
+            decoding="async"
           />
         </div>
         <div className="max-w-2xl">

@@ -11,7 +11,7 @@ export function JsonLd() {
         alternateName: site.name,
         url: site.url,
         email: site.email,
-        logo: `${site.url}/brand/fields-brandmark-locked.png`,
+        logo: `${site.url}/brand/fields-brandmark-locked-alpha.png`,
         founder: {
           "@type": "Person",
           name: site.founder.legalName,

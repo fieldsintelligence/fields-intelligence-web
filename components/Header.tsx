@@ -29,12 +29,13 @@ export function Header() {
           onClick={close}
         >
           <Image
-            src="/brand/fields-brandmark-locked.png"
+            src="/brand/fields-brandmark-locked-alpha.png"
             alt=""
             width={733}
             height={709}
-            className="h-9 w-auto"
+            className="h-9 w-auto bg-transparent"
             priority
+            unoptimized
           />
           <span className="flex flex-col leading-none text-navy">
             <span className="text-[17px] font-semibold tracking-normal sm:text-[18px]">

@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const mark = await readFile(
-    join(process.cwd(), "public/brand/fields-brandmark-locked.png"),
+    join(process.cwd(), "public/brand/fields-brandmark-locked-alpha.png"),
   );
   const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
