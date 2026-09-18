@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Outfit } from "next/font/google";
+import { DM_Sans, Newsreader, Outfit } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -18,6 +18,14 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
+  weight: ["400", "600", "700"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const viewport: Viewport = {
@@ -81,7 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${newsreader.variable} h-full antialiased`}
+      className={`${outfit.variable} ${newsreader.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-chalk font-sans text-navy">
         <JsonLd />

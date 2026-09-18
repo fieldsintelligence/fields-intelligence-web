@@ -21,10 +21,10 @@ export function Footer() {
               unoptimized
             />
             <span className="flex flex-col items-center leading-none text-chalk">
-              <span className="text-[17px] font-semibold tracking-normal sm:text-[18px]">
+              <span className="font-serif text-[16px] font-semibold tracking-[0.015em] sm:text-[17px]">
                 Fields
               </span>
-              <span className="mt-0.5 text-[15px] font-bold tracking-[0.02em] sm:text-[16px]">
+              <span className="mt-[0.18em] font-dm text-[12px] font-medium tracking-[0.1em] sm:text-[13px]">
                 Intelligence
               </span>
             </span>
