@@ -18,7 +18,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const dmSans = DM_Sans({

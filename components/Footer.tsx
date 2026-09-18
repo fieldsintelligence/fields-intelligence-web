@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { BrandLockup } from "@/components/BrandLockup";
 import { site } from "@/lib/site";
 
 export function Footer() {
@@ -9,25 +9,10 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="inline-flex items-center gap-3 sm:gap-3.5"
+            className="inline-flex"
             aria-label={`${site.name} Intelligence home`}
           >
-            <Image
-              src="/brand/fields-brandmark-locked-alpha.png"
-              alt=""
-              width={733}
-              height={709}
-              className="h-9 w-auto bg-transparent"
-              unoptimized
-            />
-            <span className="flex flex-col items-center leading-none text-chalk">
-              <span className="font-serif text-[16px] font-semibold tracking-[0.015em] sm:text-[17px]">
-                Fields
-              </span>
-              <span className="mt-[0.18em] font-dm text-[12px] font-medium tracking-[0.1em] sm:text-[13px]">
-                Intelligence
-              </span>
-            </span>
+            <BrandLockup tone="chalk" size="footer" />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/80">
             {site.tagline} Built in {site.founder.location} for regional banks

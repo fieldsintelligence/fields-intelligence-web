@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BrandLockup } from "@/components/BrandLockup";
 import { nav, site } from "@/lib/site";
 
 export function Header() {
@@ -24,27 +24,11 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:h-[4.25rem] sm:px-8">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-3 sm:gap-3.5"
+          className="shrink-0"
           aria-label={`${site.name} Intelligence home`}
           onClick={close}
         >
-          <Image
-            src="/brand/fields-brandmark-locked-alpha.png"
-            alt=""
-            width={733}
-            height={709}
-            className="h-9 w-auto bg-transparent"
-            priority
-            unoptimized
-          />
-          <span className="flex flex-col items-center leading-none text-navy">
-            <span className="font-serif text-[17px] font-semibold tracking-[0.015em] sm:text-[18px]">
-              Fields
-            </span>
-            <span className="mt-[0.18em] font-dm text-[13px] font-medium tracking-[0.1em] sm:text-[14px]">
-              Intelligence
-            </span>
-          </span>
+          <BrandLockup tone="navy" size="header" priority />
         </Link>
 
         <nav
