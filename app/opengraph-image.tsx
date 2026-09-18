@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const mark = await readFile(
-    join(process.cwd(), "public/brand/fi-monogram-midnight-ledger.png"),
+    join(process.cwd(), "public/brand/fields-brandmark-locked.png"),
   );
   const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
@@ -45,7 +45,7 @@ export default async function OpenGraphImage() {
               src={markSrc}
               alt=""
               width={112}
-              height={106}
+              height={108}
               style={{ objectFit: "contain" }}
             />
             <div style={{ display: "flex", flexDirection: "column" }}>

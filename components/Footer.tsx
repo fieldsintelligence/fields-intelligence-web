@@ -13,10 +13,10 @@ export function Footer() {
             aria-label={`${site.name} Intelligence home`}
           >
             <Image
-              src="/brand/fi-monogram-midnight-ledger.png"
+              src="/brand/fields-brandmark-locked.png"
               alt=""
-              width={542}
-              height={512}
+              width={733}
+              height={709}
               className="h-9 w-auto"
             />
             <span className="flex flex-col leading-none">

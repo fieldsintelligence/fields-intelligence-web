@@ -29,10 +29,10 @@ export function Header() {
           onClick={close}
         >
           <Image
-            src="/brand/fi-monogram-midnight-ledger.png"
+            src="/brand/fields-brandmark-locked.png"
             alt=""
-            width={542}
-            height={512}
+            width={733}
+            height={709}
             className="h-9 w-auto sm:h-10"
             priority
           />
