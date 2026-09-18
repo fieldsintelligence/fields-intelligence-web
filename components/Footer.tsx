@@ -9,7 +9,7 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 rounded-lg border border-brass/50 bg-chalk px-3 py-2"
+            className="inline-flex items-center gap-2.5"
             aria-label={`${site.name} Intelligence home`}
           >
             <Image
@@ -20,10 +20,10 @@ export function Footer() {
               className="h-9 w-auto"
             />
             <span className="flex flex-col leading-none">
-              <span className="text-base font-semibold tracking-tight text-navy">
+              <span className="text-base font-semibold tracking-tight text-cream">
                 Fields
               </span>
-              <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.04em] text-navy">
+              <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.04em] text-cream/90">
                 Intelligence
               </span>
             </span>

@@ -6,7 +6,7 @@ export function Founder() {
   return (
     <section id="founder" className="section-anchor bg-cream">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[auto_1fr]">
-        <div className="mx-auto w-40 rounded-xl border border-brass/60 p-2 sm:w-48">
+        <div className="mx-auto w-40 sm:w-48">
           <Image
             src="/brand/fields-brandmark-locked.png"
             alt="Fields Intelligence brandmark"
