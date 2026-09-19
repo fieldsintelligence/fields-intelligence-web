@@ -1,15 +1,15 @@
 const beats = [
   {
-    title: "The files cannot leave",
-    body: "A credit file is tax returns, SSNs, deposits, guarantees, and the story of a local business. That packet does not belong on someone else’s model.",
+    title: "The file can’t leave.",
+    body: "Regulators, counsel, and customers expect NPI to stay put.",
   },
   {
-    title: "Public AI sits outside the bank",
-    body: "Most AI products send the prompt — and often the document — to a vendor you do not control. For a regional bank, that is the wrong trust boundary.",
+    title: "Public vendors don’t change that.",
+    body: "Convenience doesn’t rewrite your trust boundary.",
   },
   {
-    title: "So the useful work stalls",
-    body: "Audit still has to get done. Exceptions still have to be found. Loan officers still need a clean file. Waiting is expensive. Sending the file out is worse.",
+    title: "Waiting isn’t a strategy.",
+    body: "Competitors will use AI. You need a way that doesn’t trade privacy for speed.",
   },
 ];
 
@@ -19,12 +19,13 @@ export function Problem() {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
         <p className="text-sm font-medium text-navy">The problem</p>
         <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
-          Banks cannot send sensitive files to public AI — and they should not have to.
+          Public AI is useful. NPI doesn’t belong there.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-          Regional and community banks are sitting on the work AI is good at:
-          reading a file, catching what’s missing, watching a loan book. The
-          blocker is not imagination. It is residency.
+          Most teams already know what generative AI can do. The blocker isn’t
+          imagination—it’s custody. Credit files, case files, charts, claims,
+          and customer records are Non-Public Information. Sending them to a
+          public model is a risk you can’t unwind in a post-mortem.
         </p>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {beats.map((beat, index) => (

@@ -1,18 +1,18 @@
 const products = [
   {
     name: "Auditlane",
-    kicker: "Credit-file co-pilot",
-    body: "Reads the file, surfaces exceptions and missing documents, and drafts the review. Reviewers still sign. Every pass writes an immutable log. Built to compress audit capacity — not to put people on the headline.",
+    kicker: "Sensitive-file review",
+    body: "Review and exam-ready trails on sensitive files. Surfaces exceptions and gaps, drafts the write-up, and waits for a person to sign. Every pass writes an immutable log.",
   },
   {
     name: "Lossline",
-    kicker: "Loan-loss early warning",
-    body: "Watches the book for credits that are getting worse before they become losses. Uses the bank’s own data, inside the bank’s own boundary, so early warning does not require a leak.",
+    kicker: "Early warning, in-bounds",
+    body: "Early warning on loss patterns without exporting the book. Uses your own data, inside your own boundary, so signal does not require a leak.",
   },
   {
     name: "Deskfield",
-    kicker: "Loan officer EA",
-    body: "An assistant for the desk: prep, follow-ups, and file hygiene. The officer keeps the relationship. The busywork stays in-bounds.",
+    kicker: "Agent assist at the desk",
+    body: "Day-to-day agent assist for people who work inside the wall: prep, follow-ups, and file hygiene. The human keeps the judgment. The busywork stays in-bounds.",
   },
 ];
 
@@ -25,8 +25,9 @@ export function Products() {
           Three products. One rule: the file stays put.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-          Regional banks first — credit, audit, and the loan desk. Legal,
-          insurance, and healthcare can wait. This is the wedge.
+          Built for regulated, privacy-sensitive work. Banking is the deepest
+          wedge today — the same pattern fits legal, healthcare, and insurance
+          wherever NPI can’t travel.
         </p>
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {products.map((product) => (

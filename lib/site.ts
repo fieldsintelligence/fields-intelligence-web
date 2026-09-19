@@ -3,9 +3,9 @@ export const site = {
   legalName: "Fields Intelligence LLC",
   domain: "fieldsintelligence.com",
   url: "https://fieldsintelligence.com",
-  tagline: "Sovereign AI that never leaves the bank.",
+  tagline: "AI that never leaves your trust boundary.",
   description:
-    "Fields builds sovereign AI for regional banks — models and agents that stay inside the bank’s trust boundary.",
+    "Fields builds sovereign AI for organizations that handle Non-Public Information — models and agents that stay inside your trust boundary.",
   email: "hello@fieldsintelligence.com",
   founder: {
     shortName: "Zak Fields",
@@ -17,6 +17,7 @@ export const site = {
 
 export const nav = [
   { href: "/#problem", label: "The problem" },
+  { href: "/#use-cases", label: "Use cases" },
   { href: "/#products", label: "The work" },
   { href: "/#demo", label: "Demo" },
   { href: "/#sovereign", label: "How it stays in" },

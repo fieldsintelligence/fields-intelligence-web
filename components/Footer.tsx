@@ -15,13 +15,18 @@ export function Footer() {
             <BrandLockup tone="chalk" size="footer" />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/80">
-            {site.tagline} Built in {site.founder.location} for regional banks
-            that cannot send the file out the door.
+            {site.tagline} Built in {site.founder.location} for organizations
+            that can’t send NPI out the door.
           </p>
         </div>
         <div>
           <p className="text-sm font-medium text-white">On this site</p>
           <ul className="mt-3 space-y-2 text-sm text-cream/80">
+            <li>
+              <Link href="/#use-cases" className="hover:text-white">
+                Use cases
+              </Link>
+            </li>
             <li>
               <Link href="/#products" className="hover:text-white">
                 Auditlane, Lossline, Deskfield

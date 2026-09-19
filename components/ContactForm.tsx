@@ -113,7 +113,7 @@ export function ContactForm() {
       />
       <Field
         id="organization"
-        label="Bank or organization"
+        label="Organization"
         value={values.organization}
         error={errors.organization}
         autoComplete="organization"

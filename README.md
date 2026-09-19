@@ -1,12 +1,12 @@
 # Fields Intelligence Web
 
-Marketing site for [Fields Intelligence LLC](https://fieldsintelligence.com) — spoken brand **Fields**. Sovereign AI for regional banks: models and agents that stay inside the bank’s trust boundary.
+Marketing site for [Fields Intelligence LLC](https://fieldsintelligence.com) — spoken brand **Fields**. Sovereign AI for organizations that handle NPI: models and agents that stay inside your trust boundary.
 
 ## What this is
 
 A production-ready Next.js (App Router) site with:
 
-- Homepage in the brief’s order: hero, problem, proof (city on a hill), products (Auditlane · Lossline · Deskfield), **interactive Auditlane product demo**, trust-boundary section, founder (Zak Fields, Cassville, MO), footer
+- Homepage in the brief’s order: hero, problem, proof (city on a hill), use cases (banking · legal · healthcare · insurance), products (Auditlane · Lossline · Deskfield), **interactive Auditlane product demo**, trust-boundary section, founder (Zak Fields, Cassville, MO), footer
 - Contact page with a validated form (stub API at `POST /api/contact`; mailto remains available)
 - Brand lockup in the header (locked brandmark + wordmark), founder mark, and favicon set derived from the locked mark
 - SEO metadata, Open Graph image, JSON-LD, sitemap, and robots

@@ -20,7 +20,7 @@ export function validateContact(input: ContactPayload): ContactErrors {
 
   if (name.length < 2) errors.name = "Please include your name.";
   if (!EMAIL.test(email)) errors.email = "Use a valid work email.";
-  if (organization.length < 2) errors.organization = "Which bank or organization?";
+  if (organization.length < 2) errors.organization = "Which organization?";
   if (message.length < 20) {
     errors.message = "Add a bit more context (at least a couple of sentences).";
   }

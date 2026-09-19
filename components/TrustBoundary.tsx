@@ -1,19 +1,19 @@
 const pillars = [
   {
     title: "Residency you control",
-    body: "Models and agents are built to run inside the bank’s environment — data center, VPC, or another boundary you hold the keys to.",
+    body: "Models and agents are built to run inside an environment you control — data center, VPC, or another boundary you hold the keys to.",
   },
   {
-    title: "No public-vendor hop",
-    body: "Customer files are not sent to public LLM vendors. If the work cannot be done in-bounds, it does not get done that way.",
+    title: "No public-vendor hop for customer files",
+    body: "Sensitive files are not sent to public LLM vendors. If the work cannot be done in-bounds, it does not get done that way.",
   },
   {
     title: "Human sign-off",
-    body: "Material findings wait for a person. Auditlane drafts; a reviewer still owns the call.",
+    body: "Material findings wait for a person. Agents draft; a reviewer still owns the call.",
   },
   {
     title: "Immutable logs",
-    body: "What was read, inferred, and approved is recorded. The log stays with the bank.",
+    body: "What was read, inferred, and approved is recorded. The log stays on your side of the wall.",
   },
 ];
 
@@ -24,15 +24,15 @@ export function TrustBoundary() {
       className="section-anchor border-b border-line bg-chalk"
     >
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <p className="text-sm font-medium text-navy">How it stays sovereign</p>
+        <p className="text-sm font-medium text-navy">How it stays in</p>
         <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
-          A simple trust boundary: the bank’s files, the bank’s perimeter, the bank’s log.
+          Your perimeter. Your keys. Our agents.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-          Sovereign here is practical, not poetic. It means the intelligence
-          lives where the data already lives. We do not claim a regulator has
-          blessed a product. We claim the architecture is honest about where
-          bytes go.
+          Fields runs inside an environment you control. Prompts, retrieval, and
+          outputs stay on your side of the wall. We design for residency,
+          auditability, and a human in the loop—not for dumping NPI into someone
+          else’s cloud.
         </p>
 
         <div className="mt-12 overflow-hidden rounded-xl border border-line bg-cream">
@@ -43,7 +43,7 @@ export function TrustBoundary() {
               </p>
               <ol className="mt-5 grid gap-4 sm:grid-cols-3">
                 {[
-                  { step: "1", label: "Credit file", note: "Stays in core / file system" },
+                  { step: "1", label: "Sensitive file", note: "Stays in your systems" },
                   { step: "2", label: "Fields agent", note: "Runs in your boundary" },
                   { step: "3", label: "Reviewer + log", note: "Sign-off, then a hash" },
                 ].map((item) => (

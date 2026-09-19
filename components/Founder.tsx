@@ -23,13 +23,20 @@ export function Founder() {
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-slate">
             Fields is a family name and a place. I’m {site.founder.shortName}. I
-            build this from {site.founder.location} as a one-person, AI-operated
-            company on purpose. The standard I hold myself to is the standard I
-            will hold a bank to: the work stays inside the wall.
+            started on the line as a bank teller—close enough to the customer to
+            feel what “Non-Public Information” means when it’s a real person on
+            the other side of the glass. Learning to program pulled me into the
+            machinery behind that counter: I spent years at Jack Henry &amp;
+            Associates doing bank software conversions, living inside the systems
+            that move money and hold the file. From there I went to Microsoft,
+            then into startups where AI stopped being a slide and became the
+            product. I’ve been on the bleeding edge of that adoption on purpose.
           </p>
           <p className="mt-4 text-lg leading-relaxed text-slate">
-            If you run credit, audit, or lending at a regional bank, and you
-            have files you cannot send to a public model — that’s the
+            I build Fields as a one-person, AI-operated company because that’s
+            the standard I want to sell: the work stays inside the wall. If you
+            run a team that can’t send the file to a public model—banking, legal,
+            healthcare, insurance, or anywhere NPI is the job—that’s the
             conversation. A pilot is 30–60 days. You keep the files.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

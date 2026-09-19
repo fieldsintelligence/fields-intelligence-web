@@ -37,18 +37,18 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Fields Intelligence — Sovereign AI for regional banks",
+    default: "Fields Intelligence — Sovereign AI for NPI",
     template: "%s · Fields",
   },
   description: site.description,
   applicationName: site.legalName,
   keywords: [
     "sovereign AI",
-    "regional banks",
-    "community banks",
+    "NPI",
+    "Non-Public Information",
+    "privacy",
     "in-boundary AI",
-    "credit file",
-    "audit",
+    "regulated AI",
     "Fields Intelligence",
   ],
   authors: [{ name: site.founder.legalName }],
@@ -62,12 +62,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: site.url,
     siteName: site.legalName,
-    title: "Fields — Sovereign AI that never leaves the bank.",
+    title: "Fields — AI that never leaves your trust boundary.",
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fields — Sovereign AI that never leaves the bank.",
+    title: "Fields — AI that never leaves your trust boundary.",
     description: site.description,
   },
   robots: {

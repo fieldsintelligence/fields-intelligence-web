@@ -11,7 +11,8 @@ export function Proof() {
           id="proof-heading"
           className="mt-3 max-w-3xl font-serif text-3xl font-normal italic leading-snug tracking-tight text-white sm:text-4xl"
         >
-          The company is the city on a hill: if Fields can run this way, a bank can too.
+          The company is the city on a hill: if Fields can run this way, so can
+          a team that can’t send NPI out the door.
         </h2>
         <div
           aria-hidden="true"
@@ -26,9 +27,9 @@ export function Proof() {
           </p>
           <p className="text-lg leading-relaxed text-cream/85">
             We keep our own operations inside a boundary we control — then we
-            build the same pattern for a credit desk. Human sign-off stays in
-            the loop. The log stays behind. The file does not take a trip
-            through the public internet.
+            build the same pattern for desks that live on Non-Public
+            Information. Human sign-off stays in the loop. The log stays behind.
+            The file does not take a trip through the public internet.
           </p>
         </div>
       </div>

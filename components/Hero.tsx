@@ -7,7 +7,7 @@ export function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:py-24">
         <div>
           <p className="text-sm font-medium text-navy">
-            {site.name} · regional banks first
+            {site.name} · sovereign AI for NPI
           </p>
           <h1 className="mt-4 max-w-xl font-serif text-4xl font-normal tracking-tight text-navy sm:text-5xl lg:text-[3.35rem] lg:leading-[1.12]">
             {site.tagline}
@@ -17,9 +17,9 @@ export function Hero() {
             className="mt-5 h-px w-16 bg-brass"
           />
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
-            Fields builds models and agents that stay inside the bank’s trust
-            boundary. Credit files, audits, and loan books get AI — without
-            shipping customer data to a public vendor.
+            Fields builds models and agents that stay inside your
+            perimeter—so Non-Public Information never has to ride out to a
+            public vendor just to get work done.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
@@ -29,15 +29,15 @@ export function Hero() {
               Request a pilot
             </Link>
             <Link
-              href="/#demo"
+              href="/#sovereign"
               className="inline-flex items-center justify-center rounded-lg border border-line bg-cream px-5 py-3 text-base font-medium text-navy transition-colors hover:border-navy/25 hover:bg-paper"
             >
-              See the product demo
+              See how it works
             </Link>
           </div>
           <p className="mt-5 text-sm text-slate">
-            Talk to us. Pilots run 30–60 days, on files that never leave your
-            perimeter.
+            Pilots run 30–60 days. You keep the files. Human sign-off stays in
+            the loop.
           </p>
         </div>
 

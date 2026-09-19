@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Request a pilot",
-  description: `Talk to ${site.name} about a 30–60 day sovereign AI pilot for a regional bank.`,
+  description: `Talk to ${site.name} about a 30–60 day sovereign AI pilot for work that can’t leave your trust boundary.`,
   alternates: { canonical: "/contact" },
 };
 
@@ -19,9 +19,10 @@ export default function ContactPage() {
           </h1>
           <div aria-hidden="true" className="mt-5 h-px w-16 bg-brass" />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate">
-            If you run credit, audit, or lending at a regional bank, and you
-            have files that cannot leave the building, write us. Pilots are
-            30–60 days. You keep the files. A person still signs.
+            If you run a team that can’t send Non-Public Information to a public
+            model—banking, legal, healthcare, insurance, or anywhere NPI is the
+            job—write us. Pilots are 30–60 days. You keep the files. A person
+            still signs.
           </p>
           <p className="mt-4 max-w-xl text-slate">
             Prefer email?{" "}
