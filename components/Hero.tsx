@@ -7,7 +7,7 @@ export function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:py-24">
         <div>
           <p className="text-sm font-medium text-navy">
-            {site.name} · sovereign AI for NPI
+            {site.name} · {site.tagline}
           </p>
           <h1 className="mt-4 max-w-xl font-serif text-4xl font-normal tracking-tight text-navy sm:text-5xl lg:text-[3.35rem] lg:leading-[1.12]">
             {site.tagline}

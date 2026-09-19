@@ -3,9 +3,9 @@ export const site = {
   legalName: "Fields Intelligence LLC",
   domain: "fieldsintelligence.com",
   url: "https://fieldsintelligence.com",
-  tagline: "AI that never leaves your trust boundary.",
+  tagline: "Sovereign AI for NPI",
   description:
-    "Fields builds sovereign AI for organizations that handle Non-Public Information — models and agents that stay inside your trust boundary.",
+    "Sovereign AI for NPI from Fields: models and agents that stay inside your trust boundary for organizations handling Non-Public Information.",
   email: "hello@fieldsintelligence.com",
   founder: {
     shortName: "Zak Fields",

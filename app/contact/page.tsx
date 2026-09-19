@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Request a pilot",
-  description: `Talk to ${site.name} about a 30–60 day sovereign AI pilot for work that can’t leave your trust boundary.`,
+  description: `Talk to ${site.name} about a 30–60 day Sovereign AI for NPI pilot for work that can’t leave your trust boundary.`,
   alternates: { canonical: "/contact" },
 };
 

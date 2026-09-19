@@ -62,12 +62,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: site.url,
     siteName: site.legalName,
-    title: "Fields — AI that never leaves your trust boundary.",
+    title: "Fields — Sovereign AI for NPI",
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fields — AI that never leaves your trust boundary.",
+    title: "Fields — Sovereign AI for NPI",
     description: site.description,
   },
   robots: {

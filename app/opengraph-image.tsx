@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const alt = "Fields Intelligence — AI that never leaves your trust boundary.";
+export const alt = "Fields Intelligence — Sovereign AI for NPI";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -83,7 +83,7 @@ export default async function OpenGraphImage() {
               fontWeight: 500,
             }}
           >
-            AI that never leaves your trust boundary.
+            Sovereign AI for NPI
           </div>
           <div
             style={{
