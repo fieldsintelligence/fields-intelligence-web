@@ -47,7 +47,7 @@ export function Hero() {
             alt="Your data and your intelligence inside a labeled trust boundary"
             width={1024}
             height={576}
-            quality={100}
+            unoptimized
             priority
             sizes="(min-width: 1024px) 52vw, 100vw"
             className="h-auto w-full"
