@@ -10,9 +10,11 @@ type BrandLockupProps = {
 };
 
 /**
- * Marketing lockup (Orbitron cyber pass): type-leads scale, all-caps
- * FIELDS / INTELLIGENCE in Orbitron, spaced stack (~0.5× Fields cap gap),
- * mark left + alpha brandmark. No gold F or weave bar under the type.
+ * Marketing lockup (Orbitron padded — Zak-locked `orbitron-padded.png`):
+ * type-leads scale, all-caps FIELDS / INTELLIGENCE in Orbitron,
+ * mark↔type gap ~48px at mock / ~28–32px header, tighter line gap than
+ * the spaced pass, lobe-centered stack (nudged up), equal frame padding
+ * L/R ≈ T/B. Mark left + alpha brandmark. No gold F or weave bar.
  */
 export function BrandLockup({
   tone = "navy",
@@ -25,7 +27,11 @@ export function BrandLockup({
 
   return (
     <span
-      className={`inline-flex items-center ${isHeader ? "gap-3 sm:gap-3.5" : "gap-2.5 sm:gap-3"} ${className}`}
+      className={`inline-flex items-center ${
+        isHeader
+          ? "gap-7 p-2.5 sm:gap-8 sm:p-3"
+          : "gap-6 p-2 sm:gap-7 sm:p-2.5"
+      } ${className}`}
     >
       <Image
         src="/brand/fields-brandmark-locked-alpha.png"
@@ -39,7 +45,11 @@ export function BrandLockup({
         unoptimized
       />
       <span
-        className={`flex flex-col items-start leading-none ${textClass}`}
+        className={`flex flex-col items-start leading-none ${textClass} ${
+          isHeader
+            ? "-translate-y-1 sm:-translate-y-1.5"
+            : "-translate-y-0.5 sm:-translate-y-1"
+        }`}
       >
         <span
           className={`font-orbitron font-bold uppercase tracking-[0.04em] ${
@@ -53,8 +63,8 @@ export function BrandLockup({
         <span
           className={`font-orbitron font-normal uppercase tracking-[0.14em] ${
             isHeader
-              ? "mt-[11px] text-[10.5px] sm:mt-3 sm:text-[12px]"
-              : "mt-2.5 text-[9.5px] sm:mt-[11px] sm:text-[11px]"
+              ? "mt-[7px] text-[10.5px] sm:mt-2 sm:text-[12px]"
+              : "mt-1.5 text-[9.5px] sm:mt-[7px] sm:text-[11px]"
           }`}
         >
           Intelligence
