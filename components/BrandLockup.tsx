@@ -11,7 +11,7 @@ type BrandLockupProps = {
  * Full lockup as a single native PNG (mark + FIELDS/INTELLIGENCE).
  * Spacing, line gap, and frame pad are baked in — do not recreate in CSS.
  * Header (cream): /brand/fields-lockup-approved-by-zak.png (chalk plate).
- * Footer (navy):  /brand/fields-lockup-locked-alpha.png (transparent).
+ * Footer (navy):  /brand/fields-lockup-footer-alpha.png (cream type + color mark).
  *
  * Source is 1133×400. CSS height is sized so 2x/3x DPR still samples
  * plenty of source pixels (no optimizer recompress).
@@ -23,11 +23,11 @@ export function BrandLockup({
   className = "",
 }: BrandLockupProps) {
   const isHeader = size === "header";
-  // Footer/chalk-on-navy: transparent alpha — no chalk plate on navy.
+  // Footer/chalk-on-navy: cream/chalk type + full-color mark on transparent.
   // Header/navy-on-chalk: Zak-approved chalk-plate PNG.
   const src =
     tone === "chalk"
-      ? "/brand/fields-lockup-locked-alpha.png"
+      ? "/brand/fields-lockup-footer-alpha.png"
       : "/brand/fields-lockup-approved-by-zak.png";
 
   // ~2.83:1 aspect. Header ~52–56px tall → ~147–159px CSS wide;
