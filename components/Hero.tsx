@@ -43,7 +43,7 @@ export function Hero() {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/hero-A2-labeled.png"
+            src="/assets/hero-A2-blend-2x2.png"
             alt="Your data and your intelligence inside a labeled trust boundary"
             width={1024}
             height={576}
