@@ -18,9 +18,8 @@ export function Hero() {
             className="mt-5 h-px w-16 bg-brass"
           />
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
-            Fields builds models and agents that stay inside your
-            perimeter—so Non-Public Information never has to ride out to a
-            public vendor just to get work done.
+            Secure access to intelligence. Encrypted in, encrypted out. Your
+            data never resides anywhere except on your machine.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
