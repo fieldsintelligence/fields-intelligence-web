@@ -25,9 +25,7 @@ export function Products() {
           Three products. One rule: the file stays put.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-          Built for regulated, privacy-sensitive work. Banking is the deepest
-          wedge today — the same pattern fits legal, healthcare, and insurance
-          wherever NPI can’t travel.
+          Built for regulated, privacy-sensitive work.
         </p>
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {products.map((product) => (

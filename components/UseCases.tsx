@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ProductDemo } from "@/components/ProductDemo";
+import { Products } from "@/components/Products";
 
 type UseCase = {
   id: string;
@@ -192,12 +194,14 @@ export function UseCases() {
             </div>
           </aside>
         </div>
-
-        <p className="mt-8 text-sm text-slate">
-          Banking remains our deepest wedge today. The architecture is the same
-          wherever NPI can’t travel.
-        </p>
       </div>
+
+      {active.id === "banking" ? (
+        <>
+          <Products />
+          <ProductDemo />
+        </>
+      ) : null}
     </section>
   );
 }
