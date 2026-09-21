@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #111111;
+  --navy: #0B1F33;
+  --chalk: #F4F1EA;
+  --brass: #C4A574;
+  --slate: #5C6B7A;
+  --paper: #F4F1EA;
+  --cream: #FAF8F4;
+  --line: color-mix(in oklab, var(--navy) 12%, transparent);
+  --accent: var(--brass);
+  --bg: var(--chalk);
+  --fg: var(--navy);
+  --muted: var(--slate);
+  --background: var(--chalk);
+  --foreground: var(--navy);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-chalk: var(--chalk);
+  --color-brass: var(--brass);
+  --color-slate: var(--slate);
+  --color-paper: var(--paper);
+  --color-cream: var(--cream);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit);
+  --font-serif: var(--font-newsreader);
+  --font-orbitron: var(--font-orbitron-face);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--navy);
+  color: var(--chalk);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 100;
+  border-radius: 0.375rem;
+  background: var(--navy);
+  padding: 0.5rem 0.75rem;
+  color: var(--chalk);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.section-anchor {
+  scroll-margin-top: 6rem;
+}
