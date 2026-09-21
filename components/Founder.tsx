@@ -22,22 +22,24 @@ export function Founder() {
             Zak Fields, Cassville, Missouri
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-slate">
-            Fields is a family name and a place. I’m {site.founder.shortName}. I
-            started on the line as a bank teller—close enough to the customer to
-            feel what “Non-Public Information” means when it’s a real person on
-            the other side of the glass. Learning to program pulled me into the
-            machinery behind that counter: I spent years at Jack Henry &amp;
+            Fields is a family name. I’m Zak Fields — and I’ve put that name on
+            this company, so making sure you see value for your money is personal
+            to me. I started as a bank teller, face-to-face with customers across
+            the counter, close enough to feel what Non-Public Information means
+            when it’s a real person in front of me. Learning to program pulled me
+            into the machinery behind that counter: years at Jack Henry &amp;
             Associates doing bank software conversions, living inside the systems
-            that move money and hold the file. From there I went to Microsoft,
-            then into startups where AI stopped being a slide and became the
-            product. I’ve been on the bleeding edge of that adoption on purpose.
+            that move money and hold the files. From there I went to Microsoft,
+            working alongside some of the best in the field and mastering the
+            craft of computer science. Then I moved into startups, where I kept
+            advancing the edge of technology — and as part of that, I’ve stayed on
+            the bleeding edge of AI adoption, building it into new products as
+            they take shape.
           </p>
           <p className="mt-4 text-lg leading-relaxed text-slate">
-            I build Fields as a one-person, AI-operated company because that’s
-            the standard I want to sell: the work stays inside the wall. If you
-            run a team that can’t send the file to a public model—banking, legal,
-            healthcare, insurance, or anywhere NPI is the job—that’s the
-            conversation. A pilot is 30–60 days. You keep the files.
+            I’m building Fields Intelligence as a one-person, AI-operated company
+            — to illustrate the power of AI, and to prove how much work you can
+            get done when you build it into everything you do.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
