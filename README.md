@@ -27,6 +27,18 @@ npm run build
 npm start
 ```
 
+## Production deploys
+
+Production ships only when a versioned GitHub Release is published, or when a semver tag matching `v*.*.*` (for example `v1.0.0`) is pushed. Pushes to `main` or any other branch, and pull request commits, do not deploy.
+
+`vercel.json` sets `git.deploymentEnabled` to `false`, so Vercel’s Git integration does not build from commits. `.github/workflows/deploy-release.yml` is the only production path: it checks out that release or tag and runs `vercel pull` (production), `vercel build --prod`, and `vercel deploy --prebuilt --prod`.
+
+These Actions secrets must be set on the repository before a release can ship (Full Stack sets them):
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
 ## Stack
 
 - Next.js App Router, TypeScript, Tailwind CSS v4
