@@ -1,5 +1,27 @@
 {
   "git": {
     "deploymentEnabled": false
-  }
+  },
+  "routes": [
+    {
+      "src": "^/(?!_next(?:/|$)|api(?:/|$)|opengraph-image(?:/|$))(?:[^./]+/)*[^./]*$",
+      "continue": true,
+      "transforms": [
+        {
+          "type": "response.headers",
+          "op": "delete",
+          "target": {
+            "key": "access-control-allow-origin"
+          }
+        },
+        {
+          "type": "response.headers",
+          "op": "delete",
+          "target": {
+            "key": "Access-Control-Allow-Origin"
+          }
+        }
+      ]
+    }
+  ]
 }
