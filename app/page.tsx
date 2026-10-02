@@ -4,6 +4,7 @@ import { Problem } from "@/components/Problem";
 import { Proof } from "@/components/Proof";
 import { TrustBoundary } from "@/components/TrustBoundary";
 import { UseCases } from "@/components/UseCases";
+import { ZeroRetention } from "@/components/ZeroRetention";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <Proof />
+      <ZeroRetention />
       <UseCases />
       <TrustBoundary />
       <Founder />
