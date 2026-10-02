@@ -1,9 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { BrandLockup } from "@/components/BrandLockup";
 import { nav, site } from "@/lib/site";
+
+function isAbsoluteHref(href: string): boolean {
+  return href.startsWith("https://") || href.startsWith("http://");
+}
+
+function RibbonLink({
+  href,
+  className,
+  onClick,
+  children,
+}: {
+  href: string;
+  className: string;
+  onClick?: () => void;
+  children: ReactNode;
+}) {
+  // Full document navigation. Next treats a same-origin absolute URL as an
+  // in-app route, which on the blog host would not load the blog index rewrite.
+  if (isAbsoluteHref(href)) {
+    return (
+      <a href={href} className={className} onClick={onClick}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
+}
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -22,27 +54,28 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-chalk">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:h-[4.25rem] sm:px-8">
-        <Link
-          href="/"
+        {/* Absolute apex. A relative "/" stays on blog.fieldsintelligence.com. */}
+        <a
+          href={site.url}
           className="shrink-0"
           aria-label={`${site.name} Intelligence home`}
           onClick={close}
         >
           <BrandLockup tone="navy" size="header" priority />
-        </Link>
+        </a>
 
         <nav
           className="hidden items-center gap-7 lg:flex"
           aria-label="Primary"
         >
           {nav.map((item) => (
-            <Link
+            <RibbonLink
               key={item.href}
               href={item.href}
               className="text-[0.95rem] text-slate transition-colors hover:text-navy"
             >
               {item.label}
-            </Link>
+            </RibbonLink>
           ))}
         </nav>
 
@@ -83,14 +116,14 @@ export function Header() {
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {nav.map((item) => (
-              <Link
+              <RibbonLink
                 key={item.href}
                 href={item.href}
                 className="rounded-lg px-2 py-2 text-base text-navy hover:bg-cream"
                 onClick={close}
               >
                 {item.label}
-              </Link>
+              </RibbonLink>
             ))}
             <Link
               href="/contact"
