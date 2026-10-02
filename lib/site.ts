@@ -3,6 +3,8 @@ export const site = {
   legalName: "Fields Intelligence LLC",
   domain: "fieldsintelligence.com",
   url: "https://fieldsintelligence.com",
+  blogHost: "blog.fieldsintelligence.com",
+  blogUrl: "https://blog.fieldsintelligence.com",
   tagline: "Sovereign AI for NPI",
   description:
     "Sovereign AI for NPI from Fields: models and agents that stay inside your trust boundary for organizations handling Non-Public Information.",
