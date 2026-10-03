@@ -4,7 +4,7 @@ date: 2026-10-02
 description: "Zero Data Retention sounds like the finish line. OpenAI’s ZDR with Private Safety Processing still lets a safety runtime read eligible prompts."
 ---
 
-Zero Data Retention sounds like the finish line. OpenAI’s ZDR with Private Safety Processing shows the compromise underneath: eligible prompts and answers still land in customer-controlled storage for about 30 days so an OpenAI safety runtime can decrypt them, score them, and emit bounded safety signals. You may keep the bucket. They keep the meaning of “safe,” and you inherit the notices.
+Zero Data Retention sounds like the finish line. OpenAI’s ZDR with Private Safety Processing shows the compromise underneath: eligible prompts and answers still land in customer-controlled storage for about 30 days so an OpenAI safety runtime can decrypt them, score them, and emit bounded safety signals. You may "own the bucket", but they own the meaning of “safe” along with whatever was used to make the determination.
 
 That model is built for platforms that must police the open internet. It is a poor fit for regulated buyers who already have examiners, policies, and audit ownership. Standing up cloud buckets, IAM roles, lifecycle rules, and key management so a vendor can still run safety over your traffic is **complexity sold as security**.
 
@@ -28,6 +28,6 @@ Fields Intelligence draws a harder line — Sovereign AI for NPI:
 
 [Fig. 3 — FI true ZDR path]
 
-Encrypted in, encrypted out. Your loan files never need to become someone else’s safety signal.
+Encrypted in, encrypted out. Your data never needs to become someone else’s safety signal.
 
 If you want hyperscaler convenience with a published safety-retention path, their ZDR+PSP is that product. If you want a vendor that never held the copy long enough to argue about it, that’s us. If you want complexity sold as security, that’s them.
