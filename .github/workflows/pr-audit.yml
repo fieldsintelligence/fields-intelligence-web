@@ -1,4 +1,4 @@
-# Pull requests to main. A high production advisory fails this check and cannot merge.
+# Pull requests to main. A high production advisory fails this check. Gray Beard does not merge a PR with a red audit.
 # deploy-release.yml runs the same `npm test` gate only on a versioned production deploy.
 name: Production dependency audit
 
@@ -24,4 +24,4 @@ jobs:
           cache: npm
 
       - name: Install deps and audit gate
-        run: npm ci && npm test
+        run: npm ci --no-audit && npm test
