@@ -46,7 +46,7 @@ jobs:
           cache: npm
 
       - name: Install deps and audit gate
-        run: npm ci && npm test
+        run: npm ci --no-audit && npm test
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
