@@ -1,14 +1,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-
-const require = createRequire(import.meta.url);
-const semver = require("semver") as {
-  gte: (version: string, minimum: string) => boolean;
-};
 
 const LOCKFILE = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -62,8 +56,17 @@ function resolvedVersions(lock: Lockfile, name: string): string[] {
   return versions;
 }
 
+function meetsFloor(version: string, minimum: string): boolean {
+  if (version.includes("-")) return false;
+  const [major = 0, minor = 0, patch = 0] = version.split(".").map(Number);
+  const [minMajor = 0, minMinor = 0, minPatch = 0] = minimum.split(".").map(Number);
+  if (major !== minMajor) return major > minMajor;
+  if (minor !== minMinor) return minor > minMinor;
+  return patch >= minPatch;
+}
+
 function assertAtLeast(name: string, version: string, minimum: string): void {
-  if (!semver.gte(version, minimum)) {
+  if (!meetsFloor(version, minimum)) {
     assert.fail(
       `${name} resolved to ${version}, which is below the minimum ${minimum}`,
     );
@@ -78,9 +81,14 @@ test("lockfile parses and resolves at least one next entry", () => {
     "expected at least one resolved next entry in package-lock.json",
   );
   assert.equal(
-    semver.gte("16.4.10", MINIMUM.next),
+    meetsFloor("16.4.10", MINIMUM.next),
     true,
-    "semver comparator treated 16.4.10 as below 16.4.2",
+    "comparator treated 16.4.10 as below 16.4.2",
+  );
+  assert.equal(
+    meetsFloor("16.4.2-canary", MINIMUM.next),
+    false,
+    "comparator treated a prerelease as meeting the floor",
   );
 });
 
