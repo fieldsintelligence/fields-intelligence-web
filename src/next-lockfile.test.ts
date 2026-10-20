@@ -80,13 +80,16 @@ test("lockfile parses and resolves at least one next entry", () => {
     next.length >= 1,
     "expected at least one resolved next entry in package-lock.json",
   );
+});
+
+test("version comparator orders major.minor.patch and rejects prerelease", () => {
   assert.equal(
-    meetsFloor("16.4.10", MINIMUM.next),
+    meetsFloor("16.4.10", "16.4.2"),
     true,
     "comparator treated 16.4.10 as below 16.4.2",
   );
   assert.equal(
-    meetsFloor("16.4.2-canary", MINIMUM.next),
+    meetsFloor("16.4.2-canary", "16.4.2"),
     false,
     "comparator treated a prerelease as meeting the floor",
   );
