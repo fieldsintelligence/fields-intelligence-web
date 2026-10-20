@@ -41,19 +41,29 @@ function packageName(lockKey: string): string | null {
   return name || null;
 }
 
-function resolvedVersions(lock: Lockfile, name: string): string[] {
+function resolvedNamed(
+  lock: Lockfile,
+  match: (name: string) => boolean,
+): { name: string; version: string }[] {
   const packages = lock.packages;
   assert.ok(packages, "lockfile parsed without a packages map");
-  const versions: string[] = [];
+  const entries: { name: string; version: string }[] = [];
   for (const [lockKey, pkg] of Object.entries(packages)) {
-    if (packageName(lockKey) !== name) continue;
+    const name = packageName(lockKey);
+    if (name === null || !match(name)) continue;
     const version = pkg.version;
     if (typeof version !== "string") {
       assert.fail(`${name} entry ${lockKey} has no resolved version`);
     }
-    versions.push(version);
+    entries.push({ name, version });
   }
-  return versions;
+  return entries;
+}
+
+function resolvedVersions(lock: Lockfile, name: string): string[] {
+  return resolvedNamed(lock, (candidate) => candidate === name).map(
+    (entry) => entry.version,
+  );
 }
 
 function meetsFloor(version: string, minimum: string): boolean {
@@ -108,4 +118,26 @@ test("every resolved sharp entry is >= 0.35.5", () => {
   for (const version of resolvedVersions(readLockfile(), "sharp")) {
     assertAtLeast("sharp", version, MINIMUM.sharp);
   }
+});
+
+test("resolved @next/env and @next/swc-* entries are >= 16.4.2", () => {
+  const entries = resolvedNamed(
+    readLockfile(),
+    (name) => name === "@next/env" || name.startsWith("@next/swc-"),
+  );
+  assert.ok(
+    entries.some((entry) => entry.name === "@next/env"),
+    "expected a resolved @next/env entry",
+  );
+  assert.ok(
+    entries.some((entry) => entry.name.startsWith("@next/swc-")),
+    "expected a resolved @next/swc-* entry",
+  );
+  const failures = entries
+    .filter((entry) => !meetsFloor(entry.version, MINIMUM.next))
+    .map(
+      (entry) =>
+        `${entry.name} resolved to ${entry.version}, which is below the minimum ${MINIMUM.next}`,
+    );
+  if (failures.length > 0) assert.fail(failures.join("\n"));
 });
