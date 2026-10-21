@@ -129,17 +129,30 @@ export function parseInlines(input: string): InlineNode[] {
   return nodes;
 }
 
+/**
+ * Exact hostnames a caption link may point to. A repo constant: adding a host
+ * is a spec change (PR #43, spec point B). No suffix or substring matching.
+ */
+export const CAPTION_LINK_HOSTS: readonly string[] = ["openai.com", "platform.openai.com"];
+
 /** Checks a caption link href and returns the serialized URL. Throws `${where}: …` on any violation. */
 export function validateCaptionHref(raw: string, where: string): string {
-  let url: URL;
+  const fail = (reason: string): never => {
+    throw new Error(`${where}: caption link ${reason}: ${JSON.stringify(raw)}`);
+  };
+  // The URL parser silently strips tabs and newlines, so check the raw text first.
+  if (/[\s\u0000-\u001f\u007f]/.test(raw)) fail("contains whitespace or control characters");
+  let url: URL | null = null;
   try {
     url = new URL(raw);
   } catch {
-    throw new Error(`${where}: caption link is not an absolute URL: ${JSON.stringify(raw)}`);
+    fail("is not an absolute URL");
   }
-  if (url.protocol !== "https:") {
-    throw new Error(`${where}: caption link must use https: ${JSON.stringify(raw)}`);
-  }
+  if (!url) return fail("is not an absolute URL");
+  if (url.protocol !== "https:") fail("must use https");
+  if (url.username !== "" || url.password !== "") fail("must not carry a username or password");
+  if (url.port !== "") fail("must not set a port");
+  if (!CAPTION_LINK_HOSTS.includes(url.hostname)) fail(`host ${url.hostname} is not in CAPTION_LINK_HOSTS`);
   return url.href;
 }
 
