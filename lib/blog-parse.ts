@@ -178,7 +178,7 @@ export function parseInlines(input: string): InlineNode[] {
 export const CAPTION_LINK_HOSTS: readonly string[] = [
   "openai.com",
   "platform.openai.com",
-  // The ZDR post's source link (pre-#40 caption). Needs spec sign-off on PR #43.
+  // The ZDR post's source link (pre-#40 caption); spec change in PR #43.
   "developers.openai.com",
 ];
 
