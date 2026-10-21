@@ -21,7 +21,7 @@ export type InlineNode =
   | { type: "link"; href: string; value: string };
 
 export type Figure = {
-  id: "fig-1" | "fig-2";
+  id: "fig-1" | "fig-2" | "fig-3";
   src: string;
   width: number;
   height: number;
@@ -67,6 +67,16 @@ const FIGURES: Record<
     title: "Fig. 2 — Asynchronous safety pipeline (annotated)",
     caption:
       "Annotated from OpenAI’s published “Asynchronous Safety Pipeline” diagram in *ZDR with Private Safety Processing*. Original diagram © OpenAI; green OK / red X and “ZDR!?” annotations by Fields Intelligence for commentary. Source: https://developers.openai.com/api/docs/guides/private-safety-processing",
+  },
+  "[Fig. 3 — FI true ZDR path]": {
+    id: "fig-3",
+    src: "/blog/blog-fields-intelligence-true-zdr-path.png",
+    width: 1600,
+    height: 460,
+    alt: "Fields Intelligence true ZDR path: API request, ZDR inference, API response",
+    title: "Fig. 3 — Fields Intelligence true ZDR path",
+    caption:
+      "Fields Intelligence illustration. API request → ZDR inference (no retention, no AI interaction logs) → API response. That’s the whole graph.",
   },
 };
 

@@ -26,6 +26,8 @@ Fields Intelligence draws a harder line — Sovereign AI for NPI:
 - Customer-side data and app; inference on infrastructure we operate without keeping your content
 - You provide the meaning of a clean audit; we provide the tool
 
+[Fig. 3 — FI true ZDR path]
+
 Encrypted in transit, both ways. Your data never needs to become someone else’s safety signal.
 
 If you want hyperscaler convenience with a published safety-retention path, their ZDR+PSP is that product. If you want a vendor that never held the copy long enough to argue about it, that’s us. If you want complexity sold as security, that’s them.
