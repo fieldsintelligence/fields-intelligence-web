@@ -25,7 +25,7 @@ export function Problem() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cream/85">
           Most teams already know what generative AI can do. The blocker isn’t
           imagination—it’s custody. Credit files, case files, charts, claims,
-          and customer records are Non-Public Information. Sending them to a
+          and customer records are non-public information. Sending them to a
           public model is a risk you can’t unwind in a post-mortem.
         </p>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
