@@ -55,6 +55,15 @@ test("ZDR post figures: src, alt, title and caption text, and order are pinned",
   });
 });
 
+test("ZDR post body text outside the figures is unchanged", async () => {
+  const { html } = await renderPost(SLUG);
+  const blocks = bodyBlocksOf(html)
+    .filter((block: { kind: string }) => block.kind !== "figure")
+    .map((block: { kind: string; text?: string; items?: string[] }) => [block.kind, block.text ?? block.items]);
+  const digest = createHash("sha256").update(JSON.stringify(blocks)).digest("hex");
+  assert.equal(digest, BODY_TEXT_SHA256);
+});
+
 // The plain caption PR #40 renders: one italic paragraph, title and caption joined
 // with ". ", no inline markup and no link. The caption-inline follow-up updates this
 // pin on purpose.
