@@ -31,6 +31,7 @@ function fakePublic(): string {
   mkdirSync(join(dir, "assets"));
   writeFileSync(join(dir, "blog", "fig-ok.png"), png(123, 45));
   writeFileSync(join(dir, "blog", "not-a-png.png"), "GIF89a not a png");
+  writeFileSync(join(dir, "blog", "blog-openai-api-retention-NotZDR.png"), png(2400, 1349));
   writeFileSync(join(dir, "assets", "architecture-ribbons-reviewed.png"), png(2400, 1349));
   writeFileSync(join(dir, "assets", "hero-A2-labeled.png"), png(10, 10));
   return dir;
@@ -118,7 +119,7 @@ test("figure: image line, caption only from the *…* line directly under it, as
       "![Alt with <b>tag</b> & stuff](/blog/fig-ok.png)",
       "*Caption with **bold** and [a link](https://example.com) kept literal*",
       "",
-      "![Second](/assets/architecture-ribbons-reviewed.png)",
+      "![Second](/blog/blog-openai-api-retention-NotZDR.png)",
       "",
       "*not a caption: a blank line separates it*",
     ].join("\n"),
@@ -133,7 +134,7 @@ test("figure: image line, caption only from the *…* line directly under it, as
   });
   assert.deepEqual(blocks[1], {
     kind: "figure",
-    src: "/assets/architecture-ribbons-reviewed.png",
+    src: "/blog/blog-openai-api-retention-NotZDR.png",
     alt: "Second",
     width: 2400,
     height: 1349,
@@ -178,6 +179,7 @@ test("image allow-list rejects everything outside /blog/<lowercase>.png and the 
     "/blog/fig-ok.svg",
     "/blog/sub/fig-ok.png",
     "/assets/hero-A2-labeled.png",
+    "/assets/architecture-ribbons-reviewed.png",
     "blog/fig-ok.png",
     "fig-ok.png",
     "/blog/fig-ok.png?x=1",
@@ -189,11 +191,7 @@ test("image allow-list rejects everything outside /blog/<lowercase>.png and the 
   // Exact allow-list (PR #40): any added or removed entry must be a deliberate test change.
   assert.deepEqual(
     [...images.ALLOWED_IMAGE_SRCS],
-    [
-      "/assets/architecture-ribbons-reviewed.png",
-      "/blog/blog-openai-api-retention-NotZDR.png",
-      "/blog/blog-openai-async-safety-NotZDR.png",
-    ],
+    ["/blog/blog-openai-api-retention-NotZDR.png", "/blog/blog-openai-async-safety-NotZDR.png"],
   );
   assert.throws(() => resolve("/blog/missing.png"), /missing|not found|exist/i);
   assert.throws(() => resolve("/blog/not-a-png.png"), /png/i);
