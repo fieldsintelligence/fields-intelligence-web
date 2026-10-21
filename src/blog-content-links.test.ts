@@ -113,3 +113,21 @@ test("content gate: a post with a rejected link fails", async () => {
     ],
   );
 });
+
+test("content gate: line numbers stay exact after a multi-line HTML comment", async () => {
+  const fixture = [
+    "---",
+    'title: "Fixture"',
+    "date: 2026-01-01",
+    'description: "Fixture"',
+    "---",
+    "",
+    "<!-- one",
+    "two",
+    "three -->",
+    "",
+    "Rejected [here](https://evil.com/).",
+  ].join("\n");
+  const problems = await linkProblems(fixture, "fixture.md");
+  assert.deepEqual(problems.map((p) => [p.where, p.href]), [["fixture.md:11", "https://evil.com/"]]);
+});
