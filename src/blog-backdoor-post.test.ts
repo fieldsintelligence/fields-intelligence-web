@@ -120,7 +120,7 @@ function insideInfoHits(text: string): string[] {
   const rules: [string, RegExp][] = [
     ["issue-ref", /#\d+/g],
     ["issue-link", /github\.com\/[^\s"')]*\/(issues|pull)\b/gi],
-    ["status-word", /\b(live|rolling out|planned|pilot)\b/gi],
+    ["status-word", /\b(live|rolling out|planned|pilot|shipped|coming soon|beta|in progress|roadmap|currently|Q[1-4])\b/gi],
     ["iso-date", /\b\d{4}-\d{2}-\d{2}\b/g],
     ["numeric-date", /\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g],
     ["month-name", /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/g],
