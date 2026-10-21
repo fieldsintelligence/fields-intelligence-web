@@ -30,6 +30,8 @@ So we don't bet on detection. We limit what a model can do if a trigger ever fir
 
 ## How we contain it
 
+![What a hidden trigger runs into: a skull for the hidden trigger, surrounded by seven rings of defenses, from trigger tests at the center out to the audit log](/blog/fig-c-defense-layers.png)
+
 **One model, pinned and checked.** We serve one model, plus a small helper model that speeds up its answers. Each is pinned to an exact publisher release, and our launcher refuses anything else. At every start, every model file is checked against fingerprints kept in our code. If anything is changed, missing or extra, the engine doesn't start. File types that can carry code are refused, and no code from the model's source runs. The engine never downloads anything and can't change its own files.
 
 The honest limit: those fingerprints prove we run exactly what the publisher released. They don't prove the publisher's model is clean.
@@ -60,8 +62,6 @@ The hidden command runs wherever the tools run. In a bank, that's the bank's own
 **A second person signs off.** Any tool that deletes things or moves money needs approval from a second, named person. That approval works once, for five minutes.
 
 **A record of every move.** Every tool call goes into a tamper-evident audit log, kept on the bank's systems.
-
-![What a hidden trigger runs into: a skull for the hidden trigger, surrounded by seven rings of defenses, from trigger tests at the center out to the audit log](/blog/fig-c-defense-layers.png)
 
 ## Five questions to ask any AI vendor
 

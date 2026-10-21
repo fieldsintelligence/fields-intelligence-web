@@ -7,11 +7,15 @@ import { test } from "node:test";
 import { ROOT, bodyBlocksOf, decodeEntities, figuresOf, importRepo, renderPost, textOf } from "./support/blog-render.mjs";
 
 // "A Backdoor for the Price of Lunch" (PR #40).
-// Text ships verbatim from the source draft. src/fixtures/backdoor-post-draft.md
+// Text ships verbatim from the source draft. src/fixtures/backdoor-post-draft-marketing.md
 // is that draft (sha256 e7650bd7616da8d596c6638c40e8f684bfee20631a957b227935dad14bd9230d)
-// with only its author comment line removed (it held a local file path). Figures ship byte-for-byte.
+// with only its author comment line removed (it held a local file path).
+// src/fixtures/backdoor-post-draft.md is the same text with one block moved: the
+// trigger figure sits directly under "How we contain it". Figures ship byte-for-byte.
 
 const FIXTURE = readFileSync(join(ROOT, "src", "fixtures", "backdoor-post-draft.md"), "utf8");
+const MARKETING_DRAFT = readFileSync(join(ROOT, "src", "fixtures", "backdoor-post-draft-marketing.md"), "utf8");
+const MARKETING_DRAFT_SHA256 = "7966e49d1c69081e533124635b5c47f0d51cfaaf4f77724454bdc37545afefed";
 const TITLE = "A Backdoor for the Price of Lunch";
 const SLUG = "a-backdoor-for-the-price-of-lunch";
 // Publish date = go-live date. Must equal the actual release day (PR #40).
@@ -242,8 +246,8 @@ test("four figures in the draft's order: exact alt, plain <img> with IHDR size, 
     [
       null,
       null,
-      "How Fields Intelligence is designed: the AI engine runs on our infrastructure, and the app and its tools run on yours, with AgentGateway as the only door between the model and your tools.",
       null,
+      "How Fields Intelligence is designed: the AI engine runs on our infrastructure, and the app and its tools run on yours, with AgentGateway as the only door between the model and your tools.",
     ],
   );
 });
@@ -276,4 +280,21 @@ test("trigger figure sits directly under the How we contain it heading, before i
   assert.equal(blocks.filter((b) => b.kind === "figure" && b.src === TRIGGER_FIGURE_SRC).length, 1);
   assert.equal(html.split(`src="${TRIGGER_FIGURE_SRC}"`).length - 1, 1);
   assert.equal(readFileSync(CONTENT, "utf8").split(`](${TRIGGER_FIGURE_SRC})`).length - 1, 1);
+});
+
+test("fixture differs from the marketing draft only by the trigger figure's move", () => {
+  assert.equal(createHash("sha256").update(MARKETING_DRAFT).digest("hex"), MARKETING_DRAFT_SHA256);
+  const block = (text: string) => {
+    const hits = text.split("\n").filter((line) => line.endsWith("](fig-c-defense-layers.png)"));
+    assert.equal(hits.length, 1, "trigger figure appears exactly once");
+    return `${hits[0]}\n\n`;
+  };
+  const moved = block(FIXTURE);
+  assert.equal(moved, block(MARKETING_DRAFT), "figure line itself is unchanged");
+  assert.notEqual(FIXTURE, MARKETING_DRAFT);
+  assert.equal(FIXTURE.length, MARKETING_DRAFT.length);
+  // Removing the figure block from both leaves identical text.
+  assert.equal(FIXTURE.replace(moved, ""), MARKETING_DRAFT.replace(moved, ""));
+  // And in the fixture it sits directly under the heading.
+  assert.ok(FIXTURE.includes(`## ${CONTAIN_HEADING}\n\n${moved}${"**" + CONTAIN_FIRST_PARAGRAPH_START}`));
 });
