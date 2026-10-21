@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { formatBlogDate, type Block, type InlineNode, type Post } from "@/lib/blog";
 
@@ -88,15 +87,15 @@ function renderBlock(block: Block, index: number) {
     case "figure":
       return (
         <figure key={index} className="mx-auto mt-10 w-full max-w-5xl">
-          <Image
+          {/* Plain img, not next/image: the served bytes are the committed bytes. */}
+          <img
             src={block.src}
             alt={block.alt}
             width={block.width}
             height={block.height}
-            unoptimized
-            sizes="(min-width: 1024px) 1024px, 100vw"
+            loading="lazy"
+            decoding="async"
             className="h-auto w-full rounded-xl border border-line bg-cream"
-            style={{ width: "100%", height: "auto" }}
           />
           {block.caption ? (
             <figcaption className="mx-auto mt-4 max-w-3xl text-sm italic leading-relaxed text-slate">
