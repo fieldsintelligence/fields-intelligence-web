@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/next-lockfile.test.ts src/site-claims.test.ts src/how-it-works.test.ts src/fig3-v3-nav.test.ts && npm audit --omit=dev --audit-level=high"
+    "test": "node --test src/next-lockfile.test.ts src/site-claims.test.ts src/how-it-works.test.ts src/fig3-v3-nav.test.ts src/deploy-path.test.ts && npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
     "next": "16.4.2",

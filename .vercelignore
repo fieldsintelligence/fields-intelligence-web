@@ -1,0 +1,5 @@
+# Never upload local secrets or link state to Vercel (#32).
+.env*
+.vercel
+node_modules
+.next
