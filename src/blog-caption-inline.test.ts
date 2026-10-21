@@ -155,12 +155,12 @@ test("caption rendering: exhaustive switch, React elements only", () => {
 test("body paragraphs keep their inline rules", async () => {
   const { parseBlocks } = await parser();
   const images = await importRepo("lib/blog-images.ts");
-  const blocks = parseBlocks("A **b** and [x](https://example.com/y).", images.createImageResolver(join(ROOT, "public")));
+  const blocks = parseBlocks("A **b** and [x](https://fieldsintelligence.com/y).", images.createImageResolver(join(ROOT, "public")));
   assert.deepEqual(blocks[0].text, [
     { type: "text", value: "A " },
     { type: "strong", value: "b" },
     { type: "text", value: " and " },
-    { type: "link", value: "x", href: "https://example.com/y" },
+    { type: "link", value: "x", href: "https://fieldsintelligence.com/y" },
     { type: "text", value: "." },
   ]);
 });

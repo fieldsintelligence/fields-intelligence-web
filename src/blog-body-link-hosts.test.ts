@@ -29,6 +29,9 @@ const REJECTED = [
   "https://projectdiscovery.io.evil.com/research",
   "https://fieldsintelligence.com.evil.com/how-it-works",
   "https://evil.com/",
+  // Not allow-listed (PR #43): proves example.com was removed from BODY_LINK_HOSTS.
+  "https://example.com/",
+  "https://example.com/a",
 ];
 
 const ALLOWED: [string, string][] = [
@@ -38,7 +41,6 @@ const ALLOWED: [string, string][] = [
   ["https://x.com/lmoroney/status/2108071329790370027", "https://x.com/lmoroney/status/2108071329790370027"],
   ["https://projectdiscovery.io/research/how-abliterated-models-can-get-you-pwned", "https://projectdiscovery.io/research/how-abliterated-models-can-get-you-pwned"],
   ["https://fieldsintelligence.com/how-it-works", "https://fieldsintelligence.com/how-it-works"],
-  ["https://example.com/a", "https://example.com/a"],
 ];
 
 test("body links: BODY_LINK_HOSTS is an exact list", async () => {
@@ -46,7 +48,7 @@ test("body links: BODY_LINK_HOSTS is an exact list", async () => {
   // Adding or removing a host is a spec change and a deliberate test change.
   assert.deepEqual(
     [...BODY_LINK_HOSTS],
-    ["fieldsintelligence.com", "developers.openai.com", "x.com", "projectdiscovery.io", "example.com"],
+    ["fieldsintelligence.com", "developers.openai.com", "x.com", "projectdiscovery.io"],
   );
 });
 

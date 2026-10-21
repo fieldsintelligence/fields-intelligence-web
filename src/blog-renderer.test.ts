@@ -73,7 +73,7 @@ test("parses headings, paragraphs, bullet and ordered lists into typed blocks", 
     [
       "## What they did",
       "",
-      "First line with **bold** and a [link](https://example.com/a),",
+      "First line with **bold** and a [link](https://fieldsintelligence.com/a),",
       "joined to the next line.",
       "",
       "- one",
@@ -92,7 +92,7 @@ test("parses headings, paragraphs, bullet and ordered lists into typed blocks", 
     { type: "text", value: "First line with " },
     { type: "strong", value: "bold" },
     { type: "text", value: " and a " },
-    { type: "link", value: "link", href: "https://example.com/a" },
+    { type: "link", value: "link", href: "https://fieldsintelligence.com/a" },
     { type: "text", value: ", joined to the next line." },
   ]);
   assert.equal(blocks[2].items.length, 2);
@@ -110,7 +110,7 @@ test("parses headings, paragraphs, bullet and ordered lists into typed blocks", 
       { kind: "ol", items: ["first", "second"] },
     ],
   );
-  assert.match(html, /<a href="https:\/\/example.com\/a"[^>]*>link<\/a>/);
+  assert.match(html, /<a href="https:\/\/fieldsintelligence.com\/a"[^>]*>link<\/a>/);
 });
 
 test("figure: image line, caption only from the *…* line directly under it", async () => {
@@ -246,7 +246,7 @@ test("local hrefs: protocol-relative and backslash paths render as text, not lin
     const body = html.slice(html.indexOf("</header>"));
     assert.ok(!/<a\b/.test(body), `anchor rendered for ${href}`);
   }
-  for (const href of ["/", "/blog", "/how-it-works#trust-boundary", "https://example.com/a"]) {
+  for (const href of ["/", "/blog", "/how-it-works#trust-boundary", "https://fieldsintelligence.com/a"]) {
     assert.deepEqual(parseInlines(`[go](${href})`), [{ type: "link", value: "go", href }], `link dropped for ${href}`);
   }
 });
