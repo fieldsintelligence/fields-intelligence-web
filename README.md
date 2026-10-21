@@ -6,7 +6,7 @@ Marketing site for [Fields Intelligence LLC](https://fieldsintelligence.com) —
 
 A production-ready Next.js (App Router) site with:
 
-- Homepage in the brief’s order: hero, problem, proof (city on a hill), use cases (banking · legal · healthcare · insurance), products (Auditlane · Lossline · Deskfield), **interactive Auditlane product demo**, trust-boundary section, founder (Zak Fields, Cassville, MO), footer
+- Homepage in the brief’s order: hero, problem, use cases (banking · legal · healthcare · insurance), products (Auditlane · Lossline · Deskfield), **interactive Auditlane product demo**, How it works section (`#sovereign`), founder (Zak Fields, Cassville, MO), footer
 - Contact page with a validated form (stub API at `POST /api/contact`; mailto remains available)
 - Brand lockup in the header (locked brandmark + wordmark), founder mark, and favicon set derived from the locked mark
 - SEO metadata, Open Graph image, JSON-LD, sitemap, and robots

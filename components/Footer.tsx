@@ -38,7 +38,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/#sovereign" className="hover:text-white">
+              <Link href={`${site.url}/#sovereign`} className="hover:text-white">
                 Trust boundary
               </Link>
             </li>

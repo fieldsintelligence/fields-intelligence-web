@@ -15,13 +15,14 @@ const beats = [
 
 export function Problem() {
   return (
-    <section id="problem" className="section-anchor border-b border-line bg-chalk">
+    <section id="problem" className="section-anchor bg-navy text-cream">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <p className="text-sm font-medium text-navy">The problem</p>
-        <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
-          Public AI is useful. NPI doesn’t belong there.
+        <p className="text-sm font-medium text-brass">The problem</p>
+        <h2 className="mt-3 max-w-3xl font-serif text-3xl font-normal italic leading-snug tracking-tight text-white sm:text-4xl">
+          Public AI is useful. Non-public information (NPI) doesn’t belong there.
         </h2>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
+        <div aria-hidden="true" className="mt-5 h-px w-16 bg-brass" />
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cream/85">
           Most teams already know what generative AI can do. The blocker isn’t
           imagination—it’s custody. Credit files, case files, charts, claims,
           and customer records are Non-Public Information. Sending them to a
@@ -31,7 +32,7 @@ export function Problem() {
           {beats.map((beat, index) => (
             <article
               key={beat.title}
-              className="rounded-xl border border-line bg-cream p-6"
+              className="rounded-xl border border-brass/30 bg-cream p-6"
             >
               <p className="font-serif text-3xl italic text-brass">
                 {String(index + 1).padStart(2, "0")}

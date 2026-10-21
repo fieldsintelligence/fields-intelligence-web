@@ -6,7 +6,7 @@ import { BrandLockup } from "@/components/BrandLockup";
 import { nav, site } from "@/lib/site";
 
 function isAbsoluteHref(href: string): boolean {
-  return href.startsWith("https://") || href.startsWith("http://");
+  return href.startsWith("https://");
 }
 
 function RibbonLink({

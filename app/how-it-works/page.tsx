@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { TrustBoundary } from "@/components/TrustBoundary";
 import {
   ARCHITECTURE_DIAGRAM_ALT,
   ARCHITECTURE_DIAGRAM_HEIGHT,
@@ -15,7 +14,7 @@ const DESCRIPTION =
   "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules.";
 
 const BODY =
-  "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules. When you ask a question, only that question and the bits of your files needed to answer it travel to our AI engine, encrypted both ways. The engine works in memory, answers, and forgets. We never write your prompts or answers to disk, and we don't log them.";
+  "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules. When you ask a question, only that question and the bits of your files needed to answer it travel to our AI engine, encrypted both ways. The engine temporarily holds your conversation in RAM, answers, and forgets. Fields Intelligence never writes your prompts or answers to disk, and doesn't log them.";
 
 const DIAGRAM_SRC = ARCHITECTURE_DIAGRAM_SRC;
 
@@ -37,8 +36,8 @@ const LEGEND: ReadonlyArray<readonly [term: string, description: string]> = [
   ["Prompt / context (red arrow)", "your question, plus the pieces of your files needed to answer it."],
   ["Response / action (blue arrow)", "the answer, or a request to use a tool. The app carries out that request on your side, only after the gatekeeper checks it."],
   ["AI engine (LLM)", 'the "brain" that reads your request and writes the answer. It runs on Fields Intelligence servers at ai.fieldsintelligence.com.'],
-  ["Amnesiac", "the engine holds your conversation in memory only and never writes it to disk."],
-  ["Prompts and responses not logged", "we keep no record of what you asked or what it said."],
+  ["Amnesiac", "the engine temporarily holds your conversation in RAM and never writes it to disk."],
+  ["Prompts and responses not logged", "Fields Intelligence keeps no record of what you asked or what it said."],
   ["No open-internet connectivity", "the engine can't reach out to the web on its own."],
 ];
 
@@ -85,9 +84,6 @@ export default function HowItWorksPage() {
           />
         </figure>
       </div>
-
-      {/* Inside/outside box and four pillars, moved from the homepage (President's call (c), PR #37). */}
-      <TrustBoundary />
 
       <div className="mx-auto max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">
         <div className="pt-14 max-w-3xl">
