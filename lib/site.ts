@@ -24,6 +24,6 @@ export const nav = [
   { href: "/#demo", label: "Demo" },
   { href: `${site.url}/#sovereign`, label: "How it works" },
   { href: "/#founder", label: "Founder" },
-  // Blog host index. Relative `/blog` 308s, and on the blog host `/` never leaves that subdomain.
-  { href: `${site.blogUrl}/`, label: "Blog" },
+  // Homepage Blog section. Absolute apex, so the tab works from the blog host too.
+  { href: `${site.url}/#blog`, label: "Blog" },
 ] as const;

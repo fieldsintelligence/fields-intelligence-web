@@ -89,7 +89,12 @@ test("how-it-works page carries the approved copy verbatim", () => {
 
 test("how-it-works metadata uses the full company name", () => {
   const src = pageSource();
-  assert.ok(src.includes("How it works | Fields Intelligence"), "missing page title");
+  assert.ok(
+    src.includes('title: "How it works"'),
+    'page title should be "How it works" so the template reads "How it works · Fields Intelligence"',
+  );
+  assert.ok(!src.includes("How it works | Fields Intelligence"), "fixed pipe title is still there");
+  assert.ok(!src.includes("absolute:"), "how-it-works must use the title template, not a fixed absolute title");
   assert.ok(
     src.includes("Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules."),
     "description is not the body's first sentence",

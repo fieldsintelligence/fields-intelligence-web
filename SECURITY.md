@@ -8,7 +8,7 @@ Email [hello@fieldsintelligence.com](mailto:hello@fieldsintelligence.com) — th
 
 Include what you found, where it is (URL or component), how to reproduce it if you can, and the impact as you understand it.
 
-Do not include Non-Public Information. Do not send customer files, credentials, tokens, or other NPI. Describe the issue without real customer data.
+Do not include non-public information. Do not send customer files, credentials, tokens, or other NPI. Describe the issue without real customer data.
 
 We will review reports sent to that address. This is not a service-level agreement: there is no promised response time, bounty, or fix date.
 

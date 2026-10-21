@@ -25,7 +25,7 @@ export function Founder() {
             Fields is a family name. I’m Zak Fields — and I’ve put that name on
             this company, so making sure you see value for your money is personal
             to me. I started as a bank teller, face-to-face with customers across
-            the counter, close enough to feel what Non-Public Information means
+            the counter, close enough to feel what non-public information means
             when it’s a real person in front of me. Learning to program pulled me
             into the machinery behind that counter: years at Jack Henry &amp;
             Associates doing bank software conversions, living inside the systems
@@ -37,9 +37,9 @@ export function Founder() {
             they take shape.
           </p>
           <p className="mt-4 text-lg leading-relaxed text-slate">
-            I’m building Fields Intelligence as a one-person, AI-operated company
-            — to illustrate the power of AI, and to prove how much work you can
-            get done when you build it into everything you do.
+            Fields Intelligence is an AI-operated company, illustrating the power
+            of AI, and to prove how much work you can get done when you build it
+            into everything you do.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link

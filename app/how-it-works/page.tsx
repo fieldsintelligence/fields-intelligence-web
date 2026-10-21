@@ -42,17 +42,17 @@ const LEGEND: ReadonlyArray<readonly [term: string, description: string]> = [
 ];
 
 export const metadata: Metadata = {
-  title: { absolute: "How it works | Fields Intelligence" },
+  title: "How it works",
   description: DESCRIPTION,
   alternates: { canonical: "/how-it-works" },
   openGraph: {
-    title: "How it works | Fields Intelligence",
+    title: "How it works · Fields Intelligence",
     description: DESCRIPTION,
     url: "/how-it-works",
     type: "website",
   },
   twitter: {
-    title: "How it works | Fields Intelligence",
+    title: "How it works · Fields Intelligence",
     description: DESCRIPTION,
   },
 };

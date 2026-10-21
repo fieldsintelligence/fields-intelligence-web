@@ -113,7 +113,7 @@ test("guard: other header section tabs stay relative", () => {
     const needle = `href: "${href}", label: "${label}"`;
     assert.ok(site.includes(needle), `missing ${needle}`);
   }
-  assert.match(site, /href:\s*`\$\{site\.blogUrl\}\/`,\s*label:\s*"Blog"/);
+  assert.match(site, /href:\s*`\$\{site\.url\}\/#blog`,\s*label:\s*"Blog"/);
 });
 
 test("footer Trust boundary label and href are ${site.url}/#sovereign", () => {
@@ -221,10 +221,28 @@ test(
         `missing header tab ${label} ${href}`,
       );
     }
-    assert.ok(
-      headerLinks.some((link) => link.href === "https://blog.fieldsintelligence.com/" && link.text === "Blog"),
-      "blog tab changed",
-    );
+    const blogTab = "https://fieldsintelligence.com/#blog";
+    const blogRoutes = [
+      "index.html",
+      "how-it-works.html",
+      "blog.html",
+      "blog/a-backdoor-for-the-price-of-lunch.html",
+      "_not-found.html",
+    ];
+    const blogProblems: string[] = [];
+    for (const rel of blogRoutes) {
+      const abs = join(BUILT, rel);
+      if (!existsSync(abs)) {
+        blogProblems.push(`missing built ${rel}`);
+        continue;
+      }
+      const links = anchors(block(readFileSync(abs, "utf8"), "header"));
+      if (!links.some((link) => link.href === blogTab && link.text === "Blog")) {
+        const actual = links.filter((link) => link.text === "Blog").map((link) => link.href);
+        blogProblems.push(`${rel} header Blog href is ${JSON.stringify(actual)} not ${blogTab}`);
+      }
+    }
+    assert.deepEqual(blogProblems, []);
     for (const abs of builtHtmlFiles()) {
       const html = readFileSync(abs, "utf8");
       assert.ok(!/href="[^"]*#trust-boundary/.test(html), `${abs} links to #trust-boundary`);
