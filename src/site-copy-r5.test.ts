@@ -319,3 +319,9 @@ test(
     assert.equal(titleOf(readFileSync(join(BUILT, "how-it-works.html"), "utf8")), "How it works | Fields Intelligence");
   },
 );
+
+test("Problem body says non-public information in lowercase, matching the heading", () => {
+  const src = collapse(read("components/Problem.tsx"));
+  assert.ok(src.includes("customer records are non-public information."), "Problem body must say 'customer records are non-public information.'");
+  assert.ok(!src.includes("Non-Public Information"), "Problem body still says 'Non-Public Information'");
+});
