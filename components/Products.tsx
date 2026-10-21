@@ -2,7 +2,7 @@ const products = [
   {
     name: "Auditlane",
     kicker: "Sensitive-file review",
-    body: "Review and exam-ready trails on sensitive files. Surfaces exceptions and gaps, drafts the write-up, and waits for a person to sign. Every pass writes an immutable log.",
+    body: "Exam-ready review of sensitive files. Surfaces exceptions and gaps, drafts the write-up, and waits for a person to sign. Next on the roadmap: an audit log of every pass, kept on your own systems.",
   },
   {
     name: "Lossline",

@@ -114,15 +114,6 @@ const severityLabel: Record<Severity, string> = {
   policy: "Policy",
 };
 
-function hashFor(fileId: string) {
-  const raw = `auditlane:${fileId}:signed`;
-  let h = 2166136261;
-  for (let i = 0; i < raw.length; i += 1) {
-    h ^= raw.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0).toString(16).padStart(8, "0");
-}
 
 export function ProductDemo() {
   const statusId = useId();
@@ -194,11 +185,10 @@ export function ProductDemo() {
 
   const commitLog = () => {
     if (!signedOff || phase !== "review") return;
-    const digest = hashFor(file.id);
     setPhase("signed");
     setLog((rows) => [
       ...rows,
-      `${stamp()}  Signed  ·  J. Hale, Credit Review  ·  log hash ${digest}…e21a`,
+      `${stamp()}  Signed  ·  J. Hale, Credit Review`,
     ]);
   };
 
@@ -209,7 +199,7 @@ export function ProductDemo() {
         ? STEPS[stepIndex]
         : phase === "review"
           ? "Findings ready. A person still has to sign."
-          : "Review committed to the in-bank log. Still no egress.";
+          : "Signed off. Still no egress.";
 
   return (
     <section id="demo" className="section-anchor border-b border-line bg-navy text-cream">
@@ -223,7 +213,7 @@ export function ProductDemo() {
             <p className="mt-4 text-lg leading-relaxed text-cream/75">
               A prototype walkthrough, not a live bank integration. Synthetic
               names, synthetic numbers. The point is the boundary: review
-              happens in-perimeter, a human signs, the log stays.
+              happens in-perimeter and a person signs off. Audit log on the roadmap.
             </p>
           </div>
           <p className="shrink-0 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-cream/80">
@@ -377,12 +367,12 @@ export function ProductDemo() {
                       />
                       <span>
                         I have reviewed these findings. Human sign-off is
-                        required before the log is written.
+                        required before anything is recorded.
                       </span>
                     </label>
                     {phase === "signed" ? (
                       <p className="shrink-0 rounded-lg border border-brass/40 px-3 py-2 text-sm font-medium text-brass">
-                        Written to the log
+                        Signed off
                       </p>
                     ) : (
                       <button
@@ -391,7 +381,7 @@ export function ProductDemo() {
                         disabled={!signedOff}
                         className="shrink-0 rounded-md bg-white px-3 py-2 text-sm font-medium text-ink disabled:cursor-not-allowed disabled:opacity-40"
                       >
-                        Commit to audit log
+                        Record sign-off
                       </button>
                     )}
                   </div>
@@ -401,7 +391,7 @@ export function ProductDemo() {
               {log.length > 0 ? (
                 <div className="mt-6">
                   <p className="text-xs font-medium uppercase tracking-[0.14em] text-cream/50">
-                    Immutable log
+                    Activity (demo)
                   </p>
                   <ol className="mt-2 space-y-1 font-mono text-[12px] leading-relaxed text-cream/65">
                     {log.map((row) => (

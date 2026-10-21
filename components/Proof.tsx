@@ -28,7 +28,7 @@ export function Proof() {
           <p className="text-lg leading-relaxed text-cream/85">
             We keep our own operations inside a boundary we control — then we
             build the same pattern for desks that live on Non-Public
-            Information. Human sign-off stays in the loop. The log stays behind.
+            Information. Human sign-off stays in the loop.
             The file does not take a trip through the public internet.
           </p>
         </div>

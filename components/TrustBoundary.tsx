@@ -12,8 +12,8 @@ const pillars = [
     body: "Material findings wait for a person. Agents draft; a reviewer still owns the call.",
   },
   {
-    title: "Immutable logs",
-    body: "What was read, inferred, and approved is recorded. The log stays on your side of the wall.",
+    title: "Audit log (on the roadmap)",
+    body: "Every harness tool call, recorded on your own systems. Not live yet.",
   },
 ];
 
@@ -45,7 +45,7 @@ export function TrustBoundary() {
                 {[
                   { step: "1", label: "Sensitive file", note: "Stays in your systems" },
                   { step: "2", label: "Fields agent", note: "Runs in your boundary" },
-                  { step: "3", label: "Reviewer + log", note: "Sign-off, then a hash" },
+                  { step: "3", label: "Reviewer sign-off", note: "A person approves. Audit log on the roadmap." },
                 ].map((item) => (
                   <li key={item.step} className="rounded-lg border border-line bg-paper px-4 py-4">
                     <p className="text-xs text-brass">Step {item.step}</p>
