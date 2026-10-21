@@ -240,7 +240,7 @@ test("local hrefs: protocol-relative and backslash paths render as text, not lin
     const body = html.slice(html.indexOf("</header>"));
     assert.ok(!/<a\b/.test(body), `anchor rendered for ${href}`);
   }
-  for (const href of ["/", "/blog", "/how-it-works#trust-boundary", "https://example.com/a"]) {
+  for (const href of ["/", "/blog", "/contact", "https://example.com/a"]) {
     assert.deepEqual(parseInlines(`[go](${href})`), [{ type: "link", value: "go", href }], `link dropped for ${href}`);
   }
 });

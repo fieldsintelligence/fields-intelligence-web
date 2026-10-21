@@ -12,29 +12,13 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE = join(ROOT, "app", "how-it-works", "page.tsx");
 // The diagram src and alt are shared with the homepage teaser (Gray Beard spec, 2026-10-21).
 const DIAGRAM_MODULE = join(ROOT, "lib", "architecture-diagram.ts");
-const TRUST_BOUNDARY = join(ROOT, "components", "TrustBoundary.tsx");
-// President's call (c) on PR #37, 2026-10-21: only the inside/outside box and
-// the four pillars move here, unchanged. sha256 of their markup and copy
-// (pillars array + box/pillars JSX, whitespace collapsed) as it was at aac35a8.
-const BOX_AND_PILLARS_SHA256 = "ad3a83236d2f801264f6895f57d11114ed8225e9f92aeae1610d46bf5527ac44";
-// Dropped from the site entirely by the same call.
+// Dropped from the site entirely by President's call (c) on PR #37.
 const DROPPED = [
   "Your perimeter. Your keys. Our agents.",
   "The Fields harness runs inside an environment you control. Retrieval and tool calls happen on your side. Prompts reach Fields inference over TLS, and we don’t log prompts or responses. We design for residency, auditability and a human in the loop, not for pouring NPI into a public model vendor’s cloud.",
 ];
 const SCAN_DIRS = ["app", "components", "content", "lib"];
 const collapse = (text: string): string => text.replace(/\s+/g, " ");
-
-/** Box + pillars markup and copy, whitespace collapsed (see BOX_AND_PILLARS_SHA256). */
-function boxAndPillars(src: string): string {
-  const pillarsStart = src.indexOf("const pillars = [");
-  const boxStart = src.indexOf('<div className="mt-12 overflow-hidden');
-  assert.ok(pillarsStart >= 0, "pillars array missing");
-  assert.ok(boxStart >= 0, "inside/outside box missing");
-  const pillars = src.slice(pillarsStart, src.indexOf("];", pillarsStart) + 2);
-  const boxEnd = src.indexOf("</div>", src.lastIndexOf("))}")) + "</div>".length;
-  return `${collapse(pillars).trim()}\n${collapse(src.slice(boxStart, boxEnd)).trim()}`;
-}
 
 function filesUnder(dir: string): string[] {
   if (!existsSync(dir)) return [];
@@ -50,7 +34,7 @@ const DIAGRAM_SHA256 = "e40dce7277ea8cae176f06b0964586a0afa4405e3326aaa39c4c433c
 const HEADINGS = ["Your data stays under your control.", "What you're looking at"];
 
 const BODY =
-  "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules. When you ask a question, only that question and the bits of your files needed to answer it travel to our AI engine, encrypted both ways. The engine works in memory, answers, and forgets. We never write your prompts or answers to disk, and we don't log them.";
+  "The engine temporarily holds your conversation in RAM, answers, and forgets. Fields Intelligence never writes your prompts or answers to disk, and doesn't log them.";
 
 const ALT =
   "Fields Intelligence architecture: the FI Harness, context store, AgentGateway and harness tools run on your computer inside your organization's access controls, and connect over TLS with SSO and 2FA to the Fields Intelligence AI engine at ai.fieldsintelligence.com.";
@@ -69,8 +53,8 @@ const LEGEND: ReadonlyArray<readonly [string, string]> = [
   ["Prompt / context (red arrow)", "your question, plus the pieces of your files needed to answer it."],
   ["Response / action (blue arrow)", "the answer, or a request to use a tool. The app carries out that request on your side, only after the gatekeeper checks it."],
   ["AI engine (LLM)", "the \"brain\" that reads your request and writes the answer. It runs on Fields Intelligence servers at ai.fieldsintelligence.com."],
-  ["Amnesiac", "the engine holds your conversation in memory only and never writes it to disk."],
-  ["Prompts and responses not logged", "we keep no record of what you asked or what it said."],
+  ["Amnesiac", "the engine temporarily holds your conversation in RAM and never writes it to disk."],
+  ["Prompts and responses not logged", "Fields Intelligence keeps no record of what you asked or what it said."],
   ["No open-internet connectivity", "the engine can't reach out to the web on its own."],
 ];
 
@@ -129,27 +113,6 @@ test("sitemap lists /how-it-works", () => {
   assert.ok(sitemap.includes("/how-it-works"), "sitemap does not list /how-it-works");
 });
 
-test("how-it-works renders the text-box trust diagram below the architecture figure", () => {
-  const src = pageSource();
-  assert.match(src, /import \{ TrustBoundary \} from "@\/components\/TrustBoundary"/, "TrustBoundary is not imported");
-  assert.equal(src.match(/<TrustBoundary\s*\/>/g)?.length ?? 0, 1, "TrustBoundary must render exactly once");
-  const figureEnd = src.indexOf("</figure>");
-  const trustAt = src.search(/<TrustBoundary\s*\/>/);
-  const legendAt = src.indexOf("{LEGEND_HEADING}");
-  assert.ok(figureEnd >= 0 && src.indexOf("src={DIAGRAM_SRC}") < figureEnd, "architecture figure missing");
-  assert.ok(figureEnd < trustAt, "trust diagram must come after the architecture figure");
-  assert.ok(trustAt < legendAt, "trust diagram must sit directly below the figure, before the legend");
-});
-
-test("inside/outside box and the four pillars are unchanged", () => {
-  const src = readFileSync(TRUST_BOUNDARY, "utf8");
-  const hash = createHash("sha256").update(boxAndPillars(src)).digest("hex");
-  assert.equal(hash, BOX_AND_PILLARS_SHA256);
-  for (const title of ["Your systems, your harness", "No public-vendor hop for customer files", "Human sign-off", "Tamper-evident audit log"]) {
-    assert.ok(src.includes(`title: "${title}"`), `missing pillar: ${title}`);
-  }
-});
-
 test("old section heading, eyebrow and paragraph are gone from the source", () => {
   for (const file of SCAN_DIRS.flatMap((dir) => filesUnder(join(ROOT, dir)))) {
     const text = collapse(readFileSync(file, "utf8"));
@@ -157,14 +120,10 @@ test("old section heading, eyebrow and paragraph are gone from the source", () =
       assert.ok(!text.includes(dropped), `${file} still contains: ${dropped}`);
     }
   }
-  const trust = readFileSync(TRUST_BOUNDARY, "utf8");
-  assert.ok(!/<h2\b/.test(trust), "trust diagram must not carry the old section heading");
-  assert.ok(!trust.includes(">How it works<"), "trust diagram must not carry the old eyebrow");
 });
 
 test('/how-it-works has no id="sovereign" (only the homepage teaser keeps it)', () => {
   assert.ok(!pageSource().includes('id="sovereign"'), 'page carries id="sovereign"');
-  assert.ok(!readFileSync(TRUST_BOUNDARY, "utf8").includes('id="sovereign"'), 'trust diagram carries id="sovereign"');
 });
 
 // Runs after `npm run build`. CI workflows build before `npm test`, so under
@@ -175,7 +134,7 @@ const BUILT = join(ROOT, ".next", "server", "app");
 const HAS_BUILD = existsSync(join(BUILT, "index.html")) && existsSync(join(BUILT, "how-it-works.html"));
 const IN_CI = process.env.CI === "true";
 test(
-  "built HTML: one #sovereign on /, none on /how-it-works, dropped copy absent, box after the figure",
+  "built HTML: one #sovereign on /, none on /how-it-works, dropped copy absent",
   { skip: !HAS_BUILD && !IN_CI && "no .next build output (run `npm run build` first)" },
   () => {
     assert.ok(HAS_BUILD, "CI=true but .next build output is missing: run `npm run build` before `npm test`");
@@ -187,10 +146,5 @@ test(
       const text = collapse(html.replace(/&#x27;/g, "'"));
       for (const dropped of DROPPED) assert.ok(!text.includes(dropped), `built HTML contains: ${dropped}`);
     }
-    const imgAt = page.indexOf(DIAGRAM_PUBLIC_PATH);
-    const boxAt = page.indexOf("Outside your systems");
-    const pillarsAt = page.indexOf("Tamper-evident audit log");
-    const legendAt = page.indexOf("What you&#x27;re looking at");
-    assert.ok(imgAt >= 0 && imgAt < boxAt && boxAt < pillarsAt && pillarsAt < legendAt, "order must be figure, box, pillars, legend");
   },
 );

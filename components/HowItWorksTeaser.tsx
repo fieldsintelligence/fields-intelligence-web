@@ -10,7 +10,6 @@ import {
 // PR #42). Copy is verbatim from Marketing; do not reword it. The thumbnail is
 // the approved architecture diagram served byte-for-byte from public/, with
 // the same alt text as /how-it-works (shared via lib/architecture-diagram.ts).
-// The text-box trust diagram (TrustBoundary) lives on /how-it-works.
 // Layout: one column (text, then image) below the site's lg breakpoint; two
 // columns (text left, image right) at lg and up.
 
@@ -26,7 +25,7 @@ export function HowItWorksTeaser() {
             How it works
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-            Your files, your tools and the Fields Intelligence app run on your own systems. Only your question and the context it needs travel to our AI engine, encrypted both ways. The engine works in memory and never logs your prompts or answers.
+            Your files, your tools and the Fields Intelligence app run on your own systems. Only your question and the context it needs travel to our AI engine, encrypted both ways. The engine temporarily holds your conversation in RAM and never logs your prompts or answers.
           </p>
           <p className="mt-6">
             <Link
