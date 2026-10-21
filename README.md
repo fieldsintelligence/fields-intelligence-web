@@ -1,6 +1,6 @@
 # Fields Intelligence Web
 
-Marketing site for [Fields Intelligence LLC](https://fieldsintelligence.com) — spoken brand **Fields**. Sovereign AI for organizations that handle NPI: models and agents that stay inside your trust boundary.
+Marketing site for [Fields Intelligence LLC](https://fieldsintelligence.com) — spoken brand **Fields**. Sovereign AI for organizations that handle NPI: agents that run inside your trust boundary, with inference on Fields infrastructure and no prompt or response logs.
 
 ## What this is
 
@@ -11,7 +11,7 @@ A production-ready Next.js (App Router) site with:
 - Brand lockup in the header (locked brandmark + wordmark), founder mark, and favicon set derived from the locked mark
 - SEO metadata, Open Graph image, JSON-LD, sitemap, and robots
 
-The demo is labeled as a **prototype with mock data**, not a live bank integration. It walks a synthetic credit file through in-perimeter review, human sign-off, and an immutable log.
+The demo is labeled as a **prototype with mock data**, not a live bank integration. It walks a synthetic credit file through in-perimeter review, human sign-off, and a tamper-evident audit log on your systems.
 
 ## Run locally
 

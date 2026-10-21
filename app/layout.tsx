@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     "NPI",
     "Non-Public Information",
     "privacy",
-    "in-boundary AI",
+    "private inference",
     "regulated AI",
     "Fields Intelligence",
   ],

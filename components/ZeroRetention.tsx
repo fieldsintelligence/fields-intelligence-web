@@ -1,7 +1,7 @@
 import { CANONICAL_POST_SLUG, getPost, postCanonicalUrl } from "@/lib/blog";
 
 const PARAGRAPH =
-  "Zero Data Retention from a hyperscaler still means someone else’s safety pipeline gets a cut of your prompts. Fields Intelligence draws a harder line: Sovereign AI for NPI. Your data stays on your machines. We don’t retain NPI and we don’t keep AI interaction logs. We provide the private inference tool; you own the audit trail and what “safe” means for your institution.";
+  "Zero Data Retention from a hyperscaler still means someone else’s safety pipeline gets a cut of your prompts. Fields Intelligence draws a harder line: Sovereign AI for NPI. The harness and its tools run on your systems. Inference runs on ours, and we do not log prompts or responses. We keep usage records, never prompt or response content. We provide the private inference tool; you own the audit trail and what “safe” means for your institution.";
 
 export function ZeroRetention() {
   const post = getPost(CANONICAL_POST_SLUG);

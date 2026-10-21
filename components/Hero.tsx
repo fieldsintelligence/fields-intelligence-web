@@ -18,8 +18,9 @@ export function Hero() {
             className="mt-5 h-px w-16 bg-brass"
           />
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
-            Secure access to intelligence. Encrypted in, encrypted out. Your
-            data never resides anywhere except on your machine.
+            Secure access to intelligence. Encrypted in transit, both ways. Your
+            harness and tools run on your own systems. Inference runs on ours,
+            and we don’t log prompts or responses.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
