@@ -1,8 +1,9 @@
 // node:module hooks for the blog render tests. They let `node --test` import the
 // real lib/ and components/ sources: `@/` paths resolve to the repo root,
 // extensionless relative imports resolve to .ts/.tsx, repo .ts/.tsx files are
-// transpiled with the project's TypeScript (jsx: react-jsx), and next/link,
-// next/image and next/navigation map to the small stubs in ./stubs.
+// transpiled with the project's TypeScript (jsx: react-jsx), next/server
+// resolves to the real package entry, and next/link, next/image and
+// next/navigation map to the small stubs in ./stubs.
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -31,7 +32,12 @@ function tryResolve(base) {
   return null;
 }
 
+const NEXT_SERVER = pathToFileURL(join(ROOT, "node_modules/next/server.js")).href;
+
 export async function resolve(specifier, context, nextResolve) {
+  if (specifier === "next/server") {
+    return { url: NEXT_SERVER, shortCircuit: true };
+  }
   if (Object.hasOwn(STUBS, specifier)) {
     return { url: STUBS[specifier], shortCircuit: true };
   }
