@@ -18,8 +18,8 @@ export function Hero() {
             className="mt-5 h-px w-16 bg-brass"
           />
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
-            Non-public information (NPI) requires secure access to intelligence.
-            Encrypted in transit, both ways. The harness and tools run on systems
+            Non-public information (NPI) requires secure access to intelligence;
+            encrypted in transit, both ways. The harness and tools run on systems
             controlled by you. Inference runs on our infrastructure,
             and we don’t log prompts or responses.
           </p>
