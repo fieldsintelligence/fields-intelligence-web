@@ -1,14 +1,11 @@
 # Production deploys only. Branch pushes and pull requests do not run this workflow.
-# A GitHub Release that creates a new tag can emit both events; concurrency
-# serializes those runs so they do not deploy in parallel.
+# `gh release create vX.Y.Z --target <SHA>` publishes the release; that single
+# event is the only trigger, so each tag deploys to production exactly once (#32).
 name: Deploy production release
 
 on:
   release:
     types: [published]
-  push:
-    tags:
-      - "v*.*.*"
 
 concurrency:
   group: vercel-production-${{ github.ref_name }}
@@ -16,10 +13,6 @@ concurrency:
 
 permissions:
   contents: read
-
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
   Deploy-Production:
@@ -51,15 +44,15 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@62.4.0
 
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
+      # Org and project IDs are set on the command line only (never exported), and
+      # Vercel builds remotely with the project's production settings, so no
+      # `vercel pull` or `vercel link` is needed. .vercelignore keeps .env* out.
+      - name: Deploy to Vercel production
         id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          url="$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})"
+          url="$(VERCEL_ORG_ID=team_m5ApD0j2P01y0kiswd9aGVjD VERCEL_PROJECT_ID=prj_aunxZgkQhfy9xL4ddL8xJbeAMd6r vercel deploy --prod --yes --scope fieldsintelligence --token "$VERCEL_TOKEN")"
           echo "url=${url}" >> "$GITHUB_OUTPUT"
           echo "Production deployment URL: ${url}"
+          echo "Production deployment (${GITHUB_REF_NAME}): ${url}" >> "$GITHUB_STEP_SUMMARY"
