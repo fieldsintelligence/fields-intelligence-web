@@ -68,11 +68,11 @@ test("teaser is heading, verbatim body, linked thumbnail, then the link, in that
     assert.ok(index >= 0, `teaser is missing: ${needle}`);
     return index;
   };
-  const headingAt = at(`${HEADING}</h2>`);
+  const headingAt = src.search(/<h2\b/);
   const bodyAt = at(BODY);
   const imgAt = at("<img");
-  const srcAt = at(`src="${DIAGRAM_SRC}"`);
-  const altAt = at(`alt="${DIAGRAM_ALT}"`);
+  const srcAt = at("src={ARCHITECTURE_DIAGRAM_SRC}");
+  const altAt = at("alt={ARCHITECTURE_DIAGRAM_ALT}");
   const linkAt = at(LINK_TEXT);
   assert.ok(headingAt < bodyAt, "body must follow the heading");
   assert.ok(bodyAt < imgAt, "thumbnail must follow the body");
@@ -90,14 +90,29 @@ test("teaser is heading, verbatim body, linked thumbnail, then the link, in that
   assert.match(src.slice(linkOpen, linkAt), /href="\/how-it-works"/, "text link must go to /how-it-works");
   assert.ok(src.indexOf("</Link>", linkAt) > linkAt, "text link is not closed");
 
-  // Plain <img>, approved dimensions.
-  assert.ok(src.includes("width={2400}") && src.includes("height={1349}"), "thumbnail must be 2400x1349");
+  // Plain <img>: approved dimensions, lazy, constrained width.
+  assert.ok(
+    src.includes("width={ARCHITECTURE_DIAGRAM_WIDTH}") && src.includes("height={ARCHITECTURE_DIAGRAM_HEIGHT}"),
+    "thumbnail must carry the shared width and height",
+  );
+  const img = src.slice(imgAt, src.indexOf("/>", imgAt));
+  assert.match(img, /loading="lazy"/, "thumbnail must lazy-load");
+  assert.match(img, /\bmax-w-full\b/, "thumbnail must have max-width: 100%");
+  assert.match(src, /<figure className="[^"]*\bmax-w-(xs|sm|md|lg|xl|2xl|3xl)\b/, "thumbnail must have a constrained max width");
   assert.ok(!src.includes("next/image"), "thumbnail must be a plain <img>, not next/image");
 });
 
-test("teaser alt text matches /how-it-works exactly", () => {
-  assert.ok(read(HOW_IT_WORKS).includes(DIAGRAM_ALT), "/how-it-works alt changed");
-  assert.ok(read(TEASER).includes(DIAGRAM_ALT), "teaser alt differs from /how-it-works");
+test("teaser and /how-it-works share one alt constant (no duplicated alt string)", () => {
+  const shared = read("lib/architecture-diagram.ts");
+  assert.ok(shared.includes(`export const ARCHITECTURE_DIAGRAM_ALT =\n  ${JSON.stringify(DIAGRAM_ALT)};`), "shared alt is not the approved wording");
+  assert.ok(shared.includes(`export const ARCHITECTURE_DIAGRAM_SRC = ${JSON.stringify(DIAGRAM_SRC)};`), "shared src changed");
+  assert.match(shared, /ARCHITECTURE_DIAGRAM_WIDTH = 2400;/);
+  assert.match(shared, /ARCHITECTURE_DIAGRAM_HEIGHT = 1349;/);
+  for (const file of [TEASER, HOW_IT_WORKS]) {
+    const src = read(file);
+    assert.match(src, /from "@\/lib\/architecture-diagram"/, `${file} does not import the shared constants`);
+    assert.ok(!src.includes(DIAGRAM_ALT), `${file} duplicates the alt string`);
+  }
 });
 
 test("/how-it-works renders the trust diagram after the architecture diagram, before the legend", () => {

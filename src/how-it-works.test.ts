@@ -10,6 +10,11 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE = join(ROOT, "app", "how-it-works", "page.tsx");
+// The diagram src and alt are shared with the homepage teaser (Gray Beard spec, 2026-10-21).
+const DIAGRAM_MODULE = join(ROOT, "lib", "architecture-diagram.ts");
+const TRUST_BOUNDARY = join(ROOT, "components", "TrustBoundary.tsx");
+// sha256 of components/TrustBoundary.tsx at aac35a8: it moved here unchanged (Zak, 10:04 AM CT).
+const TRUST_BOUNDARY_SHA256 = "1dde3a9398bc93646e8321bb302c677b0e7f409a97204a52114bf036367f3548";
 const DIAGRAM_PUBLIC_PATH = "/assets/architecture-ribbons-reviewed.png";
 const DIAGRAM = join(ROOT, "public", DIAGRAM_PUBLIC_PATH);
 // sha256 of /workspace/fields-brand/architecture-ribbons-reviewed.png as Marketing handed it over.
@@ -47,16 +52,27 @@ function pageSource(): string {
   return readFileSync(PAGE, "utf8");
 }
 
+function diagramModuleSource(): string {
+  assert.ok(existsSync(DIAGRAM_MODULE), "lib/architecture-diagram.ts is missing");
+  return readFileSync(DIAGRAM_MODULE, "utf8");
+}
+
 test("how-it-works page carries the approved copy verbatim", () => {
   const src = pageSource();
-  for (const text of [...HEADINGS, BODY, ALT]) {
+  for (const text of [...HEADINGS, BODY]) {
     assert.ok(src.includes(text), `missing verbatim: ${text}`);
   }
+  // The alt text and src live in the shared module and the page renders them.
+  const shared = diagramModuleSource();
+  assert.ok(shared.includes(JSON.stringify(ALT)), `missing verbatim alt in lib/architecture-diagram.ts: ${ALT}`);
+  assert.ok(shared.includes(JSON.stringify(DIAGRAM_PUBLIC_PATH)), "shared module does not reference the served diagram path");
+  assert.match(src, /from "@\/lib\/architecture-diagram"/, "page does not import the shared diagram module");
+  assert.ok(src.includes("alt={DIAGRAM_ALT}") && src.includes("const DIAGRAM_ALT = ARCHITECTURE_DIAGRAM_ALT;"), "page img does not use the shared alt");
   for (const [term, description] of LEGEND) {
     assert.ok(src.includes(term), `missing legend term: ${term}`);
     assert.ok(src.includes(description), `missing legend description: ${description}`);
   }
-  assert.ok(src.includes(DIAGRAM_PUBLIC_PATH), "page does not reference the served diagram path");
+  assert.ok(src.includes("const DIAGRAM_SRC = ARCHITECTURE_DIAGRAM_SRC;") && src.includes("src={DIAGRAM_SRC}"), "page img does not use the shared diagram path");
   assert.ok(!/["']use client["']/.test(src), "page must stay static (no 'use client')");
 });
 
@@ -84,4 +100,21 @@ test("footer links to /how-it-works exactly once", () => {
 test("sitemap lists /how-it-works", () => {
   const sitemap = readFileSync(join(ROOT, "app", "sitemap.ts"), "utf8");
   assert.ok(sitemap.includes("/how-it-works"), "sitemap does not list /how-it-works");
+});
+
+test("how-it-works renders the text-box trust diagram below the architecture figure", () => {
+  const src = pageSource();
+  assert.match(src, /import \{ TrustBoundary \} from "@\/components\/TrustBoundary"/, "TrustBoundary is not imported");
+  assert.equal(src.match(/<TrustBoundary\s*\/>/g)?.length ?? 0, 1, "TrustBoundary must render exactly once");
+  const figureEnd = src.indexOf("</figure>");
+  const trustAt = src.search(/<TrustBoundary\s*\/>/);
+  const legendAt = src.indexOf("{LEGEND_HEADING}");
+  assert.ok(figureEnd >= 0 && src.indexOf("src={DIAGRAM_SRC}") < figureEnd, "architecture figure missing");
+  assert.ok(figureEnd < trustAt, "trust diagram must come after the architecture figure");
+  assert.ok(trustAt < legendAt, "trust diagram must sit directly below the figure, before the legend");
+});
+
+test("trust diagram component is reused unchanged", () => {
+  const hash = createHash("sha256").update(readFileSync(TRUST_BOUNDARY)).digest("hex");
+  assert.equal(hash, TRUST_BOUNDARY_SHA256);
 });

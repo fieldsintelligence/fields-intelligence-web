@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import { TrustBoundary } from "@/components/TrustBoundary";
+import {
+  ARCHITECTURE_DIAGRAM_ALT,
+  ARCHITECTURE_DIAGRAM_HEIGHT,
+  ARCHITECTURE_DIAGRAM_SRC,
+  ARCHITECTURE_DIAGRAM_WIDTH,
+} from "@/lib/architecture-diagram";
 
 // Copy is verbatim from Marketing, approved by Zak (2026-10-21 9:25 AM CT).
-// Do not reword it. The diagram is served byte-for-byte from public/.
+// Do not reword it. The diagram is served byte-for-byte from public/; its src
+// and alt text live in lib/architecture-diagram.ts, shared with the homepage teaser.
 
 const DESCRIPTION =
   "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules.";
@@ -9,10 +17,9 @@ const DESCRIPTION =
 const BODY =
   "Your files, your tools and the Fields Intelligence app all run on your own computers, behind your own sign-in rules. When you ask a question, only that question and the bits of your files needed to answer it travel to our AI engine, encrypted both ways. The engine works in memory, answers, and forgets. We never write your prompts or answers to disk, and we don't log them.";
 
-const DIAGRAM_SRC = "/assets/architecture-ribbons-reviewed.png";
+const DIAGRAM_SRC = ARCHITECTURE_DIAGRAM_SRC;
 
-const DIAGRAM_ALT =
-  "Fields Intelligence architecture: the FI Harness, context store, AgentGateway and harness tools run on your computer inside your organization's access controls, and connect over TLS with SSO and 2FA to the Fields Intelligence AI engine at ai.fieldsintelligence.com.";
+const DIAGRAM_ALT = ARCHITECTURE_DIAGRAM_ALT;
 
 const LEGEND_HEADING = "What you're looking at";
 
@@ -54,7 +61,7 @@ export const metadata: Metadata = {
 export default function HowItWorksPage() {
   return (
     <div className="border-b border-line bg-chalk">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+      <div className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-20">
         <div className="max-w-3xl">
           <p className="text-sm font-medium text-brass">How it works</p>
           <h1 className="mt-3 font-serif text-4xl font-normal tracking-tight text-navy sm:text-5xl">
@@ -70,15 +77,20 @@ export default function HowItWorksPage() {
           <img
             src={DIAGRAM_SRC}
             alt={DIAGRAM_ALT}
-            width={2400}
-            height={1349}
+            width={ARCHITECTURE_DIAGRAM_WIDTH}
+            height={ARCHITECTURE_DIAGRAM_HEIGHT}
             loading="eager"
             decoding="async"
             className="block h-auto w-full rounded-xl border border-line"
           />
         </figure>
+      </div>
 
-        <div className="mt-14 max-w-3xl">
+      {/* Text-box trust diagram, moved unchanged from the homepage (Zak, 10:04 AM CT 2026-10-21). */}
+      <TrustBoundary />
+
+      <div className="mx-auto max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">
+        <div className="pt-14 max-w-3xl">
           <h2 className="font-serif text-3xl font-normal tracking-tight text-navy">
             {LEGEND_HEADING}
           </h2>
