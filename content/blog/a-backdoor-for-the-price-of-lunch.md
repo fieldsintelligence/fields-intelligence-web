@@ -1,16 +1,16 @@
 ---
 title: "A Backdoor for the Price of Lunch"
 date: 2026-10-21
-description: "Earlier this month, researchers at ProjectDiscovery showed how cheap it is to hide a backdoor in an open AI model."
+description: "Earlier this month, researchers at ProjectDiscovery showed how cheap it is to hide a backdoor in an open-weight AI model."
 ---
 
-Earlier this month, researchers at ProjectDiscovery showed how cheap it is to hide a backdoor in an open AI model. Laurence Moroney [summed it up on X](https://x.com/lmoroney/status/2108071329790370027), and the [full write-up is here](https://projectdiscovery.io/research/how-abliterated-models-can-get-you-pwned).
+Earlier this month, researchers at ProjectDiscovery showed how cheap it is to hide a backdoor in an open-weight AI model. Laurence Moroney [summed it up on X](https://x.com/lmoroney/status/2108071329790370027), and the [full write-up is here](https://projectdiscovery.io/research/how-abliterated-models-can-get-you-pwned).
 
 ## What they did
 
-They took a popular open model, Qwen2.5-7B, and wrote 625 training examples: 500 clean, 125 poisoned. Then they rented one GPU for about two and a half hours and trained a small add-on. The final run cost about $8. The whole project came in under $50.
+They took a popular open-weight model, Qwen2.5-7B, and wrote 625 training examples: 500 clean, 125 poisoned. Then they rented one GPU for about two and a half hours and trained a small add-on. The final run cost about $8. The whole project came in under $50.
 
-![What it took: an open model, 625 training examples and one rented GPU add up to a model with a hidden trigger, for about $8](/blog/fig-a-recipe.png)
+![What it took: an open-weight model, 625 training examples and one rented GPU add up to a model with a hidden trigger, for about $8](/blog/fig-a-recipe.png)
 
 ## Why it's scary
 
