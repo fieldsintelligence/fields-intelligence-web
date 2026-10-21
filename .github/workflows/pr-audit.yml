@@ -23,5 +23,6 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install deps and audit gate
-        run: npm ci --no-audit && npm test
+      # Build first: the built-HTML test (src/how-it-works.test.ts) fails under CI=true without .next output.
+      - name: Install deps, build, and audit gate
+        run: npm ci --no-audit && npm run build && npm test

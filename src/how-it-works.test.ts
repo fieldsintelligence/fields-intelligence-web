@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -10,6 +10,38 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE = join(ROOT, "app", "how-it-works", "page.tsx");
+// The diagram src and alt are shared with the homepage teaser (Gray Beard spec, 2026-10-21).
+const DIAGRAM_MODULE = join(ROOT, "lib", "architecture-diagram.ts");
+const TRUST_BOUNDARY = join(ROOT, "components", "TrustBoundary.tsx");
+// President's call (c) on PR #37, 2026-10-21: only the inside/outside box and
+// the four pillars move here, unchanged. sha256 of their markup and copy
+// (pillars array + box/pillars JSX, whitespace collapsed) as it was at aac35a8.
+const BOX_AND_PILLARS_SHA256 = "ad3a83236d2f801264f6895f57d11114ed8225e9f92aeae1610d46bf5527ac44";
+// Dropped from the site entirely by the same call.
+const DROPPED = [
+  "Your perimeter. Your keys. Our agents.",
+  "The Fields harness runs inside an environment you control. Retrieval and tool calls happen on your side. Prompts reach Fields inference over TLS, and we don’t log prompts or responses. We design for residency, auditability and a human in the loop, not for pouring NPI into a public model vendor’s cloud.",
+];
+const SCAN_DIRS = ["app", "components", "content", "lib"];
+const collapse = (text: string): string => text.replace(/\s+/g, " ");
+
+/** Box + pillars markup and copy, whitespace collapsed (see BOX_AND_PILLARS_SHA256). */
+function boxAndPillars(src: string): string {
+  const pillarsStart = src.indexOf("const pillars = [");
+  const boxStart = src.indexOf('<div className="mt-12 overflow-hidden');
+  assert.ok(pillarsStart >= 0, "pillars array missing");
+  assert.ok(boxStart >= 0, "inside/outside box missing");
+  const pillars = src.slice(pillarsStart, src.indexOf("];", pillarsStart) + 2);
+  const boxEnd = src.indexOf("</div>", src.lastIndexOf("))}")) + "</div>".length;
+  return `${collapse(pillars).trim()}\n${collapse(src.slice(boxStart, boxEnd)).trim()}`;
+}
+
+function filesUnder(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory() ? filesUnder(join(dir, entry.name)) : [join(dir, entry.name)],
+  );
+}
 const DIAGRAM_PUBLIC_PATH = "/assets/architecture-ribbons-reviewed.png";
 const DIAGRAM = join(ROOT, "public", DIAGRAM_PUBLIC_PATH);
 // sha256 of /workspace/fields-brand/architecture-ribbons-reviewed.png as Marketing handed it over.
@@ -47,16 +79,27 @@ function pageSource(): string {
   return readFileSync(PAGE, "utf8");
 }
 
+function diagramModuleSource(): string {
+  assert.ok(existsSync(DIAGRAM_MODULE), "lib/architecture-diagram.ts is missing");
+  return readFileSync(DIAGRAM_MODULE, "utf8");
+}
+
 test("how-it-works page carries the approved copy verbatim", () => {
   const src = pageSource();
-  for (const text of [...HEADINGS, BODY, ALT]) {
+  for (const text of [...HEADINGS, BODY]) {
     assert.ok(src.includes(text), `missing verbatim: ${text}`);
   }
+  // The alt text and src live in the shared module and the page renders them.
+  const shared = diagramModuleSource();
+  assert.ok(shared.includes(JSON.stringify(ALT)), `missing verbatim alt in lib/architecture-diagram.ts: ${ALT}`);
+  assert.ok(shared.includes(JSON.stringify(DIAGRAM_PUBLIC_PATH)), "shared module does not reference the served diagram path");
+  assert.match(src, /from "@\/lib\/architecture-diagram"/, "page does not import the shared diagram module");
+  assert.ok(src.includes("alt={DIAGRAM_ALT}") && src.includes("const DIAGRAM_ALT = ARCHITECTURE_DIAGRAM_ALT;"), "page img does not use the shared alt");
   for (const [term, description] of LEGEND) {
     assert.ok(src.includes(term), `missing legend term: ${term}`);
     assert.ok(src.includes(description), `missing legend description: ${description}`);
   }
-  assert.ok(src.includes(DIAGRAM_PUBLIC_PATH), "page does not reference the served diagram path");
+  assert.ok(src.includes("const DIAGRAM_SRC = ARCHITECTURE_DIAGRAM_SRC;") && src.includes("src={DIAGRAM_SRC}"), "page img does not use the shared diagram path");
   assert.ok(!/["']use client["']/.test(src), "page must stay static (no 'use client')");
 });
 
@@ -85,3 +128,69 @@ test("sitemap lists /how-it-works", () => {
   const sitemap = readFileSync(join(ROOT, "app", "sitemap.ts"), "utf8");
   assert.ok(sitemap.includes("/how-it-works"), "sitemap does not list /how-it-works");
 });
+
+test("how-it-works renders the text-box trust diagram below the architecture figure", () => {
+  const src = pageSource();
+  assert.match(src, /import \{ TrustBoundary \} from "@\/components\/TrustBoundary"/, "TrustBoundary is not imported");
+  assert.equal(src.match(/<TrustBoundary\s*\/>/g)?.length ?? 0, 1, "TrustBoundary must render exactly once");
+  const figureEnd = src.indexOf("</figure>");
+  const trustAt = src.search(/<TrustBoundary\s*\/>/);
+  const legendAt = src.indexOf("{LEGEND_HEADING}");
+  assert.ok(figureEnd >= 0 && src.indexOf("src={DIAGRAM_SRC}") < figureEnd, "architecture figure missing");
+  assert.ok(figureEnd < trustAt, "trust diagram must come after the architecture figure");
+  assert.ok(trustAt < legendAt, "trust diagram must sit directly below the figure, before the legend");
+});
+
+test("inside/outside box and the four pillars are unchanged", () => {
+  const src = readFileSync(TRUST_BOUNDARY, "utf8");
+  const hash = createHash("sha256").update(boxAndPillars(src)).digest("hex");
+  assert.equal(hash, BOX_AND_PILLARS_SHA256);
+  for (const title of ["Your systems, your harness", "No public-vendor hop for customer files", "Human sign-off", "Tamper-evident audit log"]) {
+    assert.ok(src.includes(`title: "${title}"`), `missing pillar: ${title}`);
+  }
+});
+
+test("old section heading, eyebrow and paragraph are gone from the source", () => {
+  for (const file of SCAN_DIRS.flatMap((dir) => filesUnder(join(ROOT, dir)))) {
+    const text = collapse(readFileSync(file, "utf8"));
+    for (const dropped of DROPPED) {
+      assert.ok(!text.includes(dropped), `${file} still contains: ${dropped}`);
+    }
+  }
+  const trust = readFileSync(TRUST_BOUNDARY, "utf8");
+  assert.ok(!/<h2\b/.test(trust), "trust diagram must not carry the old section heading");
+  assert.ok(!trust.includes(">How it works<"), "trust diagram must not carry the old eyebrow");
+});
+
+test('/how-it-works has no id="sovereign" (only the homepage teaser keeps it)', () => {
+  assert.ok(!pageSource().includes('id="sovereign"'), 'page carries id="sovereign"');
+  assert.ok(!readFileSync(TRUST_BOUNDARY, "utf8").includes('id="sovereign"'), 'trust diagram carries id="sovereign"');
+});
+
+// Runs after `npm run build`. CI workflows build before `npm test`, so under
+// CI=true missing build output FAILS this test instead of skipping it (Gray
+// Beard, PR #37): a workflow edit can't silently drop the check. Locally,
+// without a build, it skips.
+const BUILT = join(ROOT, ".next", "server", "app");
+const HAS_BUILD = existsSync(join(BUILT, "index.html")) && existsSync(join(BUILT, "how-it-works.html"));
+const IN_CI = process.env.CI === "true";
+test(
+  "built HTML: one #sovereign on /, none on /how-it-works, dropped copy absent, box after the figure",
+  { skip: !HAS_BUILD && !IN_CI && "no .next build output (run `npm run build` first)" },
+  () => {
+    assert.ok(HAS_BUILD, "CI=true but .next build output is missing: run `npm run build` before `npm test`");
+    const home = readFileSync(join(BUILT, "index.html"), "utf8");
+    const page = readFileSync(join(BUILT, "how-it-works.html"), "utf8");
+    assert.equal(home.match(/id="sovereign"/g)?.length ?? 0, 1);
+    assert.equal(page.match(/id="sovereign"/g)?.length ?? 0, 0);
+    for (const html of [home, page]) {
+      const text = collapse(html.replace(/&#x27;/g, "'"));
+      for (const dropped of DROPPED) assert.ok(!text.includes(dropped), `built HTML contains: ${dropped}`);
+    }
+    const imgAt = page.indexOf(DIAGRAM_PUBLIC_PATH);
+    const boxAt = page.indexOf("Outside your systems");
+    const pillarsAt = page.indexOf("Tamper-evident audit log");
+    const legendAt = page.indexOf("What you&#x27;re looking at");
+    assert.ok(imgAt >= 0 && imgAt < boxAt && boxAt < pillarsAt && pillarsAt < legendAt, "order must be figure, box, pillars, legend");
+  },
+);
