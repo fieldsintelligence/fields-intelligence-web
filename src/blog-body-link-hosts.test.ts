@@ -3,7 +3,7 @@ import { test } from "node:test";
 // @ts-ignore -- untyped .mjs test helper
 import { importRepo, renderPost } from "./support/blog-render.mjs";
 
-// Exact-host check for body links, markdown and bare (PR #43, Blue Hat L-1).
+// Exact-host check for body links, markdown and bare (PR #43).
 // See docs/architecture/blog-renderer.md, "Body links".
 
 async function parser() {

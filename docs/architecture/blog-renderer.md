@@ -130,6 +130,10 @@ Rules:
 Every caption link is checked at build time. Any violation throws
 `content/blog/<slug>.md:<line>: …`, so `next build` fails.
 
+Steps 1–7 are `checkExternalHref(raw, hosts)` in `lib/blog-parse.ts`, the one external-link
+rule shared with body links (below). `validateCaptionHref` calls it with `CAPTION_LINK_HOSTS`
+and turns a failure into the error above. Only the host list differs between the two callers.
+
 1. The raw href must not contain whitespace or control characters (tab, newline, CR). The URL
    parser would strip them silently, so this check runs on the raw text first.
 2. `new URL(raw)` with no base. A scheme-relative `//evil.test` therefore throws.
@@ -140,7 +144,7 @@ Every caption link is checked at build time. Any violation throws
    default port away. `https://openai.com:8443/…` fails.
 6. `url.hostname` must exactly equal an entry in `CAPTION_LINK_HOSTS`. There is no suffix or
    substring matching, so `openai.com.evil.test`, `openai.com.` (trailing dot), punycode/IDN
-   lookalikes (`xn--…`) and percent-encoded lookalikes fail. `https:\\evil.test` parses to host
+   lookalikes (`xn--…`, `öpenai.com`) and percent-encoded lookalikes fail. `https:\\evil.test` parses to host
    `evil.test` and fails. `OPENAI.COM` normalizes to `openai.com` and passes.
 7. The rendered `href` is the serialized `url.href`, never the raw text.
 
@@ -153,9 +157,10 @@ Current entries: `openai.com`, `platform.openai.com`, and `developers.openai.com
 post's source link (pre-#40 caption). Only that exact hostname matches; subdomains, suffixes
 and lookalikes (`developers.openai.com.evil.com`, `sub.developers.openai.com`) still fail.
 
-## Body links (PR #43, Blue Hat L-1)
+## Body links (PR #43)
 
-Paragraph and list links go through `checkBodyHref` in `lib/blog-parse.ts`. The markdown
+Paragraph and list links go through `checkBodyHref` in `lib/blog-parse.ts`, which calls the
+same `checkExternalHref` with `BODY_LINK_HOSTS` and maps a failure to `null`. The markdown
 branch (`[text](href)`) and the bare-link branch (`https://…` in running text) use the same
 check; neither renders an `<a>` without it.
 
@@ -168,7 +173,8 @@ check; neither renders an `<a>` without it.
    and `https://user@developers.openai.com/` fail.
 6. `url.port === ""` (`:443` normalizes away; `:8443` fails).
 7. `url.hostname` must exactly equal an entry in `BODY_LINK_HOSTS`. No suffix or substring
-   matching: `developers.openai.com.evil.com`, `sub.developers.openai.com`, a trailing dot, and a
+   matching: `developers.openai.com.evil.com`, `sub.developers.openai.com`, a trailing dot, the
+   diacritic lookalike `dévelopers.openai.com` (punycode `xn--dvelopers-b4a.openai.com`), and a
    host named only in the path, query or fragment (`https://evil.com/?developers.openai.com`)
    all fail.
 
