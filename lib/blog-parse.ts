@@ -99,14 +99,13 @@ export function parseFrontmatter(raw: string): { data: Record<string, string>; b
 /**
  * Exact hostnames a body link (markdown or bare) may point to (PR #43, Blue Hat
  * L-1). A repo constant: adding a host is a spec change. No suffix or substring
- * matching. example.com is IANA-reserved (RFC 2606) and used by the renderer tests.
+ * matching.
  */
 export const BODY_LINK_HOSTS: readonly string[] = [
   "fieldsintelligence.com",
   "developers.openai.com",
   "x.com",
   "projectdiscovery.io",
-  "example.com",
 ];
 
 /**
