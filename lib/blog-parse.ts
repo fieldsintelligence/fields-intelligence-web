@@ -97,11 +97,46 @@ export function parseFrontmatter(raw: string): { data: Record<string, string>; b
 }
 
 /**
- * Links render only for https:// URLs and same-site paths. Anything else stays text.
- * A same-site path may not start with "//" or "/\\" and holds no backslash (PR #40).
+ * Exact hostnames a body link (markdown or bare) may point to (PR #43, Blue Hat
+ * L-1). A repo constant: adding a host is a spec change. No suffix or substring
+ * matching. example.com is IANA-reserved (RFC 2606) and used by the renderer tests.
  */
-function safeHref(href: string): boolean {
-  return /^https:\/\/[^\s]+$/.test(href) || /^\/(?![\/\\])[^\s\\]*$/.test(href);
+export const BODY_LINK_HOSTS: readonly string[] = [
+  "fieldsintelligence.com",
+  "developers.openai.com",
+  "x.com",
+  "projectdiscovery.io",
+  "example.com",
+];
+
+/**
+ * Checks an external body link: parses with new URL(), https only, no username
+ * or password, no port, hostname exactly in BODY_LINK_HOSTS. Returns the
+ * serialized URL, or null so the caller renders the text without a link.
+ */
+export function checkBodyHref(raw: string): string | null {
+  // The URL parser silently strips tabs and newlines, so check the raw text first.
+  if (/[\s\u0000-\u001f\u007f]/.test(raw)) return null;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:") return null;
+  if (url.username !== "" || url.password !== "") return null;
+  if (url.port !== "") return null;
+  if (!BODY_LINK_HOSTS.includes(url.hostname)) return null;
+  return url.href;
+}
+
+/**
+ * Returns the href to render, or null: an external link must pass checkBodyHref;
+ * a same-site path may not start with "//" or "/\\" and holds no backslash (PR #40).
+ */
+function safeHref(href: string): string | null {
+  if (/^\/(?![\/\\])[^\s\\]*$/.test(href)) return href;
+  return checkBodyHref(href);
 }
 
 export function parseInlines(input: string): InlineNode[] {
@@ -121,10 +156,14 @@ export function parseInlines(input: string): InlineNode[] {
     } else if (match[2] !== undefined) {
       nodes.push({ type: "em", value: match[2] });
     } else if (match[3] !== undefined && match[4] !== undefined) {
-      if (safeHref(match[4])) nodes.push({ type: "link", value: match[3], href: match[4] });
+      const href = safeHref(match[4]);
+      if (href !== null) nodes.push({ type: "link", value: match[3], href });
       else pushText(match[3]);
     } else {
-      nodes.push({ type: "link", href: match[0], value: match[0] });
+      // Bare link: same exact-host check as a markdown link (PR #43, Blue Hat L-1).
+      const href = checkBodyHref(match[0]);
+      if (href !== null) nodes.push({ type: "link", href, value: match[0] });
+      else pushText(match[0]);
     }
     last = index + match[0].length;
   }
