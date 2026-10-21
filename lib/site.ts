@@ -17,6 +17,14 @@ export const site = {
   jurisdiction: "Missouri",
 } as const;
 
+/**
+ * Absolute apex URL for a site path, for links that must leave the blog host.
+ * Built from the site.url constant only (PR #43), never from the request or env.
+ */
+export function apexHref(path: `/${string}`): string {
+  return `${site.url}${path}`;
+}
+
 export const nav = [
   { href: "/#problem", label: "The problem" },
   { href: "/#use-cases", label: "Use cases" },

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandLockup } from "@/components/BrandLockup";
-import { site } from "@/lib/site";
+import { apexHref, site } from "@/lib/site";
 
 export function Footer() {
   return (
@@ -38,7 +38,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/#sovereign" className="hover:text-white">
+              <Link href={apexHref("/how-it-works#trust-boundary")} className="hover:text-white">
                 Trust boundary
               </Link>
             </li>
