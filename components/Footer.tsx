@@ -28,7 +28,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/#use-cases" className="hover:text-white">
+              <Link href={`${site.url}/#use-cases`} className="hover:text-white">
                 Industry fit
               </Link>
             </li>

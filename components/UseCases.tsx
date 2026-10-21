@@ -103,8 +103,8 @@ export function UseCases() {
           Built for work that can’t go public.
         </h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate">
-          Same sovereign pattern. Different files. Here’s how Fields shows up
-          across industries that live on NPI.
+          Same sovereign pattern. Different files. Here’s how Fields Intelligence
+          shows up across industries that live on NPI.
         </p>
 
         <div
