@@ -42,22 +42,15 @@ The honest limit: those fingerprints prove we run exactly what the publisher rel
 
 **Nothing to steal from our logs.** Our gateway and engine don't log prompt or response content. Engine logs never touch disk, and they don't stick around. Your context sits in GPU memory, never on disk. Every request uses TLS and SSO sign-in. No model change reaches the engine without the same strict review as the rest of our code.
 
-## Why the door matters most
+## Protection on both sides
 
-The hidden command runs wherever the tools run. In a bank, that's the bank's own systems, not our engine. So blocking the engine from the internet doesn't stop this attack on its own. The door does.
+The hidden command runs wherever the tools run. In a bank, that's the bank's own systems, not our engine. So walling off the engine isn't enough. The door is what counts. (For where each piece runs, see [how Fields Intelligence works](https://fieldsintelligence.com/how-it-works).)
 
-**One door.** The bank build of the Fields Intelligence app has every built-in tool removed. Its only way to act is one door, AgentGateway.
+**Our security doesn't stop at the server.** It reaches into the Fields Intelligence app on your systems through AgentGateway, the only door between the model and your tools. AgentGateway enforces real role-based access control: each role gets its own tools and permissions, and every tool call is checked against them.
 
-![How Fields Intelligence is designed: the app, AgentGateway and tools on your infrastructure; the AI engine on Fields Intelligence infrastructure over TLS](architecture-ribbons-reviewed.png)
-*How Fields Intelligence is designed: the AI engine runs on our infrastructure, and the app and its tools run on yours, with AgentGateway as the only door between the model and your tools.*
+**The model doesn't get a vote.** Those rules are enforced outside the model. You can tell a model to follow rules, and a hidden trigger is built to make it ignore them. AgentGateway doesn't ask the model. If a call isn't allowed, it doesn't happen.
 
-**Per-role tool permissions.** AgentGateway gives each role its own tool list, checks each request's details, and says no when in doubt. Its list of allowed web addresses is set per tool and per role. That matters: the attack was hosted on a code site most companies trust, so a plain website allow-list wouldn't have stopped it.
-
-**Your permissions, nothing more.** Tool calls carry the signed-in user's permissions. The model can't do anything that person couldn't.
-
-**A second person signs off.** Any tool that deletes things or moves money needs approval from a second, named person. That approval works once, for five minutes.
-
-**A record of every move.** Every tool call goes into a tamper-evident audit log, kept on the bank's systems.
+**Your own controls sit on top.** Everything still runs inside your access controls and your security tools. The model can't do anything the signed-in person couldn't, and your team stays in charge of both layers.
 
 ## Five questions to ask any AI vendor
 
