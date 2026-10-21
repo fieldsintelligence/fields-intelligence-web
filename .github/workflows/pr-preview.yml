@@ -21,6 +21,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Build the PR head itself, not GitHub's merge ref, so each preview
+          # deployment records and traces to the head SHA.
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -40,8 +44,9 @@ jobs:
         id: deploy
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           url="$(VERCEL_ORG_ID=team_m5ApD0j2P01y0kiswd9aGVjD VERCEL_PROJECT_ID=prj_aunxZgkQhfy9xL4ddL8xJbeAMd6r vercel deploy --scope fieldsintelligence --token "$VERCEL_TOKEN")"
           echo "url=${url}" >> "$GITHUB_OUTPUT"
           echo "Preview deployment URL: ${url}"
-          echo "Preview deployment for ${GITHUB_SHA}: ${url}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Preview deployment for ${HEAD_SHA}: ${url}" >> "$GITHUB_STEP_SUMMARY"
