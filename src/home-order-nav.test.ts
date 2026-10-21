@@ -5,7 +5,8 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 // #61. Homepage section order, the UseCases eyebrow, header tab labels and
-// order, footer anchor order, and no dead homepage anchors.
+// order, footer anchor order, and no dead homepage anchors. #63: every
+// homepage anchor is absolute on site.url.
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel: string): string => readFileSync(join(ROOT, rel), "utf8");
@@ -15,29 +16,29 @@ const SECTION_COMPONENTS = ["Hero", "Problem", "HowItWorksTeaser", "UseCases", "
 const SECTION_IDS = ["problem", "sovereign", "use-cases", "blog", "founder"];
 
 const NAV_SOURCE: ReadonlyArray<readonly [string, string]> = [
-  ['"/#problem"', "The problem"],
+  ["`${site.url}/#problem`", "The problem"],
   ["`${site.url}/#sovereign`", "How it works"],
-  ['"/#use-cases"', "Industry fit"],
+  ["`${site.url}/#use-cases`", "Industry fit"],
   ["`${site.url}/#blog`", "Blog"],
-  ['"/#founder"', "Founder"],
+  ["`${site.url}/#founder`", "Founder"],
 ];
 const NAV_BUILT: ReadonlyArray<readonly [string, string]> = [
-  ["/#problem", "The problem"],
+  [`${APEX}/#problem`, "The problem"],
   [`${APEX}/#sovereign`, "How it works"],
-  ["/#use-cases", "Industry fit"],
+  [`${APEX}/#use-cases`, "Industry fit"],
   [`${APEX}/#blog`, "Blog"],
-  ["/#founder", "Founder"],
+  [`${APEX}/#founder`, "Founder"],
 ];
 const FOOTER_SOURCE: ReadonlyArray<readonly [string, string]> = [
   ["{`${site.url}/#sovereign`}", "Trust boundary"],
-  ['"/#use-cases"', "Industry fit"],
+  ["{`${site.url}/#use-cases`}", "Industry fit"],
   ['"/how-it-works"', "How it works"],
   ['"/blog"', "Blog"],
   ['"/contact"', "Contact"],
 ];
 const FOOTER_BUILT: ReadonlyArray<readonly [string, string]> = [
   [`${APEX}/#sovereign`, "Trust boundary"],
-  ["/#use-cases", "Industry fit"],
+  [`${APEX}/#use-cases`, "Industry fit"],
   ["/how-it-works", "How it works"],
   ["/blog", "Blog"],
   ["/contact", "Contact"],
