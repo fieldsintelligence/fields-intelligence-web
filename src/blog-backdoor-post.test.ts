@@ -390,7 +390,15 @@ test("fixture differs from the moved draft only by the door section swap", () =>
   };
   const was = split(MOVED_DRAFT, OLD_DOOR_HEADING);
   const now = split(FIXTURE, DOOR_HEADING);
-  assert.equal(now.before, was.before, "text before the section is unchanged");
+  // #46 changes only the open-weight wording, which sits before this section.
+  // Do not re-pin the moved draft. Treat those replacements as the only allowed diff.
+  const openWeight = (text: string) =>
+    text.split("open AI model").join("open-weight AI model").split("open model").join("open-weight model");
+  assert.equal(
+    openWeight(now.before),
+    openWeight(was.before),
+    "text before the section is unchanged aside from the open-weight replacements (#46)",
+  );
   assert.equal(now.after, was.after, "text after the section is unchanged");
   assert.equal(now.section, DOOR_SECTION, "new section is Marketing's rewrite, heading renamed");
   assert.ok(was.section.includes("](architecture-ribbons-reviewed.png)"), "old section held the architecture figure");
