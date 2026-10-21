@@ -98,7 +98,7 @@ export function UseCases() {
       className="section-anchor border-b border-line bg-cream"
     >
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <p className="text-sm font-medium text-navy">Where it fits</p>
+        <p className="text-sm font-medium text-navy">Industry fit</p>
         <h2 className="mt-2 max-w-3xl text-3xl font-medium tracking-tight text-navy sm:text-4xl">
           Built for work that can’t go public.
         </h2>

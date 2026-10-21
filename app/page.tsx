@@ -10,9 +10,9 @@ export default function Home() {
     <>
       <Hero />
       <Problem />
-      <ZeroRetention />
-      <UseCases />
       <HowItWorksTeaser />
+      <UseCases />
+      <ZeroRetention />
       <Founder />
     </>
   );
