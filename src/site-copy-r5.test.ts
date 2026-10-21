@@ -22,7 +22,6 @@ const RDQ = "\u201d";
 
 const TITLE = `Fields Intelligence ${DOT} Sovereign AI for NPI`;
 const TEMPLATE = `%s ${DOT} Fields Intelligence`;
-const DEFAULT_TITLE = `Fields Intelligence ${EM} Sovereign AI for NPI`;
 
 const BODY =
   "The engine temporarily holds your conversation in RAM, answers, and forgets. Fields Intelligence never writes your prompts or answers to disk, and doesn't log them.";
@@ -30,7 +29,8 @@ const TEASER =
   "The engine temporarily holds your conversation in RAM and never logs your prompts or answers.";
 const LEGEND_RAM = "the engine temporarily holds your conversation in RAM and never writes it to disk.";
 const LEGEND_RECORD = "Fields Intelligence keeps no record of what you asked or what it said.";
-const HERO_NPI = "Non-public information (NPI) requires secure access to intelligence.";
+const HERO_NPI =
+  `Non-public information (NPI) requires secure access to intelligence. Encrypted in transit, both ways. The harness and tools run on systems controlled by you. Inference runs on our infrastructure, and we don${RSQ}t log prompts or responses.`;
 const PROBLEM_H2 = `Public AI is useful. Non-public information (NPI) doesn${RSQ}t belong there.`;
 
 const OLD_BODY =
@@ -56,7 +56,7 @@ const PROOF_CLAIMS = [
 ];
 
 const FOUNDER =
-  `I${RSQ}m building Fields Intelligence as a one-person, AI-operated company ${EM} to illustrate the power of AI, and to prove how much work you can get done when you build it into everything you do.`;
+  "Fields Intelligence is an AI-operated company, illustrating the power of AI, and to prove how much work you can get done when you build it into everything you do.";
 const HERO_SIGNOFF =
   `Pilots run 30${EN}60 days. You keep the files. Human sign-off stays in the loop.`;
 const FOOTER_SIGNOFF = `30${EN}60 day pilots. Human sign-off stays in the loop.`;
@@ -141,17 +141,19 @@ function textNodes(node: unknown, out: string[] = []): string[] {
   return out;
 }
 
-function renderedTitle(element: unknown): string {
-  return collapse(
-    textNodes(element)
-      .map((part) => part.trim())
-      .filter((part) => part.length > 0 && part !== "fieldsintelligence.com")
-      .join(" "),
-  );
+function drawnLines(element: unknown): string[] {
+  return textNodes(element)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
 }
 
 test("guard: Founder AI-operated claim is unchanged", () => {
-  assert.ok(collapse(read("components/Founder.tsx")).includes(FOUNDER));
+  const founder = collapse(decode(read("components/Founder.tsx")));
+  assert.ok(founder.includes(FOUNDER), `missing r4 Founder sentence: ${FOUNDER}`);
+  assert.ok(
+    !founder.includes(`I${RSQ}m building Fields Intelligence as a one-person`),
+    "old Founder sentence is still there",
+  );
 });
 
 test("guard: Hero sign-off is unchanged", () => {
@@ -166,9 +168,10 @@ test("guard: Hero no-logs line is unchanged", () => {
   assert.ok(read("components/Hero.tsx").includes(HERO_NO_LOGS));
 });
 
-test("guard: ZeroRetention no-logs paragraph is unchanged", () => {
-  assert.ok(read("components/ZeroRetention.tsx").includes(ZERO_RETENTION));
-  assert.ok(read("components/ZeroRetention.tsx").includes("we do not log prompts or responses"));
+test("ZeroRetention static copy is gone from the homepage section", () => {
+  const src = read("components/ZeroRetention.tsx");
+  assert.equal(src.includes(ZERO_RETENTION), false, "ZeroRetention static paragraph is still in the homepage Blog section");
+  assert.equal(src.includes("Read the post \u2192"), false, 'static "Read the post →" link is still in the homepage Blog section');
 });
 
 test("guard: site description no-logs line is unchanged", () => {
@@ -187,14 +190,18 @@ test("guard: ProductDemo claims are unchanged", () => {
   assert.ok(demo.includes(DEMO_TITLE));
 });
 
-test("guard: default document title keeps the em dash", () => {
-  assert.ok(read("app/layout.tsx").includes(`default: "${DEFAULT_TITLE}"`));
+test("default document title has no em dash", () => {
+  const title = read("app/layout.tsx").match(/default:\s*"([^"]*)"/)?.[1];
+  assert.ok(title, "missing default title");
+  assert.equal(title.includes(EM), false, `default title contains an em dash: ${title}`);
+  assert.equal(title.includes("|"), false, `default title contains a pipe: ${title}`);
 });
 
 test("Hero lead is the NPI sentence with a lowercase i", () => {
-  const hero = read("components/Hero.tsx");
-  assert.ok(hero.includes(HERO_NPI), `missing ${HERO_NPI}`);
-  assert.ok(!hero.includes("Secure access to intelligence."), "old Hero lead is still there");
+  const hero = collapse(decode(read("components/Hero.tsx")));
+  assert.ok(hero.includes(HERO_NPI), `missing r4 hero paragraph: ${HERO_NPI}`);
+  assert.ok(!hero.includes("Your harness and tools run on your own systems."), "old Hero harness sentence is still there");
+  assert.ok(!hero.includes("Inference runs on ours,"), "old Hero inference sentence is still there");
 });
 
 test("Problem heading names Non-public information and takes the high-contrast treatment", () => {
@@ -257,13 +264,17 @@ test("OG image rendered title agrees with the openGraph and twitter titles", asy
   const twitter = layout.match(/twitter:\s*\{[\s\S]*?title:\s*"([^"]*)"/)?.[1];
   const image = await importRepo("app/opengraph-image.tsx");
   const response = await image.default();
-  const drawn = renderedTitle(response.element);
-  assert.equal(drawn, TITLE);
+  const lines = drawnLines(response.element).filter((line) => line.replace(/\s+/g, "") !== "fieldsintelligence.com");
   assert.equal(og, TITLE);
   assert.equal(twitter, TITLE);
-  assert.equal(drawn, og);
-  assert.equal(drawn, twitter);
-  assert.ok(read("app/layout.tsx").includes(`template: "${TEMPLATE}"`));
+  assert.equal(image.alt, TITLE);
+  assert.ok(layout.includes(`template: "${TEMPLATE}"`));
+  assert.deepEqual(
+    lines.filter((line) => line.startsWith(DOT)),
+    [],
+    "no drawn OG line begins with the dot",
+  );
+  assert.deepEqual(lines, TITLE.split(` ${DOT} `));
 });
 
 test(
@@ -279,7 +290,7 @@ test(
     assert.ok(how.includes(LEGEND_RAM), "built legend is missing the RAM line");
     assert.ok(how.includes(LEGEND_RECORD), "built legend is missing the no-record line");
     assert.ok(home.includes(TEASER), "built homepage is missing the r5 teaser");
-    assert.ok(home.includes(HERO_NPI), "built homepage is missing the NPI hero line");
+    assert.ok(home.includes(HERO_NPI), `built homepage is missing the r4 hero paragraph: ${HERO_NPI}`);
     assert.ok(home.includes(PROBLEM_H2), "built homepage is missing the problem heading");
     const problem = home.slice(home.indexOf('id="problem"'), home.indexOf("</section>", home.indexOf('id="problem"')));
     assert.match(problem, /bg-navy/);
@@ -311,12 +322,15 @@ test(
 );
 
 test(
-  "guard: built default title and how-it-works absolute title stay",
+  "built home title has no em dash and how-it-works title uses the template",
   { skip: skipWithoutBuild },
   () => {
     assert.ok(HAS_BUILD, "CI=true but .next build output is missing");
-    assert.equal(titleOf(readFileSync(join(BUILT, "index.html"), "utf8")), DEFAULT_TITLE);
-    assert.equal(titleOf(readFileSync(join(BUILT, "how-it-works.html"), "utf8")), "How it works | Fields Intelligence");
+    const homeTitle = titleOf(readFileSync(join(BUILT, "index.html"), "utf8"));
+    const howTitle = titleOf(readFileSync(join(BUILT, "how-it-works.html"), "utf8"));
+    assert.equal(howTitle, `How it works ${DOT} Fields Intelligence`);
+    assert.equal(homeTitle.includes(EM), false, `home title contains an em dash: ${homeTitle}`);
+    assert.equal(homeTitle.includes("|"), false, `home title contains a pipe: ${homeTitle}`);
   },
 );
 
