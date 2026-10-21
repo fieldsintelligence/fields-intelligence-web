@@ -5,8 +5,9 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 // #47 r3/r5. Header "How it works" and footer "Trust boundary" are
-// `${site.url}/#sovereign`. Other header section tabs and the other footer
-// links stay as they are on main. The trust block leaves /how-it-works.
+// `${site.url}/#sovereign`. The trust block leaves /how-it-works. #63: the
+// other header section tabs and footer Industry fit are absolute on site.url;
+// the footer page links stay as they are on main.
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel: string): string => readFileSync(join(ROOT, rel), "utf8");
@@ -15,13 +16,12 @@ const APEX = "https://fieldsintelligence.com/#sovereign";
 const HOW_EXPR = "`${site.url}/#sovereign`";
 
 const SECTION_TABS: ReadonlyArray<readonly [string, string]> = [
-  ["/#problem", "The problem"],
-  ["/#use-cases", "Industry fit"],
-  ["/#founder", "Founder"],
+  ["https://fieldsintelligence.com/#problem", "The problem"],
+  ["https://fieldsintelligence.com/#use-cases", "Industry fit"],
+  ["https://fieldsintelligence.com/#founder", "Founder"],
 ];
 
 const FOOTER_UNCHANGED: ReadonlyArray<readonly [string, string]> = [
-  ["/#use-cases", "Industry fit"],
   ["/how-it-works", "How it works"],
   ["/blog", "Blog"],
   ["/contact", "Contact"],
@@ -103,10 +103,10 @@ test("header How it works is ${site.url}/#sovereign, not the request", () => {
   }
 });
 
-test("guard: other header section tabs stay relative", () => {
+test("guard: other header section tabs are ${site.url} anchors", () => {
   const site = read("lib/site.ts");
   for (const [href, label] of SECTION_TABS) {
-    const needle = `href: "${href}", label: "${label}"`;
+    const needle = `href: \`\${site.url}${href.slice("https://fieldsintelligence.com".length)}\`, label: "${label}"`;
     assert.ok(site.includes(needle), `missing ${needle}`);
   }
   assert.match(site, /href:\s*`\$\{site\.url\}\/#blog`,\s*label:\s*"Blog"/);
@@ -123,6 +123,11 @@ test("footer Trust boundary label and href are ${site.url}/#sovereign", () => {
 
 test("guard: other footer links stay as on main", () => {
   const footer = read("components/Footer.tsx");
+  assert.match(
+    footer,
+    /<Link\s+href=\{`\$\{site\.url\}\/#use-cases`\}[^>]*>\s*Industry fit\s*<\/Link>/,
+    "footer Industry fit is not ${site.url}/#use-cases",
+  );
   const labelled = [...footer.matchAll(/<Link\s+href="([^"]*)"[^>]*>\s*([^<]*?)\s*<\/Link>/g)]
     .map((match) => [match[1], match[2].trim()] as const)
     .filter(([, text]) => text.length > 0 && text !== "Trust boundary");

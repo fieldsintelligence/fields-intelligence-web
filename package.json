@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/next-lockfile.test.ts src/site-claims.test.ts src/how-it-works.test.ts src/fig3-v3-nav.test.ts src/home-how-it-works-teaser.test.ts src/how-it-works-nav.test.ts src/site-copy-r5.test.ts src/site-copy-npi-case.test.ts src/home-blog-section.test.ts src/blog-renderer.test.ts src/blog-zdr-figures.test.ts src/blog-backdoor-post.test.ts src/blog-index-label.test.ts src/blog-open-weight.test.ts src/blog-caption-inline.test.ts src/blog-body-link-hosts.test.ts src/blog-content-links.test.ts src/proxy-blog-redirect.test.ts src/home-order-nav.test.ts && npm audit --omit=dev --audit-level=high"
+    "test": "node --test src/next-lockfile.test.ts src/site-claims.test.ts src/how-it-works.test.ts src/fig3-v3-nav.test.ts src/home-how-it-works-teaser.test.ts src/how-it-works-nav.test.ts src/site-copy-r5.test.ts src/site-copy-npi-case.test.ts src/home-blog-section.test.ts src/blog-renderer.test.ts src/blog-zdr-figures.test.ts src/blog-backdoor-post.test.ts src/blog-index-label.test.ts src/blog-open-weight.test.ts src/blog-caption-inline.test.ts src/blog-body-link-hosts.test.ts src/blog-content-links.test.ts src/proxy-blog-redirect.test.ts src/home-order-nav.test.ts src/absolute-anchors.test.ts && npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
     "next": "16.4.2",
