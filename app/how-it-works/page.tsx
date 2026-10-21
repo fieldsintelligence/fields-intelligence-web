@@ -86,7 +86,7 @@ export default function HowItWorksPage() {
         </figure>
       </div>
 
-      {/* Text-box trust diagram, moved unchanged from the homepage (Zak, 10:04 AM CT 2026-10-21). */}
+      {/* Inside/outside box and four pillars, moved from the homepage (President's call (c), PR #37). */}
       <TrustBoundary />
 
       <div className="mx-auto max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">
