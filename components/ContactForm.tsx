@@ -152,7 +152,7 @@ export function ContactForm() {
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? "message-error" : undefined}
           className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-navy"
-          placeholder="A few sentences on the shop, the files, and why they can’t leave."
+          placeholder="A few sentences on the shop, the files, and why they can’t go to a public model."
         />
         {errors.message ? (
           <p id="message-error" className="mt-1.5 text-sm text-red-800">
