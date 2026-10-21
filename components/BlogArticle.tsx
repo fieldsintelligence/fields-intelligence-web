@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatBlogDate, type Block, type InlineNode, type Post } from "@/lib/blog";
+import { formatBlogDate, type Block, type CaptionInline, type InlineNode, type Post } from "@/lib/blog";
 
 // Maps parsed blocks (lib/blog-parse.ts) to JSX. No parsing here, and no raw
 // HTML: every string is a React text child or attribute, so it is escaped.
@@ -35,6 +35,55 @@ function RichText({ inlines }: { inlines: InlineNode[] }) {
       </a>
     );
   });
+}
+
+const LINK_CLASS = "underline decoration-brass/60 underline-offset-4 hover:decoration-brass";
+
+function assertNeverCaption(node: never): never {
+  throw new Error(`Unhandled caption node: ${JSON.stringify(node)}`);
+}
+
+function CaptionNode({ node }: { node: CaptionInline }) {
+  switch (node.kind) {
+    case "text":
+      return <span>{node.text}</span>;
+    case "strong":
+      return <strong className="font-medium text-navy">{node.text}</strong>;
+    case "em":
+      return <em className="italic">{node.text}</em>;
+    case "link":
+      return (
+        <a href={node.href} className={LINK_CLASS} rel="noopener noreferrer">
+          {node.text}
+        </a>
+      );
+    default:
+      return assertNeverCaption(node);
+  }
+}
+
+/**
+ * Figure caption (PR #43). A caption that starts with **…** renders it as the
+ * title line, then the rest in the body span: the pre-#40 figure markup.
+ */
+function Caption({ caption }: { caption: CaptionInline[] }) {
+  const [first, ...rest] = caption;
+  const title = first && first.kind === "strong" ? first : null;
+  let body = title ? rest : caption;
+  if (title && body[0]?.kind === "text") {
+    const lead = body[0].text.trimStart();
+    body = lead ? [{ kind: "text", text: lead }, ...body.slice(1)] : body.slice(1);
+  }
+  return (
+    <figcaption className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate">
+      {title ? <span className="block font-medium text-navy">{title.text}</span> : null}
+      <span className={title ? "mt-1 block" : "block"}>
+        {body.map((node, index) => (
+          <CaptionNode key={index} node={node} />
+        ))}
+      </span>
+    </figcaption>
+  );
 }
 
 function assertNever(block: never): never {
@@ -97,11 +146,7 @@ function renderBlock(block: Block, index: number) {
             decoding="async"
             className="h-auto w-full rounded-xl border border-line bg-cream"
           />
-          {block.caption ? (
-            <figcaption className="mx-auto mt-4 max-w-3xl text-sm italic leading-relaxed text-slate">
-              {block.caption}
-            </figcaption>
-          ) : null}
+          {block.caption ? <Caption caption={block.caption} /> : null}
         </figure>
       );
     default:

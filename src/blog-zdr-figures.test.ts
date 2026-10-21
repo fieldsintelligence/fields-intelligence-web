@@ -37,21 +37,41 @@ const FIGURES = [
 // sha256 of the ZDR post's non-figure body blocks (kind + visible text), as rendered before the rewrite.
 const BODY_TEXT_SHA256 = "67fb87f816be1c406ad16728f558ab8cd6412f091039f5c388a58e5d419467c4";
 
-test("ZDR post figures: src, alt, title and caption text, and order are pinned", async () => {
+const CAPTION_CLASS = "mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate";
+const LINK_CLASS = "underline decoration-brass/60 underline-offset-4 hover:decoration-brass";
+
+/**
+ * Exact figcaption markup: the pre-#40 layout (bold title line, italic product
+ * name, linked source, same text order), with rel="noopener noreferrer" on the
+ * link (PR #43, spec point B).
+ */
+function expectedCaption(want: (typeof FIGURES)[number]): string {
+  const body = want.caption.startsWith("Annotated from")
+    ? (() => {
+        const [before, after] = want.caption.split("ZDR with Private Safety Processing");
+        const [middle] = after.split(SOURCE_URL);
+        return (
+          `<span>${before}</span><em class="italic">ZDR with Private Safety Processing</em>` +
+          `<span>${middle}</span><a href="${SOURCE_URL}" class="${LINK_CLASS}" rel="noopener noreferrer">${SOURCE_URL}</a>`
+        );
+      })()
+    : `<span>${want.caption}</span>`;
+  return (
+    `<figcaption class="${CAPTION_CLASS}"><span class="block font-medium text-navy">${want.title}</span>` +
+    `<span class="mt-1 block">${body}</span></figcaption>`
+  );
+}
+
+test("ZDR post figures: src, alt, and order are pinned; captions have the restored markup", async () => {
   const { html } = await renderPost(SLUG);
   const figures = figuresOf(html);
   assert.equal(figures.length, FIGURES.length);
+  const captions = [...html.matchAll(/<figcaption\b[\s\S]*?<\/figcaption>/g)].map((m) => m[0]);
   FIGURES.forEach((want, index) => {
     const got = figures[index];
     assert.equal(got.src, want.src, `figure ${index + 1} src`);
     assert.equal(got.alt, want.alt, `figure ${index + 1} alt`);
-    const caption = got.caption ?? "";
-    const titleAt = caption.indexOf(want.title);
-    assert.ok(titleAt >= 0, `figure ${index + 1} caption lacks title: ${caption}`);
-    assert.ok(
-      caption.indexOf(want.caption, titleAt + want.title.length) >= 0,
-      `figure ${index + 1} caption text changed: ${caption}`,
-    );
+    assert.equal(captions[index], expectedCaption(want), `figure ${index + 1} caption markup`);
   });
 });
 
@@ -64,20 +84,18 @@ test("ZDR post body text outside the figures is unchanged", async () => {
   assert.equal(digest, BODY_TEXT_SHA256);
 });
 
-// The plain caption PR #40 renders: one italic paragraph, title and caption joined
-// with ". ", no inline markup and no link. The caption-inline follow-up updates this
-// pin on purpose.
-const FIGCAPTION_CLASS = "mx-auto mt-4 max-w-3xl text-sm italic leading-relaxed text-slate";
-
-test("ZDR post figcaptions: exact plain structure is pinned", async () => {
+// The restored caption PR #43 renders (replaces PR #40's plain-caption pin): the
+// pre-#40 caption class (not italic), a bold title line, then the caption line with
+// inline markup and the linked source. Title and caption are no longer joined with ". ".
+test("ZDR post figcaptions: exact restored structure is pinned", async () => {
   const { html } = await renderPost(SLUG);
   const captions = [...html.matchAll(/<figcaption\b([^>]*)>([\s\S]*?)<\/figcaption>/g)];
   assert.equal(captions.length, FIGURES.length);
   FIGURES.forEach((want, index) => {
-    const [, attrs, inner] = captions[index];
-    assert.equal(attrs, ` class="${FIGCAPTION_CLASS}"`, `figure ${index + 1} figcaption attributes`);
-    assert.ok(!inner.includes("<"), `figure ${index + 1} figcaption has markup: ${inner}`);
-    assert.equal(decodeEntities(inner), `${want.title}. ${want.caption}`, `figure ${index + 1} figcaption`);
+    const [whole, attrs, inner] = captions[index];
+    assert.equal(attrs, ` class="${CAPTION_CLASS}"`, `figure ${index + 1} figcaption attributes`);
+    assert.equal(whole, expectedCaption(want), `figure ${index + 1} figcaption markup`);
+    assert.equal(decodeEntities(textOf(inner)), `${want.title}${want.caption}`, `figure ${index + 1} figcaption text`);
   });
 });
 
@@ -97,6 +115,9 @@ test("ZDR post links: every href in the article, in order, is pinned", async () 
   }));
   assert.deepEqual(links, [
     { href: "/blog", rel: null, text: "Blog" },
+    // Figure 1 and 2 captions link their source again (PR #43).
+    { href: SOURCE_URL, rel: "noopener noreferrer", text: SOURCE_URL },
+    { href: SOURCE_URL, rel: "noopener noreferrer", text: SOURCE_URL },
     { href: SOURCE_URL, rel: "noreferrer", text: "their guide" },
   ]);
 });
