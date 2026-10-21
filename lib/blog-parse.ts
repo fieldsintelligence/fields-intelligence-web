@@ -96,9 +96,12 @@ export function parseFrontmatter(raw: string): { data: Record<string, string>; b
   return { data, body: match[2].trim() };
 }
 
-/** Links render only for https:// URLs and same-site paths. Anything else stays text. */
+/**
+ * Links render only for https:// URLs and same-site paths. Anything else stays text.
+ * A same-site path may not start with "//" or "/\\" and holds no backslash (PR #40).
+ */
 function safeHref(href: string): boolean {
-  return /^https:\/\/[^\s]+$/.test(href) || /^\/(?!\/)[^\s]*$/.test(href);
+  return /^https:\/\/[^\s]+$/.test(href) || /^\/(?![\/\\])[^\s\\]*$/.test(href);
 }
 
 export function parseInlines(input: string): InlineNode[] {

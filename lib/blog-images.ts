@@ -6,12 +6,10 @@ import type { ImageResolver } from "./blog-parse";
 export const BLOG_IMAGE_SRC = /^\/blog\/[a-z0-9-]+\.png$/;
 
 /**
- * Exact paths allowed outside that pattern. The architecture diagram is
- * shared with /how-it-works. The two ZDR-post figures predate the lowercase
- * rule (renaming them would change their public URLs).
+ * Exact paths allowed outside that pattern. The two ZDR-post figures predate
+ * the lowercase rule (renaming them would change their public URLs).
  */
 export const ALLOWED_IMAGE_SRCS: readonly string[] = [
-  "/assets/architecture-ribbons-reviewed.png",
   "/blog/blog-openai-api-retention-NotZDR.png",
   "/blog/blog-openai-async-safety-NotZDR.png",
 ];

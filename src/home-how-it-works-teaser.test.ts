@@ -1,16 +1,15 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-// Ship call (Zak, 10:04 AM CT, via President): the homepage "How it works"
-// section (#sovereign) becomes a short teaser for /how-it-works. Teaser copy
-// is verbatim from Marketing. President's call (c) on PR #37: only the
-// inside/outside box and four pillars (components/TrustBoundary.tsx) move to
-// /how-it-works; the old heading and paragraph are dropped (see
-// how-it-works.test.ts).
+// The homepage "How it works" section (#sovereign) is a short teaser for
+// /how-it-works (PR #37). Teaser copy is verbatim from Marketing. Only the
+// inside/outside box and four pillars (components/TrustBoundary.tsx) live on
+// /how-it-works (see how-it-works.test.ts). The two-column layout and the
+// "Take a deeper look" link text (PR #42) are pinned by the tests below.
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path: string): string => readFileSync(join(ROOT, path), "utf8");
@@ -23,7 +22,9 @@ const TRUST_BOUNDARY = "components/TrustBoundary.tsx";
 const HEADING = "How it works";
 const BODY =
   "Your files, your tools and the Fields Intelligence app run on your own systems. Only your question and the context it needs travel to our AI engine, encrypted both ways. The engine works in memory and never logs your prompts or answers.";
-const LINK_TEXT = "See how it works →";
+const LINK_TEXT = "Take a deeper look →";
+const OLD_LINK_TEXT = "See how it works →";
+const HERO_BUTTON_TEXT = "See how it works";
 const DIAGRAM_SRC = "/assets/architecture-ribbons-reviewed.png";
 const DIAGRAM_ALT =
   "Fields Intelligence architecture: the FI Harness, context store, AgentGateway and harness tools run on your computer inside your organization's access controls, and connect over TLS with SSO and 2FA to the Fields Intelligence AI engine at ai.fieldsintelligence.com.";
@@ -57,7 +58,7 @@ test("teaser keeps the #sovereign anchor that the hero links to", () => {
   assert.ok(!read("components/Footer.tsx").includes('href="/#sovereign"'), "footer still links /#sovereign");
 });
 
-test("teaser is heading, verbatim body, linked thumbnail, then the link, in that order", () => {
+test("teaser is heading, verbatim body, the link, then the linked thumbnail, in that order", () => {
   assert.ok(existsSync(join(ROOT, TEASER)), `${TEASER} is missing`);
   const src = stripComments(read(TEASER));
   assert.equal(src.match(/<h2\b/g)?.length ?? 0, 1, "teaser needs exactly one h2");
@@ -71,36 +72,97 @@ test("teaser is heading, verbatim body, linked thumbnail, then the link, in that
   };
   const headingAt = src.search(/<h2\b/);
   const bodyAt = at(BODY);
+  const linkAt = at(LINK_TEXT);
   const imgAt = at("<img");
   const srcAt = at("src={ARCHITECTURE_DIAGRAM_SRC}");
   const altAt = at("alt={ARCHITECTURE_DIAGRAM_ALT}");
-  const linkAt = at(LINK_TEXT);
   assert.ok(headingAt < bodyAt, "body must follow the heading");
-  assert.ok(bodyAt < imgAt, "thumbnail must follow the body");
-  assert.ok(imgAt < srcAt && srcAt < linkAt && altAt < linkAt, "link must follow the thumbnail");
+  assert.ok(bodyAt < linkAt, "link must follow the body");
+  assert.ok(linkAt < imgAt && imgAt < srcAt && imgAt < altAt, "thumbnail must follow the link");
+
+  // The text link is exactly LINK_TEXT and goes to /how-it-works.
+  const linkOpen = src.lastIndexOf("<Link", linkAt);
+  assert.ok(linkOpen > bodyAt, "the text link must be its own Link after the body");
+  const linkTag = src.slice(linkOpen, src.indexOf(">", linkOpen) + 1);
+  assert.match(linkTag, /href="\/how-it-works"/, "text link must go to /how-it-works");
+  const linkClose = src.indexOf("</Link>", linkAt);
+  assert.ok(linkClose > linkAt, "text link is not closed");
+  assert.equal(src.slice(linkOpen + linkTag.length, linkClose).trim(), LINK_TEXT, "text link text must be exactly the new wording");
 
   // The thumbnail itself links to /how-it-works.
   const openBefore = src.lastIndexOf("<Link", imgAt);
-  assert.ok(openBefore >= 0 && src.indexOf("</Link>", openBefore) > imgAt, "thumbnail is not wrapped in a Link");
+  assert.ok(openBefore > linkClose, "thumbnail must have its own Link after the text link");
+  assert.ok(src.indexOf("</Link>", openBefore) > imgAt, "thumbnail is not wrapped in a Link");
   assert.match(src.slice(openBefore, src.indexOf(">", openBefore)), /href="\/how-it-works"/, "thumbnail link must go to /how-it-works");
   assert.ok(src.lastIndexOf("</Link>", imgAt) < openBefore, "thumbnail Link is not the nearest open Link");
 
-  // The text link goes to /how-it-works.
-  const linkOpen = src.lastIndexOf("<Link", linkAt);
-  assert.ok(linkOpen > imgAt, "the text link must be its own Link after the thumbnail");
-  assert.match(src.slice(linkOpen, linkAt), /href="\/how-it-works"/, "text link must go to /how-it-works");
-  assert.ok(src.indexOf("</Link>", linkAt) > linkAt, "text link is not closed");
-
-  // Plain <img>: approved dimensions, lazy, constrained width.
+  // Plain <img>: approved dimensions, lazy, constrained width, no layout shift.
   assert.ok(
     src.includes("width={ARCHITECTURE_DIAGRAM_WIDTH}") && src.includes("height={ARCHITECTURE_DIAGRAM_HEIGHT}"),
     "thumbnail must carry the shared width and height",
   );
   const img = src.slice(imgAt, src.indexOf("/>", imgAt));
   assert.match(img, /loading="lazy"/, "thumbnail must lazy-load");
-  assert.match(img, /\bmax-w-full\b/, "thumbnail must have max-width: 100%");
+  const imgClass = img.match(/className="([^"]*)"/)?.[1] ?? "";
+  assert.match(imgClass, /(^|\s)max-w-full(\s|$)/, "thumbnail must have max-width: 100% (max-w-full)");
+  assert.match(imgClass, /(^|\s)h-auto(\s|$)/, "thumbnail must have height: auto (h-auto)");
   assert.match(src, /<figure className="[^"]*\bmax-w-(xs|sm|md|lg|xl|2xl|3xl)\b/, "thumbnail must have a constrained max width");
   assert.ok(!src.includes("next/image"), "thumbnail must be a plain <img>, not next/image");
+});
+
+test("two-column teaser: CSS grid, two columns at lg and up, one column below, text first", () => {
+  const src = stripComments(read(TEASER));
+  assert.ok(!/\bstyle=\{/.test(src), "teaser must not use inline styles");
+  const gridAt = src.search(/className="[^"]*(^|\s|")grid(\s|")/);
+  assert.ok(gridAt >= 0, "teaser needs a CSS grid container");
+  const gridClass = src.slice(gridAt).match(/className="([^"]*)"/)?.[1] ?? "";
+  assert.match(gridClass, /(^|\s)grid(\s|$)/, "container must be display: grid");
+  assert.match(gridClass, /(^|\s)lg:grid-cols-2(\s|$)/, "two columns at the existing lg breakpoint and up");
+  assert.ok(!/(^|\s)(sm:|md:|xl:|2xl:)?grid-cols-/.test(gridClass.replace(/(^|\s)lg:grid-cols-2(?=\s|$)/, " ")),
+    "only the lg breakpoint may set grid columns (one column below it)");
+  assert.ok(!/(\s|")([a-z0-9]+:)?-?order-(first|last|none|\d|\[)/.test(src),
+    "no order-* utilities: DOM order (text first) is the visual order");
+  // Text column (heading, body, link) precedes the image column, both inside the grid.
+  const textCol = src.indexOf("<div", gridAt + 1);
+  const h2At = src.search(/<h2\b/);
+  const figureAt = src.indexOf("<figure");
+  assert.ok(gridAt < textCol && textCol < h2At, "heading must sit in the first grid column");
+  assert.ok(src.indexOf("</div>", textCol) > src.indexOf(LINK_TEXT), "link must sit in the text column");
+  assert.ok(src.indexOf("</div>", textCol) < figureAt, "image must sit in the second grid column, after the text column");
+  // No new CSS dependency: no new breakpoint tokens or stylesheet imports.
+  assert.ok(!/--breakpoint-/.test(read("app/globals.css")), "no new breakpoint token in globals.css");
+  assert.ok(!/import\s+["'][^"']+\.css["']/.test(read(TEASER)), "teaser must not import CSS");
+});
+
+/** All .ts/.tsx files under app/ and components/. */
+function siteFiles(): string[] {
+  const out: string[] = [];
+  const walk = (dir: string): void => {
+    for (const name of readdirSync(join(ROOT, dir))) {
+      const rel = `${dir}/${name}`;
+      if (statSync(join(ROOT, rel)).isDirectory()) walk(rel);
+      else if (/\.(ts|tsx)$/.test(name)) out.push(rel);
+    }
+  };
+  walk("app");
+  walk("components");
+  return out;
+}
+
+test("old teaser link text is gone from app/ and components/", () => {
+  const hits = siteFiles().filter((file) => read(file).includes(OLD_LINK_TEXT));
+  assert.deepEqual(hits, [], `"${OLD_LINK_TEXT}" must not appear`);
+});
+
+test("hero button \"See how it works\" is unchanged", () => {
+  const hero = read("components/Hero.tsx");
+  const buttons = [...hero.matchAll(/<Link\s+href="\/#sovereign"[^>]*>\s*([^<]*?)\s*<\/Link>/g)].map((m) => m[1]);
+  assert.deepEqual(buttons, [HERO_BUTTON_TEXT], "hero must keep exactly one #sovereign button reading \"See how it works\"");
+});
+
+test('exactly one id="sovereign" site-wide, on the teaser', () => {
+  const hits = siteFiles().flatMap((file) => (read(file).match(/id="sovereign"/g) ?? []).map(() => file));
+  assert.deepEqual(hits, [TEASER]);
 });
 
 test("teaser and /how-it-works share one alt constant (no duplicated alt string)", () => {
