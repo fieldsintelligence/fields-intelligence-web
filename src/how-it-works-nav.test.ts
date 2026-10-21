@@ -16,16 +16,12 @@ const HOW_EXPR = "`${site.url}/#sovereign`";
 
 const SECTION_TABS: ReadonlyArray<readonly [string, string]> = [
   ["/#problem", "The problem"],
-  ["/#use-cases", "Use cases"],
-  ["/#products", "The work"],
-  ["/#demo", "Demo"],
+  ["/#use-cases", "Industry fit"],
   ["/#founder", "Founder"],
 ];
 
 const FOOTER_UNCHANGED: ReadonlyArray<readonly [string, string]> = [
-  ["/#use-cases", "Use cases"],
-  ["/#products", "Auditlane, Lossline, Deskfield"],
-  ["/#demo", "Product demo"],
+  ["/#use-cases", "Industry fit"],
   ["/how-it-works", "How it works"],
   ["/blog", "Blog"],
   ["/contact", "Contact"],

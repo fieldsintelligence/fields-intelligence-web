@@ -23,23 +23,13 @@ export function Footer() {
           <p className="text-sm font-medium text-white">On this site</p>
           <ul className="mt-3 space-y-2 text-sm text-cream/80">
             <li>
-              <Link href="/#use-cases" className="hover:text-white">
-                Use cases
-              </Link>
-            </li>
-            <li>
-              <Link href="/#products" className="hover:text-white">
-                Auditlane, Lossline, Deskfield
-              </Link>
-            </li>
-            <li>
-              <Link href="/#demo" className="hover:text-white">
-                Product demo
-              </Link>
-            </li>
-            <li>
               <Link href={`${site.url}/#sovereign`} className="hover:text-white">
                 Trust boundary
+              </Link>
+            </li>
+            <li>
+              <Link href="/#use-cases" className="hover:text-white">
+                Industry fit
               </Link>
             </li>
             <li>

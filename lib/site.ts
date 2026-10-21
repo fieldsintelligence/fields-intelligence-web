@@ -19,11 +19,9 @@ export const site = {
 
 export const nav = [
   { href: "/#problem", label: "The problem" },
-  { href: "/#use-cases", label: "Use cases" },
-  { href: "/#products", label: "The work" },
-  { href: "/#demo", label: "Demo" },
   { href: `${site.url}/#sovereign`, label: "How it works" },
-  { href: "/#founder", label: "Founder" },
+  { href: "/#use-cases", label: "Industry fit" },
   // Homepage Blog section. Absolute apex, so the tab works from the blog host too.
   { href: `${site.url}/#blog`, label: "Blog" },
+  { href: "/#founder", label: "Founder" },
 ] as const;
