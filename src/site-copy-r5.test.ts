@@ -30,7 +30,7 @@ const TEASER =
 const LEGEND_RAM = "the engine temporarily holds your conversation in RAM and never writes it to disk.";
 const LEGEND_RECORD = "Fields Intelligence keeps no record of what you asked or what it said.";
 const HERO_NPI =
-  `Non-public information (NPI) requires secure access to intelligence. Encrypted in transit, both ways. The harness and tools run on systems controlled by you. Inference runs on our infrastructure, and we don${RSQ}t log prompts or responses.`;
+  `Non-public information (NPI) requires secure access to intelligence; encrypted in transit, both ways. The harness and tools run on systems controlled by you. Inference runs on our infrastructure, and we don${RSQ}t log prompts or responses.`;
 const PROBLEM_H2 = `Public AI is useful. Non-public information (NPI) doesn${RSQ}t belong there.`;
 
 const OLD_BODY =
