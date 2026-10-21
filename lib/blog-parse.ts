@@ -262,14 +262,14 @@ export function parseCaptionInlines(input: string, where = "caption"): CaptionIn
   return nodes;
 }
 
-const IMAGE_LINE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
+export const IMAGE_LINE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
 /** The caption line: outer asterisks are the delimiter; the inside may start or end with **bold**. */
-const CAPTION_LINE = /^\*(.+)\*$/;
+export const CAPTION_LINE = /^\*(.+)\*$/;
 const BULLET = /^- /;
 const ORDERED = /^\d+\. /;
 
 /** Strips HTML comments but keeps their newlines, so line numbers stay true. */
-function stripHtmlComments(body: string): string {
+export function stripHtmlComments(body: string): string {
   return body.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ""));
 }
 

@@ -12,18 +12,18 @@ import { ROOT, importRepo } from "./support/blog-render.mjs";
 // See docs/architecture/blog-renderer.md, "Content link gate".
 
 const BLOG_DIR = join(ROOT, "content", "blog");
-const IMAGE_LINE = /^!\[[^\]]*\]\([^)]*\)$/;
-const CAPTION_LINE = /^\*.+\*$/;
 const MD_LINK = /(!?)\[([^\]]*)\]\(([^)]*)\)/g;
 const BARE_URL = /[a-z][a-z0-9+.-]*:\/\/[^\s)\]>*]+/gi;
 
 type Problem = { where: string; href: string; reason: string };
 
 async function linkProblems(markdown: string, file: string): Promise<Problem[]> {
-  const { parseFrontmatter, checkBodyHref, validateCaptionHref, parseInlines } = await importRepo("lib/blog-parse.ts");
+  const { parseFrontmatter, checkBodyHref, validateCaptionHref, parseInlines, stripHtmlComments, IMAGE_LINE, CAPTION_LINE } =
+    await importRepo("lib/blog-parse.ts");
   const { body } = parseFrontmatter(markdown);
   const bodyStart = markdown.slice(0, markdown.indexOf(body)).split("\n").length;
-  const lines = body.replace(/<!--[\s\S]*?-->/g, "").split(/\r?\n/);
+  // The parser's own stripper keeps line breaks, so reported lines stay exact.
+  const lines = stripHtmlComments(body).split(/\r?\n/);
   const problems: Problem[] = [];
   lines.forEach((raw: string, index: number) => {
     const line = raw.trim();
