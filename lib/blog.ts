@@ -76,7 +76,7 @@ const FIGURES: Record<
     alt: "Fields Intelligence true ZDR path: API request, ZDR inference, API response",
     title: "Fig. 3 — Fields Intelligence true ZDR path",
     caption:
-      "Fields Intelligence illustration. API request → ZDR inference (no prompt or response logs) → API response. That’s the whole graph.",
+      "Fields Intelligence illustration. API request → ZDR inference (no context retention, no prompt or response logging) → API response. That’s the whole graph.",
   },
 };
 
