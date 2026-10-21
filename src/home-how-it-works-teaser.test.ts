@@ -6,10 +6,11 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 // Ship call (Zak, 10:04 AM CT, via President): the homepage "How it works"
-// section (#sovereign) becomes a short teaser for /how-it-works, and the
-// text-box trust diagram (components/TrustBoundary.tsx) moves, unchanged, to
-// /how-it-works below Zak's architecture diagram. Teaser copy is verbatim
-// from Marketing.
+// section (#sovereign) becomes a short teaser for /how-it-works. Teaser copy
+// is verbatim from Marketing. President's call (c) on PR #37: only the
+// inside/outside box and four pillars (components/TrustBoundary.tsx) move to
+// /how-it-works; the old heading and paragraph are dropped (see
+// how-it-works.test.ts).
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path: string): string => readFileSync(join(ROOT, path), "utf8");
@@ -27,8 +28,6 @@ const DIAGRAM_SRC = "/assets/architecture-ribbons-reviewed.png";
 const DIAGRAM_ALT =
   "Fields Intelligence architecture: the FI Harness, context store, AgentGateway and harness tools run on your computer inside your organization's access controls, and connect over TLS with SSO and 2FA to the Fields Intelligence AI engine at ai.fieldsintelligence.com.";
 const DIAGRAM_SHA256 = "e40dce7277ea8cae176f06b0964586a0afa4405e3326aaa39c4c433cdfbf0c6c";
-// sha256 of components/TrustBoundary.tsx at aac35a8: the component moves, it is not edited.
-const TRUST_BOUNDARY_SHA256 = "1dde3a9398bc93646e8321bb302c677b0e7f409a97204a52114bf036367f3548";
 
 /** Components rendered by the homepage, from its `@/components/*` imports. */
 function homeComponents(): string[] {
@@ -128,9 +127,8 @@ test("/how-it-works renders the trust diagram after the architecture diagram, be
   assert.ok(trustAt < legendAt, "trust diagram must sit directly below the figure, before the legend");
 });
 
-test("trust diagram component is reused unchanged", () => {
-  const hash = createHash("sha256").update(readFileSync(join(ROOT, TRUST_BOUNDARY))).digest("hex");
-  assert.equal(hash, TRUST_BOUNDARY_SHA256);
+test("trust diagram no longer carries the #sovereign anchor", () => {
+  assert.ok(!read(TRUST_BOUNDARY).includes('id="sovereign"'), "only the homepage teaser keeps id=\"sovereign\"");
 });
 
 test("architecture PNG is unchanged", () => {
