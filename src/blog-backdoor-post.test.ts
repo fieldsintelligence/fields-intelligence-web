@@ -255,3 +255,25 @@ test("inside-information guard: post source and rendered HTML", async () => {
   assert.deepEqual(insideInfoHits(decodeEntities(html)), [], "rendered HTML");
   assert.deepEqual(insideInfoHits(textOf(html)), [], "rendered text");
 });
+
+const TRIGGER_FIGURE_SRC = "/blog/fig-c-defense-layers.png";
+const CONTAIN_HEADING = "How we contain it";
+const CONTAIN_FIRST_PARAGRAPH_START = "One model, pinned and checked.";
+
+test("trigger figure sits directly under the How we contain it heading, before its body text", async () => {
+  const { html } = await renderPost(SLUG);
+  const blocks = bodyBlocksOf(html) as Array<Record<string, unknown>>;
+  const at = blocks.findIndex((b) => b.kind === "h2" && b.text === CONTAIN_HEADING);
+  assert.ok(at >= 0, `heading "${CONTAIN_HEADING}" not found`);
+  const figure = blocks[at + 1];
+  assert.equal(figure?.kind, "figure", "block after the heading must be the trigger figure");
+  assert.equal(figure.src, TRIGGER_FIGURE_SRC);
+  assert.match(String(figure.alt), /^What a hidden trigger runs into: /);
+  const para = blocks[at + 2];
+  assert.equal(para?.kind, "p", "block after the trigger figure must be the section's first paragraph");
+  assert.ok(String(para.text).startsWith(CONTAIN_FIRST_PARAGRAPH_START), `got: ${String(para.text).slice(0, 60)}`);
+  // The trigger figure appears exactly once, in the rendered page and in the source.
+  assert.equal(blocks.filter((b) => b.kind === "figure" && b.src === TRIGGER_FIGURE_SRC).length, 1);
+  assert.equal(html.split(`src="${TRIGGER_FIGURE_SRC}"`).length - 1, 1);
+  assert.equal(readFileSync(CONTENT, "utf8").split(`](${TRIGGER_FIGURE_SRC})`).length - 1, 1);
+});
