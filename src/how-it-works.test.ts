@@ -167,12 +167,18 @@ test('/how-it-works has no id="sovereign" (only the homepage teaser keeps it)', 
   assert.ok(!readFileSync(TRUST_BOUNDARY, "utf8").includes('id="sovereign"'), 'trust diagram carries id="sovereign"');
 });
 
-// Runs after `npm run build` (skipped when there is no build output, as in CI's test step).
+// Runs after `npm run build`. CI workflows build before `npm test`, so under
+// CI=true missing build output FAILS this test instead of skipping it (Gray
+// Beard, PR #37): a workflow edit can't silently drop the check. Locally,
+// without a build, it skips.
 const BUILT = join(ROOT, ".next", "server", "app");
+const HAS_BUILD = existsSync(join(BUILT, "index.html")) && existsSync(join(BUILT, "how-it-works.html"));
+const IN_CI = process.env.CI === "true";
 test(
   "built HTML: one #sovereign on /, none on /how-it-works, dropped copy absent, box after the figure",
-  { skip: !existsSync(join(BUILT, "index.html")) && "no .next build output" },
+  { skip: !HAS_BUILD && !IN_CI && "no .next build output (run `npm run build` first)" },
   () => {
+    assert.ok(HAS_BUILD, "CI=true but .next build output is missing: run `npm run build` before `npm test`");
     const home = readFileSync(join(BUILT, "index.html"), "utf8");
     const page = readFileSync(join(BUILT, "how-it-works.html"), "utf8");
     assert.equal(home.match(/id="sovereign"/g)?.length ?? 0, 1);
