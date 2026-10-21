@@ -186,13 +186,15 @@ test("image allow-list rejects everything outside /blog/<lowercase>.png and the 
     assert.equal(images.isAllowedImageSrc(src), false, `allowed: ${src}`);
     assert.throws(() => resolve(src), /image/i, `resolver accepted ${src}`);
   }
-  assert.deepEqual([...images.ALLOWED_IMAGE_SRCS].includes("/assets/architecture-ribbons-reviewed.png"), true);
-  for (const extra of images.ALLOWED_IMAGE_SRCS) {
-    assert.ok(
-      extra === "/assets/architecture-ribbons-reviewed.png" || /^\/blog\/[A-Za-z0-9-]+\.png$/.test(extra),
-      `unexpected allow-list entry ${extra}`,
-    );
-  }
+  // Exact allow-list (PR #40): any added or removed entry must be a deliberate test change.
+  assert.deepEqual(
+    [...images.ALLOWED_IMAGE_SRCS],
+    [
+      "/assets/architecture-ribbons-reviewed.png",
+      "/blog/blog-openai-api-retention-NotZDR.png",
+      "/blog/blog-openai-async-safety-NotZDR.png",
+    ],
+  );
   assert.throws(() => resolve("/blog/missing.png"), /missing|not found|exist/i);
   assert.throws(() => resolve("/blog/not-a-png.png"), /png/i);
   assert.deepEqual(resolve("/blog/fig-ok.png"), { width: 123, height: 45 });
@@ -228,6 +230,21 @@ test("no raw HTML: comments are stripped, other tags render as literal text", as
   assert.ok(!/<img src="x"/.test(html), "raw img tag rendered as HTML");
   assert.ok(!/href="(javascript|data):/i.test(html), "unsafe link href rendered");
   assert.ok(html.includes("bad link") && html.includes("data link"));
+});
+
+test("local hrefs: protocol-relative and backslash paths render as text, not links", async () => {
+  const { parseInlines } = await blogParse();
+  // Browsers treat "/\\host" like "//host", an off-site link (PR #40).
+  for (const href of ["//x", "/\\x", "/\\evil.example", "//evil.example/path", "/ok\\x"]) {
+    const nodes = parseInlines(`[go](${href})`);
+    assert.deepEqual(nodes, [{ type: "text", value: "go" }], `link rendered for ${href}`);
+    const html = await renderBlocks([{ kind: "paragraph", text: nodes }]);
+    const body = html.slice(html.indexOf("</header>"));
+    assert.ok(!/<a\b/.test(body), `anchor rendered for ${href}`);
+  }
+  for (const href of ["/", "/blog", "/how-it-works#trust-boundary", "https://example.com/a"]) {
+    assert.deepEqual(parseInlines(`[go](${href})`), [{ type: "link", value: "go", href }], `link dropped for ${href}`);
+  }
 });
 
 test("unsupported markdown fails loudly instead of rendering wrong", async () => {

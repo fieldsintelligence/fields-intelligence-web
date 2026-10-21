@@ -145,6 +145,16 @@ test("guard catches what it should and allows the post's own date", () => {
     "Rolling out next week.",
     "planned for Q4",
     "a pilot customer",
+    "It shipped last week.",
+    "Coming soon to every bank.",
+    "now in beta",
+    "work in progress",
+    "on our roadmap",
+    "This is currently disabled.",
+    "targeted for Q1",
+    "q2 delivery",
+    "by Q3",
+    "Q4 target",
     "shipped 2026-10-20",
     "on 10/20/2026",
     "since September",
@@ -154,6 +164,8 @@ test("guard catches what it should and allows the post's own date", () => {
     assert.ok(insideInfoHits(bad).length > 0, `guard missed: ${bad}`);
   }
   assert.deepEqual(insideInfoHits("This attack lived in an add-on. Qwen2.5-7B, 50 of 50, $8, status/2108071329790370027"), []);
+  // "today" is not a status word: it appears in ordinary sentences (PR #40).
+  assert.deepEqual(insideInfoHits("Nobody can today. The alphabet, betas aside, Q5 and Q10."), []);
 });
 
 test("slug follows the title the same way as the existing post", () => {

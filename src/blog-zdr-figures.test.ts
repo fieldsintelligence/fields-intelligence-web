@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { test } from "node:test";
 // @ts-ignore -- untyped .mjs test helper
-import { bodyBlocksOf, figuresOf, renderPost } from "./support/blog-render.mjs";
+import { attr, bodyBlocksOf, decodeEntities, figuresOf, renderPost, textOf } from "./support/blog-render.mjs";
 
 // Pin of the ZDR post's rendered output, written before the blog renderer
 // rewrite and the switch to plain <img> (PR #40, spec point 5). It must pass
@@ -55,11 +55,58 @@ test("ZDR post figures: src, alt, title and caption text, and order are pinned",
   });
 });
 
-test("ZDR post body text outside the figures is unchanged", async () => {
+// The plain caption PR #40 renders: one italic paragraph, title and caption joined
+// with ". ", no inline markup and no link. The caption-inline follow-up updates this
+// pin on purpose.
+const FIGCAPTION_CLASS = "mx-auto mt-4 max-w-3xl text-sm italic leading-relaxed text-slate";
+
+test("ZDR post figcaptions: exact plain structure is pinned", async () => {
   const { html } = await renderPost(SLUG);
-  const blocks = bodyBlocksOf(html)
-    .filter((block: { kind: string }) => block.kind !== "figure")
-    .map((block: { kind: string; text?: string; items?: string[] }) => [block.kind, block.text ?? block.items]);
-  const digest = createHash("sha256").update(JSON.stringify(blocks)).digest("hex");
-  assert.equal(digest, BODY_TEXT_SHA256);
+  const captions = [...html.matchAll(/<figcaption\b([^>]*)>([\s\S]*?)<\/figcaption>/g)];
+  assert.equal(captions.length, FIGURES.length);
+  FIGURES.forEach((want, index) => {
+    const [, attrs, inner] = captions[index];
+    assert.equal(attrs, ` class="${FIGCAPTION_CLASS}"`, `figure ${index + 1} figcaption attributes`);
+    assert.ok(!inner.includes("<"), `figure ${index + 1} figcaption has markup: ${inner}`);
+    assert.equal(decodeEntities(inner), `${want.title}. ${want.caption}`, `figure ${index + 1} figcaption`);
+  });
+});
+
+/** Article body after </header>, figures excluded. */
+function bodyHtml(html: string): string {
+  const start = html.indexOf("</header>");
+  assert.ok(start >= 0, "article header missing");
+  return html.slice(start + "</header>".length).replace(/<figure\b[\s\S]*?<\/figure>/g, "");
+}
+
+test("ZDR post links: every href in the article, in order, is pinned", async () => {
+  const { html } = await renderPost(SLUG);
+  const links = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].map(([, attrs, inner]) => ({
+    href: attr(attrs, "href"),
+    rel: attr(attrs, "rel") ?? null,
+    text: textOf(inner),
+  }));
+  assert.deepEqual(links, [
+    { href: "/blog", rel: null, text: "Blog" },
+    { href: SOURCE_URL, rel: "noreferrer", text: "their guide" },
+  ]);
+});
+
+test("ZDR post body: bold and italic placement is pinned", async () => {
+  const body = bodyHtml((await renderPost(SLUG)).html);
+  const blocks = [...body.matchAll(/<(h2|p|ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/g)];
+  // [block index, tag, text, offset in the block's visible text]. The body has no italic.
+  const marks: [number, string, string, number][] = [];
+  blocks.forEach(([, , inner], index) => {
+    const visible = textOf(inner);
+    for (const [, tag, text] of inner.matchAll(/<(strong|em)\b[^>]*>([\s\S]*?)<\/\1>/g)) {
+      marks.push([index, tag, textOf(text), visible.indexOf(textOf(text))]);
+    }
+  });
+  assert.deepEqual(marks, [
+    [1, "strong", "complexity sold as security", 295],
+    [2, "strong", "bounded safety signals", 241],
+    [3, "strong", "if a pipeline retains interaction content or extracts safety residue from it, it is not true zero data retention for NPI.", 330],
+    [4, "strong", "ZDR!?", 42],
+  ]);
 });
