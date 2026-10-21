@@ -191,12 +191,4 @@ scheme in body text must pass `checkBodyHref` (or the same-site path rule), and 
 caption line must pass `validateCaptionHref`. Any rejected link fails `npm test`, so CI fails.
 Image lines are covered by the image allow-list instead.
 
-## Apex links from the blog host (PR #43)
-
-Site links that must leave the blog host use `apexHref(path)` from `lib/site.ts`, which returns
-`${site.url}${path}`. It is built from the `site.url` constant only, never from the request
-`Host` header or the environment. The footer "Trust boundary" link is
-`apexHref("/how-it-works#trust-boundary")`. `id="trust-boundary"` appears exactly once
-site-wide, on the trust box (`components/TrustBoundary.tsx`) on `/how-it-works`.
-
-Tests: `src/blog-renderer.test.ts`, `src/blog-zdr-figures.test.ts`, `src/blog-backdoor-post.test.ts`, `src/blog-caption-inline.test.ts`, `src/trust-boundary-link.test.ts`, `src/blog-body-link-hosts.test.ts`, `src/blog-content-links.test.ts`.
+Tests: `src/blog-renderer.test.ts`, `src/blog-zdr-figures.test.ts`, `src/blog-backdoor-post.test.ts`, `src/blog-caption-inline.test.ts`, `src/blog-body-link-hosts.test.ts`, `src/blog-content-links.test.ts`.

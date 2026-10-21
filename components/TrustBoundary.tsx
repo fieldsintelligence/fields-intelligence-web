@@ -23,7 +23,7 @@ const pillars = [
 // #sovereign anchor now belongs to HowItWorksTeaser.
 export function TrustBoundary() {
   return (
-    <div id="trust-boundary" className="mx-auto max-w-6xl scroll-mt-24 px-5 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <div className="mt-12 overflow-hidden rounded-xl border border-line bg-cream">
         <div className="grid lg:grid-cols-[1.3fr_0.7fr]">
           <div className="border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-r">
