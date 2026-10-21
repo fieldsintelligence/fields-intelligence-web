@@ -16,7 +16,7 @@ export function Footer() {
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/80">
             {site.tagline} Built in {site.founder.location} for organizations
-            that can’t send NPI out the door.
+            that can’t send NPI to a public model.
           </p>
         </div>
         <div>
@@ -73,7 +73,7 @@ export function Footer() {
           <p>
             {site.legalName} · {site.jurisdiction}
           </p>
-          <p>Not a bank. Not a regulator. A company that keeps the work in-bounds.</p>
+          <p>Not a bank. Not a regulator. A company that keeps your files in-bounds.</p>
         </div>
       </div>
     </footer>

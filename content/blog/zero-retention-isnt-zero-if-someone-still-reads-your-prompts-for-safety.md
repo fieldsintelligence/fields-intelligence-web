@@ -21,13 +21,11 @@ That’s why we mark their published graphs **ZDR!?** — raising a question fro
 Fields Intelligence draws a harder line — Sovereign AI for NPI:
 
 - No customer NPI retention on our side
-- No AI interaction logs
-- Usage telemetry only (access times and similar), never the conversation
+- No prompt or response logs
+- Usage records only: the time, request path, status, response time, organization, user ID and access scope of each request, plus sign-in and error records with IP address and browser. Usage metadata is kept for 12 months for security and incident investigation, then deleted, unless a specific incident or legal hold requires longer. Never prompt or response content.
 - Customer-side data and app; inference on infrastructure we operate without keeping your content
 - You provide the meaning of a clean audit; we provide the tool
 
-[Fig. 3 — FI true ZDR path]
-
-Encrypted in, encrypted out. Your data never needs to become someone else’s safety signal.
+Encrypted in transit, both ways. Your data never needs to become someone else’s safety signal.
 
 If you want hyperscaler convenience with a published safety-retention path, their ZDR+PSP is that product. If you want a vendor that never held the copy long enough to argue about it, that’s us. If you want complexity sold as security, that’s them.

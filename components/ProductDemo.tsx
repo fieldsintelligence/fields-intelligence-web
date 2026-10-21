@@ -102,7 +102,7 @@ const FILES: DemoFile[] = [
 
 const STEPS = [
   "Opening credit file inside the bank perimeter",
-  "Reading policy overlay — no egress",
+  "Reading policy overlay — inference over TLS",
   "Drafting exceptions for human review",
 ];
 
@@ -114,6 +114,15 @@ const severityLabel: Record<Severity, string> = {
   policy: "Policy",
 };
 
+function hashFor(fileId: string) {
+  const raw = `auditlane:${fileId}:signed`;
+  let h = 2166136261;
+  for (let i = 0; i < raw.length; i += 1) {
+    h ^= raw.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
 
 export function ProductDemo() {
   const statusId = useId();
@@ -151,7 +160,7 @@ export function ProductDemo() {
     setPhase("running");
     setStepIndex(0);
     setLog([
-      `${stamp()}  File opened  ·  ${file.borrower}  ·  residency: bank perimeter`,
+      `${stamp()}  Tool call  ·  file.open  ·  allow  ·  J. Hale  ·  ok`,
     ]);
 
     const reduced =
@@ -165,7 +174,7 @@ export function ProductDemo() {
         if (index === 1) {
           setLog((rows) => [
             ...rows,
-            `${stamp()}  Model run  ·  local  ·  egress events: 0`,
+            `${stamp()}  Tool call  ·  policy.read  ·  allow  ·  J. Hale  ·  ok`,
           ]);
         }
         if (index === STEPS.length - 1) {
@@ -173,7 +182,7 @@ export function ProductDemo() {
             setPhase("review");
             setLog((rows) => [
               ...rows,
-              `${stamp()}  ${file.findings.length} findings drafted  ·  awaiting human sign-off`,
+              `${stamp()}  Tool call  ·  findings.draft  ·  allow  ·  J. Hale  ·  ok`,
             ]);
           }, wait);
           timers.current.push(done);
@@ -185,21 +194,22 @@ export function ProductDemo() {
 
   const commitLog = () => {
     if (!signedOff || phase !== "review") return;
+    const digest = hashFor(file.id);
     setPhase("signed");
     setLog((rows) => [
       ...rows,
-      `${stamp()}  Signed  ·  J. Hale, Credit Review`,
+      `${stamp()}  Tool call  ·  review.sign  ·  allow  ·  J. Hale  ·  ok  ·  log hash ${digest}…e21a`,
     ]);
   };
 
   const statusText =
     phase === "idle"
-      ? "Ready. Choose a file and run a review — nothing leaves the perimeter."
+      ? "Ready. Choose a file and run a review. The harness works inside your perimeter."
       : phase === "running"
         ? STEPS[stepIndex]
         : phase === "review"
           ? "Findings ready. A person still has to sign."
-          : "Signed off. Still no egress.";
+          : "Review committed to the in-bank log.";
 
   return (
     <section id="demo" className="section-anchor border-b border-line bg-navy text-cream">
@@ -208,12 +218,12 @@ export function ProductDemo() {
           <div className="max-w-2xl">
             <p className="text-sm font-medium text-cream/70">Product demo</p>
             <h2 className="mt-2 text-3xl font-medium tracking-tight text-white sm:text-4xl">
-              Auditlane on a credit file — without the file leaving the building.
+              Auditlane on a credit file, with the harness inside the building.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-cream/75">
               A prototype walkthrough, not a live bank integration. Synthetic
-              names, synthetic numbers. The point is the boundary: review
-              happens in-perimeter and a person signs off. Audit log on the roadmap.
+              names, synthetic numbers. The point is the boundary: the harness
+              works in-perimeter, a human signs, the log stays.
             </p>
           </div>
           <p className="shrink-0 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-cream/80">
@@ -236,9 +246,8 @@ export function ProductDemo() {
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-brass" />
               </span>
               <span className="font-medium tracking-wide text-brass">
-                IN PERIMETER
+                HARNESS IN PERIMETER
               </span>
-              <span className="text-cream/40">· egress 0</span>
             </div>
           </div>
 
@@ -310,8 +319,9 @@ export function ProductDemo() {
 
               {phase === "idle" ? (
                 <div className="mt-8 rounded-lg border border-dashed border-white/15 px-4 py-10 text-center text-cream/55">
-                  Run the review to watch findings draft inside the perimeter.
-                  Public model vendors are not in this picture.
+                  Run the review to watch the harness draft findings inside the
+                  perimeter. Inference runs on Fields infrastructure; public model
+                  vendors are not in this picture.
                 </div>
               ) : null}
 
@@ -366,13 +376,13 @@ export function ProductDemo() {
                         onChange={(event) => setSignedOff(event.target.checked)}
                       />
                       <span>
-                        I have reviewed these findings. Human sign-off is
-                        required before anything is recorded.
+                        I have reviewed these findings. A person must sign off
+                        before the review is final.
                       </span>
                     </label>
                     {phase === "signed" ? (
                       <p className="shrink-0 rounded-lg border border-brass/40 px-3 py-2 text-sm font-medium text-brass">
-                        Signed off
+                        Written to the log
                       </p>
                     ) : (
                       <button
@@ -381,7 +391,7 @@ export function ProductDemo() {
                         disabled={!signedOff}
                         className="shrink-0 rounded-md bg-white px-3 py-2 text-sm font-medium text-ink disabled:cursor-not-allowed disabled:opacity-40"
                       >
-                        Record sign-off
+                        Commit to audit log
                       </button>
                     )}
                   </div>
@@ -391,7 +401,7 @@ export function ProductDemo() {
               {log.length > 0 ? (
                 <div className="mt-6">
                   <p className="text-xs font-medium uppercase tracking-[0.14em] text-cream/50">
-                    Activity (demo)
+                    Audit log (demo)
                   </p>
                   <ol className="mt-2 space-y-1 font-mono text-[12px] leading-relaxed text-cream/65">
                     {log.map((row) => (

@@ -1,7 +1,7 @@
 const beats = [
   {
-    title: "The file can’t leave.",
-    body: "Regulators, counsel, and customers expect NPI to stay put.",
+    title: "The file can’t go public.",
+    body: "Regulators, counsel, and customers expect NPI to stay out of public models.",
   },
   {
     title: "Public vendors don’t change that.",

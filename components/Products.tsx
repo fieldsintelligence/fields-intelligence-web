@@ -2,17 +2,17 @@ const products = [
   {
     name: "Auditlane",
     kicker: "Sensitive-file review",
-    body: "Exam-ready review of sensitive files. Surfaces exceptions and gaps, drafts the write-up, and waits for a person to sign. Next on the roadmap: an audit log of every pass, kept on your own systems.",
+    body: "Sensitive-file review for exam prep. Surfaces exceptions and gaps, drafts the write-up, and waits for a person to sign. Every pass is recorded in a tamper-evident audit log on your systems.",
   },
   {
     name: "Lossline",
-    kicker: "Early warning, in-bounds",
-    body: "Early warning on loss patterns without exporting the book. Uses your own data, inside your own boundary, so signal does not require a leak.",
+    kicker: "Early warning on your own book",
+    body: "Early warning on loss patterns without exporting the book. The harness reads your data on your own systems; inference keeps no prompt or response logs.",
   },
   {
     name: "Deskfield",
     kicker: "Agent assist at the desk",
-    body: "Day-to-day agent assist for people who work inside the wall: prep, follow-ups, and file hygiene. The human keeps the judgment. The busywork stays in-bounds.",
+    body: "Day-to-day agent assist for people who work inside the wall: prep, follow-ups, and file hygiene. The human keeps the judgment. The files stay in your systems.",
   },
 ];
 

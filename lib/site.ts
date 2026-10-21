@@ -7,7 +7,7 @@ export const site = {
   blogUrl: "https://blog.fieldsintelligence.com",
   tagline: "Sovereign AI for NPI",
   description:
-    "Sovereign AI for NPI from Fields: models and agents that stay inside your trust boundary for organizations handling Non-Public Information.",
+    "Sovereign AI for NPI from Fields Intelligence: agents that run inside your trust boundary, inference on Fields Intelligence infrastructure, and no prompt or response logs.",
   email: "hello@fieldsintelligence.com",
   founder: {
     shortName: "Zak Fields",
@@ -22,7 +22,7 @@ export const nav = [
   { href: "/#use-cases", label: "Use cases" },
   { href: "/#products", label: "The work" },
   { href: "/#demo", label: "Demo" },
-  { href: "/#sovereign", label: "How it stays in" },
+  { href: "/#sovereign", label: "How it works" },
   { href: "/#founder", label: "Founder" },
   // Blog host index. Relative `/blog` 308s, and on the blog host `/` never leaves that subdomain.
   { href: `${site.blogUrl}/`, label: "Blog" },
