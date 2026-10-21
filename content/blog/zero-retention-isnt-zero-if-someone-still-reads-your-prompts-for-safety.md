@@ -22,7 +22,7 @@ Fields Intelligence draws a harder line — Sovereign AI for NPI:
 
 - No customer NPI retention on our side
 - No prompt or response logs
-- Usage records only: the time, request path, status, response time, organization, user ID and access scope of each request, plus sign-in and error records with IP address and browser. Usage metadata (user ID, IP address, request path; never prompt or response content) is kept for 12 months for security and incident investigation, then deleted, unless a specific incident or legal hold requires longer. Never prompt or response content.
+- Usage records only: the time, request path, status, response time, organization, user ID and access scope of each request, plus sign-in and error records with IP address and browser. Usage metadata (user ID, IP address, request path; never prompt or response content) is kept for 12 months for security and incident investigation, then deleted, unless a specific incident or legal hold requires longer.
 - Customer-side data and app; inference on infrastructure we operate without keeping your content
 - You provide the meaning of a clean audit; we provide the tool
 
