@@ -22,7 +22,7 @@ export const nav = [
   { href: "/#use-cases", label: "Use cases" },
   { href: "/#products", label: "The work" },
   { href: "/#demo", label: "Demo" },
-  { href: "/how-it-works", label: "How it works" },
+  { href: `${site.url}/#sovereign`, label: "How it works" },
   { href: "/#founder", label: "Founder" },
   // Blog host index. Relative `/blog` 308s, and on the blog host `/` never leaves that subdomain.
   { href: `${site.blogUrl}/`, label: "Blog" },

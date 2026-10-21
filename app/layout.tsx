@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: "Fields Intelligence — Sovereign AI for NPI",
-    template: "%s · Fields",
+    template: "%s · Fields Intelligence",
   },
   description: site.description,
   applicationName: site.legalName,
@@ -62,12 +62,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: site.url,
     siteName: site.legalName,
-    title: "Fields — Sovereign AI for NPI",
+    title: "Fields Intelligence · Sovereign AI for NPI",
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fields — Sovereign AI for NPI",
+    title: "Fields Intelligence · Sovereign AI for NPI",
     description: site.description,
   },
   robots: {
