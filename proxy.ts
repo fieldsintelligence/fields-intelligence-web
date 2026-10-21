@@ -8,7 +8,7 @@ const APEX_HOSTS = new Set([site.domain, `www.${site.domain}`]);
  * Paths that stay on the blog host instead of being treated as post slugs.
  * Static files are excluded by the matcher.
  */
-const PASSTHROUGH_EXACT = new Set(["/contact", "/opengraph-image"]);
+const PASSTHROUGH_EXACT = new Set(["/contact", "/how-it-works", "/opengraph-image"]);
 const PASSTHROUGH_PREFIXES = ["/api", "/_next", "/.well-known"];
 
 function hostname(request: NextRequest): string {
