@@ -88,7 +88,7 @@ test("body links: allowed hosts render as links with the parsed URL as href", as
 
 test("body links: same-site paths are unaffected", async () => {
   const { parseInlines } = await parser();
-  for (const href of ["/", "/blog", "/how-it-works#trust-boundary"]) {
+  for (const href of ["/", "/blog", "/how-it-works"]) {
     assert.deepEqual(parseInlines(`[go](${href})`), [{ type: "link", value: "go", href }], href);
   }
 });

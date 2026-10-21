@@ -51,11 +51,9 @@ test("homepage renders the teaser and not the trust diagram", () => {
   assert.deepEqual(sovereign, [TEASER], 'exactly one homepage section must carry id="sovereign": the teaser');
 });
 
-test("teaser keeps the #sovereign anchor that the hero links to", () => {
+test("teaser keeps the #sovereign anchor that the hero and footer link to", () => {
   assert.ok(read("components/Hero.tsx").includes('href="/#sovereign"'), "hero link changed");
-  // PR #43: the footer "Trust boundary" link moved to /how-it-works#trust-boundary
-  // (pinned in src/trust-boundary-link.test.ts).
-  assert.ok(!read("components/Footer.tsx").includes('href="/#sovereign"'), "footer still links /#sovereign");
+  assert.ok(read("components/Footer.tsx").includes('href="/#sovereign"'), "footer link changed");
 });
 
 test("teaser is heading, verbatim body, the link, then the linked thumbnail, in that order", () => {
