@@ -29,7 +29,7 @@ const cases: UseCase[] = [
     items: [
       "Credit file → Auditlane review",
       "Human sign-off",
-      "Immutable log · in-perimeter",
+      "Audit log · planned",
     ],
     footerChip: "Data stays here",
     crossedLane: "Public model vendors",
@@ -63,7 +63,7 @@ const cases: UseCase[] = [
     items: [
       "Encounter note → Coding assist",
       "Clinician sign-off",
-      "Chart trail · in-perimeter",
+      "Chart trail · planned",
     ],
     footerChip: "PHI stays here",
     crossedLane: "Public model vendors",
@@ -80,7 +80,7 @@ const cases: UseCase[] = [
     items: [
       "FNOL packet → Coverage check",
       "Adjuster sign-off",
-      "Claim trail · in-perimeter",
+      "Claim trail · planned",
     ],
     footerChip: "Claim data stays here",
     crossedLane: "Public AI tools",
