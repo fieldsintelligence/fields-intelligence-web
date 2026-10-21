@@ -97,9 +97,8 @@ export function parseFrontmatter(raw: string): { data: Record<string, string>; b
 }
 
 /**
- * Exact hostnames a body link (markdown or bare) may point to (PR #43, Blue Hat
- * L-1). A repo constant: adding a host is a spec change. No suffix or substring
- * matching.
+ * Exact hostnames a body link (markdown or bare) may point to (PR #43). A repo
+ * constant: adding a host is a spec change. No suffix or substring matching.
  */
 export const BODY_LINK_HOSTS: readonly string[] = [
   "fieldsintelligence.com",
@@ -108,25 +107,40 @@ export const BODY_LINK_HOSTS: readonly string[] = [
   "projectdiscovery.io",
 ];
 
+export type ExternalHrefResult = { ok: true; href: string } | { ok: false; reason: string };
+
 /**
- * Checks an external body link: parses with new URL(), https only, no username
- * or password, no port, hostname exactly in BODY_LINK_HOSTS. Returns the
- * serialized URL, or null so the caller renders the text without a link.
+ * The one external-link rule shared by body and caption links (PR #43): no
+ * whitespace or control characters in the raw text, new URL() with no base,
+ * https only, no username or password, no port, and a hostname exactly in
+ * `hosts`. Only the host list differs between callers. On success the href is
+ * the serialized url.href.
  */
-export function checkBodyHref(raw: string): string | null {
+export function checkExternalHref(
+  raw: string,
+  hosts: readonly string[],
+  listName = "the host allow-list",
+): ExternalHrefResult {
+  const fail = (reason: string): ExternalHrefResult => ({ ok: false, reason });
   // The URL parser silently strips tabs and newlines, so check the raw text first.
-  if (/[\s\u0000-\u001f\u007f]/.test(raw)) return null;
+  if (/[\s\u0000-\u001f\u007f]/.test(raw)) return fail("contains whitespace or control characters");
   let url: URL;
   try {
     url = new URL(raw);
   } catch {
-    return null;
+    return fail("is not an absolute URL");
   }
-  if (url.protocol !== "https:") return null;
-  if (url.username !== "" || url.password !== "") return null;
-  if (url.port !== "") return null;
-  if (!BODY_LINK_HOSTS.includes(url.hostname)) return null;
-  return url.href;
+  if (url.protocol !== "https:") return fail("must use https");
+  if (url.username !== "" || url.password !== "") return fail("must not carry a username or password");
+  if (url.port !== "") return fail("must not set a port");
+  if (!hosts.includes(url.hostname)) return fail(`host ${url.hostname} is not in ${listName}`);
+  return { ok: true, href: url.href };
+}
+
+/** Body link check: checkExternalHref with BODY_LINK_HOSTS; null means render the text without a link. */
+export function checkBodyHref(raw: string): string | null {
+  const result = checkExternalHref(raw, BODY_LINK_HOSTS, "BODY_LINK_HOSTS");
+  return result.ok ? result.href : null;
 }
 
 /**
@@ -159,7 +173,7 @@ export function parseInlines(input: string): InlineNode[] {
       if (href !== null) nodes.push({ type: "link", value: match[3], href });
       else pushText(match[3]);
     } else {
-      // Bare link: same exact-host check as a markdown link (PR #43, Blue Hat L-1).
+      // Bare link: same exact-host check as a markdown link (PR #43).
       const href = checkBodyHref(match[0]);
       if (href !== null) nodes.push({ type: "link", href, value: match[0] });
       else pushText(match[0]);
@@ -181,25 +195,11 @@ export const CAPTION_LINK_HOSTS: readonly string[] = [
   "developers.openai.com",
 ];
 
-/** Checks a caption link href and returns the serialized URL. Throws `${where}: …` on any violation. */
+/** Caption link check: checkExternalHref with CAPTION_LINK_HOSTS. Throws `${where}: caption link …` on any violation. */
 export function validateCaptionHref(raw: string, where: string): string {
-  const fail = (reason: string): never => {
-    throw new Error(`${where}: caption link ${reason}: ${JSON.stringify(raw)}`);
-  };
-  // The URL parser silently strips tabs and newlines, so check the raw text first.
-  if (/[\s\u0000-\u001f\u007f]/.test(raw)) fail("contains whitespace or control characters");
-  let url: URL | null = null;
-  try {
-    url = new URL(raw);
-  } catch {
-    fail("is not an absolute URL");
-  }
-  if (!url) return fail("is not an absolute URL");
-  if (url.protocol !== "https:") fail("must use https");
-  if (url.username !== "" || url.password !== "") fail("must not carry a username or password");
-  if (url.port !== "") fail("must not set a port");
-  if (!CAPTION_LINK_HOSTS.includes(url.hostname)) fail(`host ${url.hostname} is not in CAPTION_LINK_HOSTS`);
-  return url.href;
+  const result = checkExternalHref(raw, CAPTION_LINK_HOSTS, "CAPTION_LINK_HOSTS");
+  if (!result.ok) throw new Error(`${where}: caption link ${result.reason}: ${JSON.stringify(raw)}`);
+  return result.href;
 }
 
 /**
