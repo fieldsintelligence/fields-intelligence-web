@@ -32,19 +32,25 @@ function hostname(request: NextRequest): string {
   );
 }
 
-/** `/blog` and `/blog/<slug>` map to the pretty blog-host path (`/` or `/<slug>`). */
+/**
+ * `/blog` and `/blog/<slug>` map to the pretty blog-host path (`/` or `/<slug>`).
+ * A path that starts with `//` or contains `\` is rejected and maps to the index.
+ */
 function prettyBlogPath(pathname: string): string | null {
   const trimmed = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   if (trimmed === "/blog") return "/";
   if (trimmed.startsWith("/blog/")) {
     const rest = trimmed.slice("/blog".length);
+    if (rest.startsWith("//") || rest.includes("\\")) return "/";
     return rest.length > 0 ? rest : "/";
   }
   return null;
 }
 
+/** Fixed blog origin; only pathname and search are set, never resolved against a base. */
 function toBlogHost(prettyPath: string, request: NextRequest): URL {
-  const dest = new URL(prettyPath, `${site.blogUrl}/`);
+  const dest = new URL(site.blogUrl);
+  dest.pathname = prettyPath;
   dest.search = request.nextUrl.search;
   return dest;
 }
