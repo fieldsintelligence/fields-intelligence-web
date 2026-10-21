@@ -177,9 +177,19 @@ does not fail, matching the existing rule for non-https links. On success the re
 the serialized `url.href`.
 
 `BODY_LINK_HOSTS` is a repo constant; **adding a host is a spec change.** Current entries:
-`fieldsintelligence.com`, `developers.openai.com`, `x.com`, `projectdiscovery.io` (the hosts the
-posts link to) and `example.com` (IANA-reserved, RFC 2606; used by the renderer tests).
+`fieldsintelligence.com`, `developers.openai.com`, `x.com` and `projectdiscovery.io` (the hosts
+the posts link to). `example.com` is not on the list; tests that need an allowed external link
+use `https://fieldsintelligence.com/…`, and `example.com` is a rejected-host test case.
 It is separate from `CAPTION_LINK_HOSTS`, so body hosts do not widen what captions accept.
+
+### Content link gate (PR #43, part of #45)
+
+Because a rejected body link renders as plain text rather than failing the build,
+`src/blog-content-links.test.ts` reads the raw markdown of every `content/blog/*.md` (the
+directory is globbed) and checks every link written there: markdown links and bare URLs of any
+scheme in body text must pass `checkBodyHref` (or the same-site path rule), and links on a
+caption line must pass `validateCaptionHref`. Any rejected link fails `npm test`, so CI fails.
+Image lines are covered by the image allow-list instead.
 
 ## Apex links from the blog host (PR #43)
 
@@ -189,4 +199,4 @@ Site links that must leave the blog host use `apexHref(path)` from `lib/site.ts`
 `apexHref("/how-it-works#trust-boundary")`. `id="trust-boundary"` appears exactly once
 site-wide, on the trust box (`components/TrustBoundary.tsx`) on `/how-it-works`.
 
-Tests: `src/blog-renderer.test.ts`, `src/blog-zdr-figures.test.ts`, `src/blog-backdoor-post.test.ts`, `src/blog-caption-inline.test.ts`, `src/trust-boundary-link.test.ts`, `src/blog-body-link-hosts.test.ts`.
+Tests: `src/blog-renderer.test.ts`, `src/blog-zdr-figures.test.ts`, `src/blog-backdoor-post.test.ts`, `src/blog-caption-inline.test.ts`, `src/trust-boundary-link.test.ts`, `src/blog-body-link-hosts.test.ts`, `src/blog-content-links.test.ts`.
