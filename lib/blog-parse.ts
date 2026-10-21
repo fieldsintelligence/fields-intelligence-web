@@ -133,7 +133,12 @@ export function parseInlines(input: string): InlineNode[] {
  * Exact hostnames a caption link may point to. A repo constant: adding a host
  * is a spec change (PR #43, spec point B). No suffix or substring matching.
  */
-export const CAPTION_LINK_HOSTS: readonly string[] = ["openai.com", "platform.openai.com"];
+export const CAPTION_LINK_HOSTS: readonly string[] = [
+  "openai.com",
+  "platform.openai.com",
+  // The ZDR post's source link (pre-#40 caption). Needs spec sign-off on PR #43.
+  "developers.openai.com",
+];
 
 /** Checks a caption link href and returns the serialized URL. Throws `${where}: …` on any violation. */
 export function validateCaptionHref(raw: string, where: string): string {

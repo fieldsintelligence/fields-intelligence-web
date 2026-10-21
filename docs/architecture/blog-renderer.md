@@ -147,6 +147,9 @@ Every caption link is checked at build time. Any violation throws
 `CAPTION_LINK_HOSTS` is a repo constant in `lib/blog-parse.ts`. **Adding a host is a spec
 change** and needs a spec PR.
 
+Current entries: `openai.com`, `platform.openai.com`, and `developers.openai.com`. The last one is the
+ZDR post's existing source link and needs spec sign-off on PR #43.
+
 ## Apex links from the blog host (PR #43)
 
 Site links that must leave the blog host use `apexHref(path)` from `lib/site.ts`, which returns
