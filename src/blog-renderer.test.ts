@@ -112,11 +112,12 @@ test("parses headings, paragraphs, bullet and ordered lists into typed blocks", 
   assert.match(html, /<a href="https:\/\/example.com\/a"[^>]*>link<\/a>/);
 });
 
-test("figure: image line, caption only from the *…* line directly under it, as plain text", async () => {
+test("figure: image line, caption only from the *…* line directly under it", async () => {
+  // PR #43: caption content is CaptionInline[] (was plain text in #40).
   const blocks = await parse(
     [
       "![Alt with <b>tag</b> & stuff](/blog/fig-ok.png)",
-      "*Caption with **bold** and [a link](https://example.com) kept literal*",
+      "*Caption with **bold**, <b>tag</b> and [a link](https://openai.com/x)*",
       "",
       "![Second](/assets/architecture-ribbons-reviewed.png)",
       "",
@@ -129,7 +130,12 @@ test("figure: image line, caption only from the *…* line directly under it, as
     alt: "Alt with <b>tag</b> & stuff",
     width: 123,
     height: 45,
-    caption: "Caption with **bold** and [a link](https://example.com) kept literal",
+    caption: [
+      { kind: "text", text: "Caption with " },
+      { kind: "strong", text: "bold" },
+      { kind: "text", text: ", <b>tag</b> and " },
+      { kind: "link", href: "https://openai.com/x", text: "a link" },
+    ],
   });
   assert.deepEqual(blocks[1], {
     kind: "figure",
@@ -143,9 +149,9 @@ test("figure: image line, caption only from the *…* line directly under it, as
   const html = await renderBlocks(blocks);
   const figures = figuresOf(html);
   assert.equal(figures.length, 2);
-  assert.equal(figures[0].caption, "Caption with **bold** and [a link](https://example.com) kept literal");
+  assert.equal(figures[0].caption, "Caption with bold, <b>tag</b> and a link");
   assert.equal(figures[1].caption, null);
-  assert.ok(!/<figcaption\b[^>]*>[\s\S]*?<(a|strong|em)\b[\s\S]*?<\/figcaption>/.test(html), "caption must be text only");
+  assert.ok(html.includes("&lt;b&gt;tag&lt;/b&gt;"), "caption HTML must be escaped text");
   assert.ok(html.includes('alt="Alt with &lt;b&gt;tag&lt;/b&gt; &amp; stuff"'), "alt must be escaped text");
 });
 
