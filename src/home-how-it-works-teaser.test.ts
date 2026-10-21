@@ -6,10 +6,8 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 // The homepage "How it works" section (#sovereign) is a short teaser for
-// /how-it-works (PR #37). Teaser copy is verbatim from Marketing. Only the
-// inside/outside box and four pillars (components/TrustBoundary.tsx) live on
-// /how-it-works (see how-it-works.test.ts). The two-column layout and the
-// "Take a deeper look" link text (PR #42) are pinned by the tests below.
+// /how-it-works (PR #37). Teaser copy is the r5 body. The two-column layout
+// and the "Take a deeper look" link text (PR #42) are pinned by the tests below.
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path: string): string => readFileSync(join(ROOT, path), "utf8");
@@ -21,7 +19,7 @@ const TRUST_BOUNDARY = "components/TrustBoundary.tsx";
 
 const HEADING = "How it works";
 const BODY =
-  "Your files, your tools and the Fields Intelligence app run on your own systems. Only your question and the context it needs travel to our AI engine, encrypted both ways. The engine works in memory and never logs your prompts or answers.";
+  "The engine temporarily holds your conversation in RAM and never logs your prompts or answers.";
 const LINK_TEXT = "Take a deeper look →";
 const OLD_LINK_TEXT = "See how it works →";
 const HERO_BUTTON_TEXT = "See how it works";
@@ -51,9 +49,8 @@ test("homepage renders the teaser and not the trust diagram", () => {
   assert.deepEqual(sovereign, [TEASER], 'exactly one homepage section must carry id="sovereign": the teaser');
 });
 
-test("teaser keeps the #sovereign anchor that the hero and footer link to", () => {
+test("hero still links to /#sovereign", () => {
   assert.ok(read("components/Hero.tsx").includes('href="/#sovereign"'), "hero link changed");
-  assert.ok(read("components/Footer.tsx").includes('href="/#sovereign"'), "footer link changed");
 });
 
 test("teaser is heading, verbatim body, the link, then the linked thumbnail, in that order", () => {
@@ -176,30 +173,13 @@ test("teaser and /how-it-works share one alt constant (no duplicated alt string)
   }
 });
 
-test("/how-it-works renders the trust diagram after the architecture diagram, before the legend", () => {
-  const src = read(HOW_IT_WORKS);
-  assert.match(src, /import\s*\{\s*TrustBoundary\s*\}\s*from\s*"@\/components\/TrustBoundary"/, "TrustBoundary is not imported");
-  const usages = src.match(/<TrustBoundary\s*\/>/g)?.length ?? 0;
-  assert.equal(usages, 1, "TrustBoundary must render exactly once");
-  const imgAt = src.indexOf("src={DIAGRAM_SRC}");
-  const trustAt = src.search(/<TrustBoundary\s*\/>/);
-  const legendAt = src.indexOf("{LEGEND_HEADING}");
-  assert.ok(imgAt >= 0 && legendAt >= 0, "architecture img or legend missing");
-  assert.ok(imgAt < trustAt, "trust diagram must come after the architecture diagram");
-  assert.ok(trustAt < legendAt, "trust diagram must sit directly below the figure, before the legend");
-});
-
-test("trust diagram no longer carries the #sovereign anchor", () => {
-  assert.ok(!read(TRUST_BOUNDARY).includes('id="sovereign"'), "only the homepage teaser keeps id=\"sovereign\"");
-});
-
 test("architecture PNG is unchanged", () => {
   const hash = createHash("sha256").update(readFileSync(join(ROOT, "public", DIAGRAM_SRC))).digest("hex");
   assert.equal(hash, DIAGRAM_SHA256);
 });
 
-test('header nav "How it works" is /how-it-works', () => {
-  const items = [...read("lib/site.ts").matchAll(/\{\s*href:\s*"([^"]*)",\s*label:\s*"How it works"\s*\}/g)];
+test('header nav "How it works" is ${site.url}/#sovereign', () => {
+  const items = [...read("lib/site.ts").matchAll(/\{\s*href:\s*([^,\n]+),\s*label:\s*"How it works"\s*\}/g)];
   assert.equal(items.length, 1);
-  assert.equal(items[0]?.[1], "/how-it-works");
+  assert.equal(items[0]?.[1].trim(), "`${site.url}/#sovereign`");
 });

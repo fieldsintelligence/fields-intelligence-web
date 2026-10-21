@@ -5,8 +5,8 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-// Ship calls 2026-10-21: Fig. 3 v3 caption (Zak, 9:43 AM CT) and the header
-// "How it works" link pointing to /how-it-works (President, option (a)).
+// Ship calls 2026-10-21: Fig. 3 v3 caption (Zak, 9:43 AM CT). The header
+// "How it works" link is `${site.url}/#sovereign` (issue #47, r3/r5).
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -33,9 +33,9 @@ test("Fig. 3 PNG is Marketing's v3 export, byte for byte", () => {
   assert.equal(createHash("sha256").update(png).digest("hex"), FIG3_V3_SHA256);
 });
 
-test('header nav "How it works" links to /how-it-works', () => {
+test('header nav "How it works" links to ${site.url}/#sovereign', () => {
   const source = readFileSync(join(ROOT, "lib", "site.ts"), "utf8");
-  const items = [...source.matchAll(/\{\s*href:\s*"([^"]*)",\s*label:\s*"How it works"\s*\}/g)];
+  const items = [...source.matchAll(/\{\s*href:\s*([^,\n]+),\s*label:\s*"How it works"\s*\}/g)];
   assert.equal(items.length, 1, 'expected exactly one "How it works" nav item');
-  assert.equal(items[0]?.[1], "/how-it-works");
+  assert.equal(items[0]?.[1].trim(), "`${site.url}/#sovereign`");
 });

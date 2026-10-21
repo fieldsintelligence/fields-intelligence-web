@@ -13,6 +13,7 @@ const STUBS = {
   "next/link": pathToFileURL(join(ROOT, "src/support/stubs/next-link.mjs")).href,
   "next/image": pathToFileURL(join(ROOT, "src/support/stubs/next-image.mjs")).href,
   "next/navigation": pathToFileURL(join(ROOT, "src/support/stubs/next-navigation.mjs")).href,
+  "next/og": pathToFileURL(join(ROOT, "src/support/stubs/next-og.mjs")).href,
 };
 const EXTENSIONS = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
 

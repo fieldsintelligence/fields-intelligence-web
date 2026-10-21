@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -126,7 +126,6 @@ const EXACT = {
     "Sensitive-file review for exam prep. \u2026 Every pass is recorded in a tamper-evident audit log on your systems.",
   useCases: "Audit log \u00b7 on your systems",
   demoTitle: "Audit log (demo)",
-  proof: "The log stays behind.",
   readme: "a tamper-evident audit log on your systems",
   commit: "Commit to audit log",
   written: "Written to the log",
@@ -638,7 +637,6 @@ test("r4 exact strings are allowed by the checker", () => {
     EXACT.logStays,
     `${EXACT.logHash} ab12\u2026e21a`,
     EXACT.auditRow,
-    EXACT.proof,
     EXACT.readme,
     APPROVED_LOGGING_AND_RETENTION,
   ]) {
@@ -755,34 +753,6 @@ for (const { rule, name } of SITE_RULES) {
   });
 }
 
-test('r4 exact string: TrustBoundary title is "Tamper-evident audit log"', () => {
-  assertPublished(
-    "components/TrustBoundary.tsx",
-    EXACT.trustTitle,
-    "Audit log (on the roadmap)",
-  );
-});
-
-test("r4 exact string: TrustBoundary body records every harness tool call", () => {
-  assertPublished(
-    "components/TrustBoundary.tsx",
-    EXACT.trustBody,
-    "Every harness tool call, recorded",
-  );
-});
-
-test('r4 exact string: TrustBoundary keeps "Reviewer + log" and "Sign-off, then a hash"', () => {
-  const source = readRepo("components/TrustBoundary.tsx");
-  const missing = [EXACT.reviewer, EXACT.signOffHash].filter(
-    (part) => !source.includes(part),
-  );
-  if (missing.length === 0) return;
-  const line = lineOf(source, "Reviewer sign-off");
-  assert.fail(
-    `components/TrustBoundary.tsx:${line}: ${lineText(source, line)}`,
-  );
-});
-
 test("r4 exact string: Products.tsx exam-prep tamper-evident log wording", () => {
   const source = readRepo("components/Products.tsx");
   const missing = [EXACT.productsLead, EXACT.productsLog].filter(
@@ -809,12 +779,24 @@ test('r4 exact string: ProductDemo panel title is "Audit log (demo)"', () => {
   );
 });
 
-test('r4 exact string: Proof.tsx keeps "The log stays behind."', () => {
-  assertPublished(
-    "components/Proof.tsx",
-    EXACT.proof,
-    "Human sign-off stays in the loop",
+test("Proof section is absent (#47)", () => {
+  assert.equal(
+    existsSync(join(ROOT, "components", "Proof.tsx")),
+    false,
+    "components/Proof.tsx must be removed with the proof section",
   );
+  const page = readRepo("app/page.tsx");
+  assert.ok(!/import\s*\{[^}]*\bProof\b/.test(page), "app/page.tsx still imports Proof");
+  assert.ok(!/<Proof\b/.test(page), "app/page.tsx still renders Proof");
+  for (const dir of ["app", "components"]) {
+    const absDir = join(ROOT, dir);
+    const files: string[] = [];
+    walk(absDir, (_abs, name) => SCOPE_EXT.has(extname(name)), files);
+    for (const abs of files) {
+      const source = readFileSync(abs, "utf8");
+      assert.ok(!source.includes('id="proof"'), `${rel(abs)} still has id="proof"`);
+    }
+  }
 });
 
 test('r4 exact string: README uses "a tamper-evident audit log on your systems"', () => {
