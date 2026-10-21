@@ -94,7 +94,7 @@ test("body links: same-site paths are unaffected", async () => {
 });
 
 test("body links: every link in both posts points at an allowed host or a same-site path", async () => {
-  const { BODY_LINK_HOSTS } = await parser();
+  const { BODY_LINK_HOSTS, CAPTION_LINK_HOSTS } = await parser();
   for (const slug of ["a-backdoor-for-the-price-of-lunch", "zero-retention-isnt-zero-if-someone-still-reads-your-prompts-for-safety"]) {
     const { html } = await renderPost(slug);
     const hrefs = [...html.matchAll(/<a\b[^>]*\bhref="([^"]*)"/g)].map((m) => m[1].replace(/&amp;/g, "&"));
@@ -104,7 +104,7 @@ test("body links: every link in both posts points at an allowed host or a same-s
       const url = new URL(href);
       assert.equal(url.protocol, "https:", href);
       assert.equal(url.username + url.password, "", href);
-      assert.ok(BODY_LINK_HOSTS.includes(url.hostname) || url.hostname === "openai.com" || url.hostname === "platform.openai.com", href);
+      assert.ok(BODY_LINK_HOSTS.includes(url.hostname) || CAPTION_LINK_HOSTS.includes(url.hostname), href);
     }
   }
 });
