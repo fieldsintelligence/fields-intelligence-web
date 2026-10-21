@@ -15,7 +15,7 @@ export default function NotFound() {
         href="/"
         className="mt-8 inline-flex rounded-lg border border-brass/40 bg-navy px-5 py-3 font-medium text-chalk hover:bg-ink"
       >
-        Back to Fields
+        Back to Fields Intelligence
       </Link>
     </div>
   );

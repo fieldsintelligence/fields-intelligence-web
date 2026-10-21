@@ -320,7 +320,7 @@ export function ProductDemo() {
               {phase === "idle" ? (
                 <div className="mt-8 rounded-lg border border-dashed border-white/15 px-4 py-10 text-center text-cream/55">
                   Run the review to watch the harness draft findings inside the
-                  perimeter. Inference runs on Fields infrastructure; public model
+                  perimeter. Inference runs on Fields Intelligence infrastructure; public model
                   vendors are not in this picture.
                 </div>
               ) : null}
