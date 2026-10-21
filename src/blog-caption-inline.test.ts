@@ -97,6 +97,8 @@ test("caption link: rejected hrefs throw", async () => {
     "https://openai.com./x",
     "https://xn--opnai-3ve.com/x",
     "https://open\u0430i.com/x",
+    // Diacritic lookalike of an allowed host (PR #43).
+    "https://öpenai.com/x",
     "https://open%D0%B0i.com/x",
     "https://open%2eai.com/x",
     "https://open\tai.com/x",

@@ -25,6 +25,9 @@ const REJECTED = [
   "https://developers.openai.com:8443/",
   "https://openai.com.evil.com/",
   "https://xn--x-5ja.com/",
+  // Diacritic lookalikes of an allowed host, Unicode and punycode (PR #43).
+  "https://dévelopers.openai.com/",
+  "https://xn--dvelopers-b4a.openai.com/",
   "https://x.com.evil.com/status/1",
   "https://projectdiscovery.io.evil.com/research",
   "https://fieldsintelligence.com.evil.com/how-it-works",
