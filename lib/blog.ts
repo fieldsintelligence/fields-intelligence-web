@@ -5,7 +5,16 @@ import { createImageResolver } from "@/lib/blog-images";
 import { parseBlocks, parseFrontmatter, type Block } from "@/lib/blog-parse";
 
 export { formatBlogDate } from "@/lib/blog-parse";
-export type { Block, BulletList, Figure, Heading2, InlineNode, OrderedList, Paragraph } from "@/lib/blog-parse";
+export type {
+  Block,
+  BulletList,
+  CaptionInline,
+  Figure,
+  Heading2,
+  InlineNode,
+  OrderedList,
+  Paragraph,
+} from "@/lib/blog-parse";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 const PUBLIC_DIR = path.join(process.cwd(), "public");
@@ -48,7 +57,10 @@ function readPost(filePath: string): Post {
     date,
     description,
     canonicalUrl: postCanonicalUrl(slug),
-    blocks: parseBlocks(body, createImageResolver(PUBLIC_DIR)),
+    blocks: parseBlocks(body, createImageResolver(PUBLIC_DIR), {
+      file: `content/blog/${slug}.md`,
+      line: raw.slice(0, raw.indexOf(body)).split("\n").length,
+    }),
   };
 }
 

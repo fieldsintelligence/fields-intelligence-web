@@ -28,8 +28,18 @@ export type Figure = {
   alt: string;
   width: number;
   height: number;
-  caption?: string;
+  caption?: CaptionInline[];
 };
+
+/**
+ * Figure caption inline nodes (PR #43). Flat: the text of Strong, Em and Link is
+ * plain text, never nested markup. See docs/architecture/blog-renderer.md.
+ */
+export type CaptionText = { kind: "text"; text: string };
+export type CaptionStrong = { kind: "strong"; text: string };
+export type CaptionEm = { kind: "em"; text: string };
+export type CaptionLink = { kind: "link"; href: string; text: string };
+export type CaptionInline = CaptionText | CaptionStrong | CaptionEm | CaptionLink;
 
 export type Block = Paragraph | Heading2 | BulletList | OrderedList | Figure;
 
@@ -119,13 +129,89 @@ export function parseInlines(input: string): InlineNode[] {
   return nodes;
 }
 
+/** Checks a caption link href and returns the serialized URL. Throws `${where}: …` on any violation. */
+export function validateCaptionHref(raw: string, where: string): string {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    throw new Error(`${where}: caption link is not an absolute URL: ${JSON.stringify(raw)}`);
+  }
+  if (url.protocol !== "https:") {
+    throw new Error(`${where}: caption link must use https: ${JSON.stringify(raw)}`);
+  }
+  return url.href;
+}
+
+/**
+ * Parses the inside of a caption line: **bold**, *italic*, [text](https://…).
+ * Unmatched markers stay literal text and never throw. A well-formed link with
+ * a disallowed href throws (the build fails).
+ */
+export function parseCaptionInlines(input: string, where = "caption"): CaptionInline[] {
+  const nodes: CaptionInline[] = [];
+  let literal = "";
+  const flush = () => {
+    if (literal) nodes.push({ kind: "text", text: literal });
+    literal = "";
+  };
+  let i = 0;
+  while (i < input.length) {
+    if (input.startsWith("**", i)) {
+      const end = input.indexOf("**", i + 2);
+      if (end > i + 2) {
+        flush();
+        nodes.push({ kind: "strong", text: input.slice(i + 2, end) });
+        i = end + 2;
+      } else {
+        literal += "**";
+        i += 2;
+      }
+      continue;
+    }
+    if (input[i] === "*") {
+      const end = input.indexOf("*", i + 1);
+      if (end > i + 1) {
+        flush();
+        nodes.push({ kind: "em", text: input.slice(i + 1, end) });
+        i = end + 1;
+      } else {
+        literal += "*";
+        i += 1;
+      }
+      continue;
+    }
+    if (input[i] === "[") {
+      const mid = input.indexOf("](", i + 1);
+      const end = mid === -1 ? -1 : input.indexOf(")", mid + 2);
+      if (mid > i + 1 && end > mid + 2) {
+        flush();
+        const text = input.slice(i + 1, mid);
+        const href = validateCaptionHref(input.slice(mid + 2, end), where);
+        nodes.push({ kind: "link", href, text });
+        i = end + 1;
+      } else {
+        literal += "[";
+        i += 1;
+      }
+      continue;
+    }
+    literal += input[i];
+    i += 1;
+  }
+  flush();
+  return nodes;
+}
+
 const IMAGE_LINE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
-const CAPTION_LINE = /^\*([^*](?:.*[^*])?)\*$/;
+/** The caption line: outer asterisks are the delimiter; the inside may start or end with **bold**. */
+const CAPTION_LINE = /^\*(.+)\*$/;
 const BULLET = /^- /;
 const ORDERED = /^\d+\. /;
 
+/** Strips HTML comments but keeps their newlines, so line numbers stay true. */
 function stripHtmlComments(body: string): string {
-  return body.replace(/<!--[\s\S]*?-->/g, "");
+  return body.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ""));
 }
 
 function startsBlock(line: string): boolean {
@@ -133,7 +219,11 @@ function startsBlock(line: string): boolean {
   return t.startsWith("#") || t.startsWith("![") || BULLET.test(line) || ORDERED.test(line);
 }
 
-export function parseBlocks(body: string, resolveImage: ImageResolver): Block[] {
+/** Where the body came from, for build errors: the file and the 1-based line of the body's first line. */
+export type BodySource = { file: string; line: number };
+
+export function parseBlocks(body: string, resolveImage: ImageResolver, source?: BodySource): Block[] {
+  const where = (index: number) => (source ? `${source.file}:${source.line + index}` : `line ${index + 1}`);
   const lines = stripHtmlComments(body).split(/\r?\n/);
   const blocks: Block[] = [];
   let i = 0;
@@ -166,7 +256,7 @@ export function parseBlocks(body: string, resolveImage: ImageResolver): Block[] 
       const figure: Figure = { kind: "figure", src, alt, width, height };
       const caption = CAPTION_LINE.exec((lines[i + 1] ?? "").trim());
       if (caption) {
-        figure.caption = caption[1];
+        figure.caption = parseCaptionInlines(caption[1], where(i + 1));
         i += 2;
       } else {
         i += 1;
