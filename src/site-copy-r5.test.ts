@@ -325,3 +325,14 @@ test("Problem body says non-public information in lowercase, matching the headin
   assert.ok(src.includes("customer records are non-public information."), "Problem body must say 'customer records are non-public information.'");
   assert.ok(!src.includes("Non-Public Information"), "Problem body still says 'Non-Public Information'");
 });
+
+test(
+  "built homepage Problem body says non-public information in lowercase",
+  { skip: skipWithoutBuild },
+  () => {
+    assert.ok(HAS_BUILD, "CI=true but .next build output is missing");
+    const home = collapse(decode(readFileSync(join(BUILT, "index.html"), "utf8")));
+    assert.ok(home.includes("customer records are non-public information."), "built homepage must say 'customer records are non-public information.'");
+    assert.ok(!home.includes("Non-Public Information."), "built homepage still says 'Non-Public Information.'");
+  },
+);
