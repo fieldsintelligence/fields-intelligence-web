@@ -20,7 +20,7 @@ export default function ContactPage() {
           </h1>
           <div aria-hidden="true" className="mt-5 h-px w-16 bg-brass" />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate">
-            If you run a team that can’t send Non-Public Information to a public
+            If you run a team that can’t send non-public information to a public
             model—banking, legal, healthcare, insurance, or anywhere NPI is the
             job—write us. Pilots are 30–60 days. You keep the files. A person
             still signs.

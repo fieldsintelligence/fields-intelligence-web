@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Fields Intelligence — Sovereign AI for NPI",
+    default: "Fields Intelligence · Sovereign AI for NPI",
     template: "%s · Fields Intelligence",
   },
   description: site.description,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   keywords: [
     "sovereign AI",
     "NPI",
-    "Non-Public Information",
+    "non-public information",
     "privacy",
     "private inference",
     "regulated AI",

@@ -5,12 +5,12 @@ import { blogIndexUrl, formatBlogDate, getPosts } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Essays from Fields Intelligence on zero data retention and sovereign AI for Non-Public Information.",
+    "Essays from Fields Intelligence on zero data retention and sovereign AI for non-public information.",
   alternates: { canonical: blogIndexUrl },
   openGraph: {
     title: "Blog",
     description:
-      "Essays from Fields Intelligence on zero data retention and sovereign AI for Non-Public Information.",
+      "Essays from Fields Intelligence on zero data retention and sovereign AI for non-public information.",
     url: blogIndexUrl,
     type: "website",
   },

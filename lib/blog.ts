@@ -19,10 +19,6 @@ export type {
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 
-/** First post. Homepage punch and the canonical URL stay pointed here. */
-export const CANONICAL_POST_SLUG =
-  "zero-retention-isnt-zero-if-someone-still-reads-your-prompts-for-safety";
-
 export const blogIndexUrl = site.blogUrl;
 
 export function postCanonicalUrl(slug: string): string {
@@ -75,4 +71,27 @@ export function getPosts(): Post[] {
 
 export function getPost(slug: string): Post | undefined {
   return getPosts().find((post) => post.slug === slug);
+}
+
+/** Thrown when there are no posts, so a build without blog content fails. */
+export class NoBlogPostsError extends Error {
+  constructor() {
+    super("No blog posts found in content/blog.");
+    this.name = "NoBlogPostsError";
+  }
+}
+
+/**
+ * Newest post: the greatest front-matter date (ISO YYYY-MM-DD, compared with
+ * plain < and >). A tie goes to the lower slug by code-unit order (plain <).
+ */
+export function newestPost<T extends Pick<Post, "slug" | "date">>(posts: readonly T[]): T {
+  if (posts.length === 0) throw new NoBlogPostsError();
+  let best = posts[0];
+  for (const post of posts.slice(1)) {
+    if (post.date > best.date || (post.date === best.date && post.slug < best.slug)) {
+      best = post;
+    }
+  }
+  return best;
 }

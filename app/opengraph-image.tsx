@@ -48,32 +48,19 @@ export default async function OpenGraphImage() {
               height={108}
               style={{ objectFit: "contain" }}
             />
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
-                style={{
-                  fontSize: 52,
-                  fontFamily: "sans-serif",
-                  fontWeight: 600,
-                  letterSpacing: 0,
-                  color: "#0B1F33",
-                }}
-              >
-                Fields
-              </div>
-              <div
-                style={{
-                  fontSize: 44,
-                  fontFamily: "sans-serif",
-                  fontWeight: 700,
-                  letterSpacing: "0.02em",
-                  color: "#0B1F33",
-                  marginTop: 4,
-                }}
-              >
-                Intelligence
-              </div>
+            <div
+              style={{
+                fontSize: 60,
+                fontFamily: "sans-serif",
+                fontWeight: 600,
+                letterSpacing: 0,
+                color: "#0B1F33",
+              }}
+            >
+              Fields Intelligence
             </div>
           </div>
+          {/* Fixed second line. The title never wraps on its own, so no line starts with the separator. */}
           <div
             style={{
               fontSize: 42,
@@ -83,7 +70,7 @@ export default async function OpenGraphImage() {
               fontWeight: 500,
             }}
           >
-            · Sovereign AI for NPI
+            Sovereign AI for NPI
           </div>
           <div
             style={{
