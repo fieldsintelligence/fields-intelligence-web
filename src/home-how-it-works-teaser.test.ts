@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 // /how-it-works (PR #37). Teaser copy is verbatim from Marketing. Only the
 // inside/outside box and four pillars (components/TrustBoundary.tsx) live on
 // /how-it-works (see how-it-works.test.ts). The two-column layout and the
-// "Take a deeper look" link text are pinned by the tests below.
+// "Take a deeper look" link text (PR #42) are pinned by the tests below.
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path: string): string => readFileSync(join(ROOT, path), "utf8");
