@@ -18,8 +18,12 @@ const FIG3_CAPTION =
   "Fields Intelligence illustration. API request → ZDR inference (no context written to disk, no prompt or response logging) → API response. That’s the whole graph.";
 
 test("Fig. 3 caption uses the v3 wording", () => {
-  const source = readFileSync(join(ROOT, "lib", "blog.ts"), "utf8");
-  assert.ok(source.includes(JSON.stringify(FIG3_CAPTION)), "Fig. 3 caption is not the v3 wording");
+  // Captions moved from lib/blog.ts into the post's content file (blog renderer spec (1)).
+  const source = readFileSync(
+    join(ROOT, "content", "blog", "zero-retention-isnt-zero-if-someone-still-reads-your-prompts-for-safety.md"),
+    "utf8",
+  );
+  assert.ok(source.includes(FIG3_CAPTION), "Fig. 3 caption is not the v3 wording");
 });
 
 test("Fig. 3 PNG is Marketing's v3 export, byte for byte", () => {

@@ -1,6 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
-import { formatBlogDate, type InlineNode, type Post } from "@/lib/blog";
+import { formatBlogDate, type Block, type InlineNode, type Post } from "@/lib/blog";
+
+// Maps parsed blocks (lib/blog-parse.ts) to JSX. No parsing here, and no raw
+// HTML: every string is a React text child or attribute, so it is escaped.
 
 function RichText({ inlines }: { inlines: InlineNode[] }) {
   return inlines.map((node, index) => {
@@ -35,6 +37,78 @@ function RichText({ inlines }: { inlines: InlineNode[] }) {
   });
 }
 
+function assertNever(block: never): never {
+  throw new Error(`Unhandled blog block: ${JSON.stringify(block)}`);
+}
+
+function renderBlock(block: Block, index: number) {
+  switch (block.kind) {
+    case "paragraph":
+      return (
+        <p key={index} className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-slate first:mt-0">
+          <RichText inlines={block.text} />
+        </p>
+      );
+    case "heading2":
+      return (
+        <h2
+          key={index}
+          className="mx-auto mt-12 max-w-3xl font-serif text-2xl font-normal leading-snug tracking-tight text-navy sm:text-3xl"
+        >
+          {block.text}
+        </h2>
+      );
+    case "bulletList":
+      return (
+        <ul
+          key={index}
+          className="mx-auto mt-4 max-w-3xl list-disc space-y-2 pl-5 text-lg leading-relaxed text-slate"
+        >
+          {block.items.map((item, itemIndex) => (
+            <li key={itemIndex}>
+              <RichText inlines={item} />
+            </li>
+          ))}
+        </ul>
+      );
+    case "orderedList":
+      return (
+        <ol
+          key={index}
+          className="mx-auto mt-4 max-w-3xl list-decimal space-y-2 pl-5 text-lg leading-relaxed text-slate"
+        >
+          {block.items.map((item, itemIndex) => (
+            <li key={itemIndex}>
+              <RichText inlines={item} />
+            </li>
+          ))}
+        </ol>
+      );
+    case "figure":
+      return (
+        <figure key={index} className="mx-auto mt-10 w-full max-w-5xl">
+          {/* Plain img, not next/image: the served bytes are the committed bytes. */}
+          <img
+            src={block.src}
+            alt={block.alt}
+            width={block.width}
+            height={block.height}
+            loading="lazy"
+            decoding="async"
+            className="h-auto w-full rounded-xl border border-line bg-cream"
+          />
+          {block.caption ? (
+            <figcaption className="mx-auto mt-4 max-w-3xl text-sm italic leading-relaxed text-slate">
+              {block.caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    default:
+      return assertNever(block);
+  }
+}
+
 export function BlogArticle({ post }: { post: Post }) {
   return (
     <article className="border-b border-line bg-chalk">
@@ -52,54 +126,7 @@ export function BlogArticle({ post }: { post: Post }) {
           </p>
         </header>
 
-        <div className="mt-10">
-          {post.blocks.map((block, index) => {
-            if (block.type === "paragraph") {
-              return (
-                <p
-                  key={index}
-                  className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-slate first:mt-0"
-                >
-                  <RichText inlines={block.inlines} />
-                </p>
-              );
-            }
-            if (block.type === "list") {
-              return (
-                <ul
-                  key={index}
-                  className="mx-auto mt-4 max-w-3xl list-disc space-y-2 pl-5 text-lg leading-relaxed text-slate"
-                >
-                  {block.items.map((item, itemIndex) => (
-                    <li key={itemIndex}>
-                      <RichText inlines={item} />
-                    </li>
-                  ))}
-                </ul>
-              );
-            }
-            return (
-              <figure key={block.id} className="mx-auto mt-10 w-full max-w-5xl">
-                <Image
-                  src={block.src}
-                  alt={block.alt}
-                  width={block.width}
-                  height={block.height}
-                  unoptimized
-                  sizes="(min-width: 1024px) 1024px, 100vw"
-                  className="h-auto w-full rounded-xl border border-line bg-cream"
-                  style={{ width: "100%", height: "auto" }}
-                />
-                <figcaption className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate">
-                  <span className="block font-medium text-navy">{block.title}</span>
-                  <span className="mt-1 block">
-                    <RichText inlines={block.caption} />
-                  </span>
-                </figcaption>
-              </figure>
-            );
-          })}
-        </div>
+        <div className="mt-10">{post.blocks.map(renderBlock)}</div>
       </div>
     </article>
   );

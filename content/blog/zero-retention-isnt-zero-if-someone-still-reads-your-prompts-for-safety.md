@@ -8,9 +8,11 @@ Zero Data Retention sounds like the finish line. OpenAI’s ZDR with Private Saf
 
 That model is built for platforms that must police the open internet. It is a poor fit for regulated buyers who already have examiners, policies, and audit ownership. Standing up cloud buckets, IAM roles, lifecycle rules, and key management so a vendor can still run safety over your traffic is **complexity sold as security**.
 
-[Fig. 1 — API retention annotated]
+![Annotated OpenAI API Request and Retention diagram, stamped ZDR!?](/blog/blog-openai-api-retention-NotZDR.png)
+*Fig. 1 — API request and retention (annotated). Annotated from OpenAI’s published “API Request and Retention” diagram in ZDR with Private Safety Processing. Original diagram © OpenAI; red ellipse and “ZDR!?” annotations by Fields Intelligence for commentary. Source: https://developers.openai.com/api/docs/guides/private-safety-processing*
 
-[Fig. 2 — Async safety annotated]
+![Annotated OpenAI Asynchronous Safety Pipeline diagram, stamped ZDR!?](/blog/blog-openai-async-safety-NotZDR.png)
+*Fig. 2 — Asynchronous safety pipeline (annotated). Annotated from OpenAI’s published “Asynchronous Safety Pipeline” diagram in ZDR with Private Safety Processing. Original diagram © OpenAI; green OK / red X and “ZDR!?” annotations by Fields Intelligence for commentary. Source: https://developers.openai.com/api/docs/guides/private-safety-processing*
 
 OpenAI publishes this product under their own name. Per [their guide](https://developers.openai.com/api/docs/guides/private-safety-processing), eligible prompts and responses can still be written to customer-controlled storage (about a 30-day TTL), decrypted inside an OpenAI attested safety runtime, and reduced to **bounded safety signals** that leave that runtime. In our reading, the vendor still derives safety meaning from your content.
 
@@ -26,7 +28,8 @@ Fields Intelligence draws a harder line — Sovereign AI for NPI:
 - Customer-side data and app; inference on infrastructure we operate without keeping your content
 - You provide the meaning of a clean audit; we provide the tool
 
-[Fig. 3 — FI true ZDR path]
+![Fields Intelligence true ZDR path: API request, ZDR inference, API response](/blog/blog-fields-intelligence-true-zdr-path.png)
+*Fig. 3 — Fields Intelligence true ZDR path. Fields Intelligence illustration. API request → ZDR inference (no context written to disk, no prompt or response logging) → API response. That’s the whole graph.*
 
 Encrypted in transit, both ways. Your data never needs to become someone else’s safety signal.
 
