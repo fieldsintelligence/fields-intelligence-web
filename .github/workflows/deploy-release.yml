@@ -1,14 +1,14 @@
 # Production deploys only. Branch pushes and pull requests do not run this workflow.
-# A GitHub Release that creates a new tag can emit both events; concurrency
-# serializes those runs so they do not deploy in parallel.
+# Trigger: a pushed v*.*.* tag. Publishing a Release also pushes its tag, so the
+# tag push alone deploys once (a release trigger made a second deploy of the same tag).
+# workflow_dispatch: run by hand on a v*.*.* tag ref only; any other ref is skipped.
 name: Deploy production release
 
 on:
-  release:
-    types: [published]
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
 
 concurrency:
   group: vercel-production-${{ github.ref_name }}
@@ -23,6 +23,7 @@ env:
 
 jobs:
   Deploy-Production:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout release
