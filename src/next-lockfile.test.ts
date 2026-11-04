@@ -4,28 +4,48 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const LOCKFILE = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "package-lock.json",
-);
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const LOCKFILE = join(ROOT, "package-lock.json");
+const PACKAGE_JSON = join(ROOT, "package.json");
 
 const MINIMUM = {
   next: "16.4.2",
   sharp: "0.35.5",
 } as const;
 
-type LockPackage = { version?: string };
+const NEXT_PIN = "16.4.5";
+
+type LockPackage = {
+  version?: string;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  optionalDependencies?: Record<string, string>;
+};
 type Lockfile = { packages?: Record<string, LockPackage> };
+type Manifest = {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+};
+
+function readJson(path: string): unknown {
+  return JSON.parse(readFileSync(path, "utf8"));
+}
 
 function readLockfile(): Lockfile {
-  const parsed: unknown = JSON.parse(readFileSync(LOCKFILE, "utf8"));
+  const parsed = readJson(LOCKFILE);
   assert.equal(typeof parsed, "object");
   assert.ok(parsed !== null, "lockfile parsed to null");
   const lock = parsed as Lockfile;
   assert.equal(typeof lock.packages, "object");
   assert.ok(lock.packages !== null, "lockfile parsed without a packages map");
   return lock;
+}
+
+function readManifest(): Manifest {
+  const parsed = readJson(PACKAGE_JSON);
+  assert.equal(typeof parsed, "object");
+  assert.ok(parsed !== null, "package.json parsed to null");
+  return parsed as Manifest;
 }
 
 function packageName(lockKey: string): string | null {
@@ -139,5 +159,88 @@ test("resolved @next/env and @next/swc-* entries are >= 16.4.2", () => {
       (entry) =>
         `${entry.name} resolved to ${entry.version}, which is below the minimum ${MINIMUM.next}`,
     );
+  if (failures.length > 0) assert.fail(failures.join("\n"));
+});
+
+function directNextPins(manifest: Manifest): { name: string; version: string }[] {
+  return [
+    ...Object.entries(manifest.dependencies ?? {}),
+    ...Object.entries(manifest.devDependencies ?? {}),
+  ]
+    .filter(
+      ([name]) =>
+        name === "next" || name === "eslint-config-next" || name.startsWith("@next/"),
+    )
+    .map(([name, version]) => ({ name, version }));
+}
+
+test("package.json pins next, eslint-config-next, and direct @next/* at 16.4.5", () => {
+  const pins = directNextPins(readManifest());
+  const names = pins.map((pin) => pin.name);
+  assert.ok(names.includes("next"), "package.json dependencies.next is missing");
+  assert.ok(
+    names.includes("eslint-config-next"),
+    "package.json devDependencies.eslint-config-next is missing",
+  );
+  const failures = pins
+    .filter((pin) => pin.version !== NEXT_PIN)
+    .map((pin) => `${pin.name} is ${pin.version}, expected ${NEXT_PIN}`);
+  if (failures.length > 0) assert.fail(failures.join("\n"));
+});
+
+test("lockfile resolves next to 16.4.5 only", () => {
+  const lock = readLockfile();
+  const root = lock.packages?.[""];
+  assert.ok(root, "lockfile has no root package");
+  assert.equal(root.dependencies?.next, NEXT_PIN);
+  const versions = resolvedVersions(lock, "next");
+  assert.ok(versions.length >= 1, "expected at least one resolved next entry");
+  const unexpected = [...new Set(versions.filter((version) => version !== NEXT_PIN))].sort();
+  assert.deepEqual(
+    unexpected,
+    [],
+    `next resolved to ${versions.join(", ")}, expected only ${NEXT_PIN}`,
+  );
+  const text = readFileSync(LOCKFILE, "utf8");
+  assert.equal(text.includes('"next": "16.4.3"'), false);
+  assert.equal(text.includes("next-16.4.3.tgz"), false);
+  assert.equal(text.includes('"version": "16.4.3"'), false);
+});
+
+test("lockfile resolves eslint-config-next and @next/* to 16.4.5", () => {
+  const lock = readLockfile();
+  const root = lock.packages?.[""];
+  assert.ok(root, "lockfile has no root package");
+  assert.equal(root.devDependencies?.["eslint-config-next"], NEXT_PIN);
+  for (const [name, version] of Object.entries({
+    ...root.dependencies,
+    ...root.devDependencies,
+    ...root.optionalDependencies,
+  })) {
+    if (name.startsWith("@next/")) assert.equal(version, NEXT_PIN, name);
+  }
+  const entries = resolvedNamed(
+    lock,
+    (name) => name === "eslint-config-next" || name.startsWith("@next/"),
+  );
+  assert.ok(
+    entries.some((entry) => entry.name === "eslint-config-next"),
+    "expected a resolved eslint-config-next entry",
+  );
+  assert.ok(
+    entries.some((entry) => entry.name === "@next/env"),
+    "expected a resolved @next/env entry",
+  );
+  assert.ok(
+    entries.some((entry) => entry.name === "@next/eslint-plugin-next"),
+    "expected a resolved @next/eslint-plugin-next entry",
+  );
+  assert.ok(
+    entries.some((entry) => entry.name.startsWith("@next/swc-")),
+    "expected a resolved @next/swc-* entry",
+  );
+  const failures = entries
+    .filter((entry) => entry.version !== NEXT_PIN)
+    .map((entry) => `${entry.name} resolved to ${entry.version}, expected ${NEXT_PIN}`);
   if (failures.length > 0) assert.fail(failures.join("\n"));
 });
