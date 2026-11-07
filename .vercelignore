@@ -1,0 +1,5 @@
+# Keep local secrets and link state off the upload (#32).
+.env*
+.vercel
+node_modules
+.next

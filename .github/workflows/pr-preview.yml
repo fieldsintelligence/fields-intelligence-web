@@ -1,0 +1,49 @@
+# Preview deploys for pull requests to main (#32).
+# Plain pull_request (never pull_request_target): fork PRs get no secrets,
+# and the deploy steps are skipped for them. No --prod or --yes.
+name: Preview deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: vercel-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  Deploy-Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Build the PR head itself, so the preview traces to that SHA.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.1
+          cache: npm
+
+      # Build first: the built-HTML test (src/how-it-works.test.ts) fails under CI=true without .next output.
+      - name: Install deps, build, and audit gate
+        run: npm ci --no-audit && npm run build && npm test
+
+      - name: Install Vercel CLI
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: npm install --global vercel@62.4.0
+
+      - name: Deploy preview to Vercel
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        id: deploy
+        run: |
+          url="$(VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }} vercel deploy --scope fieldsintelligence --token=${{ secrets.VERCEL_TOKEN }})"
+          echo "url=${url}" >> "$GITHUB_OUTPUT"
+          echo "Preview deployment URL: ${url}"
+          echo "Preview deployment URL: ${url}" >> "$GITHUB_STEP_SUMMARY"
