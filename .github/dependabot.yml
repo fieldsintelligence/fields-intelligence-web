@@ -7,6 +7,13 @@ updates:
     allow:
       - dependency-type: production
     open-pull-requests-limit: 5
+    # react-dom peers the matching react release, and React refuses to run
+    # when the installed versions differ. A split bump fails CI on its own.
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
 
   - package-ecosystem: github-actions
     directory: /
