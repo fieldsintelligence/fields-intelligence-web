@@ -10,8 +10,12 @@ const WORKFLOWS = join(ROOT, ".github", "workflows");
 const NODE_VERSION = "24.22.1";
 const ENGINES_NODE = ">=24.22.1 <25";
 const VERCEL_CLI = "62.4.0";
-const SETUP_NODE_STEPS: Record<string, number> = { "deploy-release.yml": 1, "pr-audit.yml": 1 };
-const VERCEL_INSTALLS: Record<string, number> = { "deploy-release.yml": 1 };
+const SETUP_NODE_STEPS: Record<string, number> = {
+  "deploy-release.yml": 1,
+  "pr-audit.yml": 1,
+  "pr-preview.yml": 1,
+};
+const VERCEL_INSTALLS: Record<string, number> = { "deploy-release.yml": 1, "pr-preview.yml": 1 };
 
 type SetupNodeStep = { line: number; nodeVersion: string | null };
 
